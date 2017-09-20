@@ -1,0 +1,1 @@
+<?php	return array ( 0 => 'id', 1 => 'uid', 2 => 'foldername', 3 => 'show', 4 => 'isuse', 5 => 'ctime', 6 => 'topimgid', '_autoinc' => true, '_pk' => 'id', '_type' => array ( 'id' => 'int(11)', 'uid' => 'int(11)', 'foldername' => 'varchar(255)', 'show' => 'tinyint(1)', 'isuse' => 'tinyint(1)', 'ctime' => 'datetime', 'topimgid' => 'int(11)', ), );?>

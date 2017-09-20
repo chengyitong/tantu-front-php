@@ -1,0 +1,253 @@
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:header" />
+<script>
+$(function() {
+	var class1 = '{$where.class1id}';
+	var class2 = '{$where.class2id}';
+	var class3 = '{$where.class3id}';
+	if(class1=='') class1 = 0;
+	if(class2=='') class2 = 0;
+	if(class3=='') class3 = 0;
+	if(class1>0) selclass(2,class1,class2);
+	if(class2>0) selclass(3,class2,class3);
+});
+function selclass(selid,id,def){
+	if(id=='0'){
+		$('#class'+selid+'id').html('<option value="0">请选择</option>');
+		if(selid==2) $('#class3id').html('<option value="0">请选择</option>');
+	}else{
+		$.getJSON('/product/addv_selclass?id='+id+'&callback=?',function(json){
+			var str = '<option value="0">请选择</option>';
+			$.each(json, function(index, data){
+				str += '<option value="'+data.syscode_id+'"';
+				if(def==data.syscode_id) str += ' selected';
+				str += '>'+data.syscode_name+'</option>';
+			});
+			$('#class'+selid+'id').html(str);
+		});
+	}
+}
+</script>
+<table class="table_list table_search" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <form action="?" method="get">
+        <thead>
+            <tr>
+                <th colspan="4">
+        <div class="tdp">
+            <div></div>搜索条件
+        </div>
+        </th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td width="25%">
+                	<label>图片ID</label>
+                    <input type="text" name="id" value="{$where.id}" />
+                </td>
+                <td width="25%">
+                    <label>名称</label>
+                    <input type="text" name="name" value="{$where.name}" />
+                </td>
+                <td width="25%">
+            		<label>简介关键字</label>
+                    <input type="text" name="desc" value="{$where.desc}" />
+                </td>
+                <td width="25%">
+                	<label>状态</label>
+                	<select name="haspass">
+                		<option value="">全部</option>
+                		<option value="-2"<php>if($where['haspass']=='-2') echo ' selected';</php>>待处理</option>
+                		<option value="-1"<php>if($where['haspass']=='-1') echo ' selected';</php>>未通过</option>
+                		<option value="0"<php>if($where['haspass']=='0') echo ' selected';</php>>待审核</option>
+                		<option value="1"<php>if($where['haspass']=='1') echo ' selected';</php>>已发布</option>
+                	</select>
+                	<label>上下架</label>
+                	<select name="status">
+                		<option value="">全部</option>
+                		<option value="1"<php>if($where['status']=='1') echo ' selected';</php>>上架</option>
+                		<option value="0"<php>if($where['status']=='0') echo ' selected';</php>>下架</option>
+                	</select>
+                </td>
+            </tr>
+                <tr>
+                    <td>
+                    	<label>会员ID</label>
+                        <input type="text" name="uid" value="{$where.uid}" />
+                    </td>
+                    <td>
+                    	<label>属性</label>
+                        <select name="banquan">
+                            <option value="" <php>if(!$where['banquan']) echo ' selected';</php>>全部</option>
+                            <option value="1" <php>if($where['banquan']==1) echo ' selected';</php>>版权保护</option>
+                            <option value="2" <php>if($where['banquan']==2) echo ' selected';</php>>版权释放</option>
+                        </select>
+                    </td>
+                    <td>
+                		<label>活动ID</label>
+                        <input type="text" name="event_id" value="{$where.event_id}" />
+                    </td>
+                    <td>
+                    	
+                    </td>
+                </tr>
+        </tbody>
+        <tfoot>
+            <tr align="center">
+                <td colspan="4"><input type="submit" class="sys_button btn_blue" value=" 搜索 " /></td>
+            </tr>
+        </tfoot>
+    </form>
+</table>
+<div class="midline">
+    <input type="button" style="display:none;" class="sys_button btn_gray" id="btntocvs" value="导出表格" onclick="location = '{:seturlget('exp')}&exp=xls';" />
+    <input type="button" value="批量删除" class="sys_button" onclick="pldel()" />
+    <input type="button" value="全选" class="sys_button" onclick="seldelall()" />
+</div>
+<php>endif;</php>
+<style>
+
+.seacon1col {
+    margin-top: 6px;
+    width: 30px;
+    height: 20px;
+    border: 1px #ccc solid;
+    margin-right: 2px;
+    float: left;
+    -webkit-border-radius: 1px;
+    border-radius: 1px;
+}
+</style>
+<script>
+function api_fsave_ok(str){
+	alert(str);
+	loading.hide();
+}
+function pldel(){
+	if($('input[name=pldel]:checked').length<1){
+		alert('请先选择图片!');
+		return;
+	}
+	if(!confirm('是否确认批量删除图片？')){
+		return;
+	}
+	var str = '0';
+	$('input[name=pldel]:checked').each(function(){
+		str += ','+$(this).val();
+	});
+	location = '/product/del?id='+str;
+}
+function seldelall(){
+	$('input[name=pldel]').each(function(){
+		$(this).prop('checked',true);
+	});
+}
+</script>
+{:load('@.bd_plugs')}
+{:loadplug_tooltip()}
+{:loadplug_fancybox()}
+<iframe src="" style="position: absolute;left: -100px;top: -100px;width: 0;height: 0;" name="fsave" id="fsave"></iframe>
+<table class="table_list table_list_hover" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th width="3%">ID.</th>
+            <th width="8%">预览图</th>
+            <th width="15%">名称</th>
+            <th width="20%">分类</th>
+            <th width="15%">标签</th>
+            <th width="15%">颜色</th>
+            <th width="5%">状态</th>
+            <th width="10%">用户/上传时间</th>
+    <php>if(I('get.exp')!='xls'):</php>
+    <th>其他操作</th>
+    <php>endif;</php>
+</tr>
+</thead>
+<tbody>
+<volist name="data.list" id="vo">
+<php>
+$u = D('a_user')->where('id='.$vo['uid'])->find();
+$f = D('a_folder')->where('id='.$vo['folderid'])->find();
+</php>
+<form action="/product/edit?do=js" method="post" target="fsave" onsubmit="loading.show();">
+<input type="hidden" name="id" value="{$vo.id}" />
+    <tr align="center">
+        <td>
+        <input type="checkbox" name="pldel" value="{$vo.id}" />
+        {$vo.id}
+        </td>
+        <td style="line-height: 1.6em;">
+        <img src="{:imgurl_t1($vo['imgkey'],$vo['size'])}" style="margin: 5px 0;" height="40px" class="tooltip_e sexybox_img" href="{:imgurl_t2($vo['imgkey'],$vo['size'])}" title="<img src='{:imgurl_t1($vo['imgkey'],$vo['size'])}' width='100%' />" /><br>
+        相册: {$f.foldername}<br>
+        <php>echo round($vo['size']/1024/1024,2);</php>M<br>
+        [<a href="/product/img_api?id={$vo.id}">下载</a>]
+        </td>
+        <td align="left"><textarea name="name" id="name" style="width:100%;" rows="5">{$vo.name}</textarea></td>
+        <td align="left">
+        <volist name="data.class" id="vo_cl">
+        <php>
+        $chk = '';
+        $arr = explode(',',$vo['classids']);
+        if(in_array($vo_cl['id'],$arr)) $chk = 'checked';
+        </php>
+            <input name="class[]" id="class{$vo_cl.id}_{$vo.id}" type="checkbox" value="{$vo_cl.id}" {$chk} /><label for="class{$vo_cl.id}_{$vo.id}">{$vo_cl.classname}</label>
+        </volist>
+        </td>
+        <td align="left"><textarea name="tagids" id="tagids" style="width:100%" rows="5"><php>
+        $arr = explode(',',$vo['tagids']);
+        for($i=0;$i<(count($arr)-1);$i++){
+        	if($arr[$i]>0){
+                $r = D('a_tags')->field('tagname')->where('id='.$arr[$i])->find();
+               if($r) echo $r['tagname'].' ';
+            }
+        }
+        </php></textarea></td>
+        <td align="left">
+        <volist name="data.color" id="vo_color">
+        <php>
+        $chk = '';
+        $arr = explode(',',$vo['colorids']);
+        if(in_array($vo_color['id'],$arr)) $chk = 'checked';
+        </php>
+            <input name="color[]" id="color{$vo_color.id}_{$vo.id}" type="checkbox" value="{$vo_color.id}" style="float:left;margin-top: 10px;" {$chk} />
+            <label for="color{$vo_color.id}_{$vo.id}" class="seacon1col" data-val="{$vo_color.id}" style=" background-color:{$vo_color.colorvalue};">
+            </label>
+        </volist>
+        </td>
+        <td>
+        <select name="status" id="">
+        	<option value="0"<php>if(!$vo['status']) echo ' selected';</php>>下架</option>
+        	<option value="1"<php>if($vo['status']) echo ' selected';</php>>上架</option>
+        </select><br>
+        <php>
+        if($vo['haspass']=='-2') echo '待处理';
+        elseif($vo['haspass']=='-1') echo '未通过<br>'.$vo['passstr'];
+        elseif($vo['haspass']=='0') echo '待审核';
+        elseif($vo['haspass']=='1') echo '已发布';
+        </php>
+        </td>
+        <td style="line-height: 1.6em;">
+        [{$u.mobile}] {:cstr($u['nickname'],'匿名')}<br>
+        <php>if($vo['isfree']) echo '免费'; else echo '收费';</php><br>
+        {$vo.ctime}
+        </td>
+    <php>if(I('get.exp')!='xls'):</php>
+    <td>
+    	<input type="submit" class="sys_button btn_orange" value="保存" />&nbsp;
+        <input type="button" class="sys_button btn_<php>if($vo['haspass']=='0') echo 'red'; else echo 'blue';</php> btn_open" value="编辑" href="/product/editv?id={$vo.id}" />&nbsp;
+        <input type="button" class="sys_button btn_gray" value="删除" onclick="if (confirm('确定删除?'))
+                    location = '/product/del?id={$vo.id}';" /> 
+    </td>
+    <php>endif;</php>
+    </tr>
+</form>
+</volist>
+</tbody>
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:table_page" />
+<php>endif;</php>
+</table>
+<php>if(I('get.exp')!='xls'):</php>
+</body>
+</html>
+<php>endif;</php>

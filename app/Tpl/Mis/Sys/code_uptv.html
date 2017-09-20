@@ -1,0 +1,109 @@
+<include file="public:header" />
+{:loadplug_editor('syscoderemark3');}
+<script>
+$(function() {
+});
+</script>
+<style>
+label {
+	width: 60px;
+	text-align: right;
+	display: inline-block
+}
+tr{margin:5px 0;}
+</style>
+<form action="/sys/code_upt" method="post">
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <thead>
+  <tr>
+    <th>信息修改</th>
+  </tr>
+  </thead>
+  <input type="hidden" name="syscodeLevel" value="{$syscode.syscode_level}" />
+  <tbody>
+  <tr>
+    <td>
+        <label for="syscodeid">ID: </label>
+		<input name="syscodeid" id="syscodeid" type="text" value="{$syscode.syscode_id}" readonly="readonly" style="background-color:#EEE;" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label for="syscodeno">标记: </label>
+        <input name="syscodeno" id="syscodeno" type="text" value="{$syscode.syscode_no}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label for="syscodename">名称: </label>
+        <input name="syscodename" id="syscodename" type="text" value="{$syscode.syscode_name}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label for="syscodedesc">说明: </label>
+		<input name="syscodedesc" id="syscodedesc" type="text" value="{$syscode.syscode_desc}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label for="syscodeid">内容: </label>
+        <input type="text" name="content1" value="{$syscode.syscode_content}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label for="syscodevalue">值: </label>
+        <input name="syscodevalue" id="syscodevalue" type="text" value="{$syscode.syscode_value}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label for="syscodeparentid">父级ID: </label>
+        <input name="syscodeparentid" id="syscodeparentid" type="text" value="{$syscode.syscode_parentid}" readonly="readonly" style="background-color:#EEE;" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label for="syscodeisuse">使用: </label>
+		<select name="syscodeisuse" id="syscodeisuse">
+        	<option value="1"<eq name="syscode.syscode_isuse" value="1"> selected="selected"</eq>>是</option>
+        	<option value="0"<eq name="syscode.syscode_isuse" value="0"> selected="selected"</eq>>否</option>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label for="syscodecandelete">允许删除: </label>
+		<select name="syscodecandelete" id="syscodecandelete">
+        	<option value="1"<eq name="syscode.syscode_candelete" value="1"> selected="selected"</eq>>是</option>
+        	<option value="0"<eq name="syscode.syscode_candelete" value="0"> selected="selected"</eq>>否</option>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label for="syscoderemark1">注释1: </label>
+        <input name="syscoderemark1" id="syscoderemark1" type="text" value="{$syscode.syscode_remark1}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label for="syscoderemark2">注释2: </label>
+        <input name="syscoderemark2" id="syscoderemark2" type="text" value="{$syscode.syscode_remark2}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label for="syscoderemark3">注释3: </label>
+      <textarea name="syscoderemark3" style="visibility:hidden;">{$syscode.syscode_remark3}</textarea>
+    </td>
+  </tr>
+  </tbody>
+  <tr>
+  	<td align="center" bgcolor="#EEEEEE"><input type="submit" class="sys_button" value=" 修改 " /> <input type="button" class="sys_button" onClick="parent.window.close();" value=" 关闭 " /></td>
+  </tr>
+</table>
+</form>
+</body>
+</html>

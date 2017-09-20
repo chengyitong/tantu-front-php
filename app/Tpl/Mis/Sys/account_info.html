@@ -1,0 +1,133 @@
+<include file="public:header"/>
+{:import_js('plugs/md5.js')}
+<script>
+$(function(){
+	getpermission_addclerk();
+	$("#permission").change(function(){
+		getpermission_addclerk();
+	});
+	$('#box').click(function(){
+		var a=$("#box").attr("checked");
+		if(a)
+		{
+			$("#pwd").attr("readonly",false);
+			$("#pwd").css("background-color","");
+			$("#pwd").focus();
+		}else
+		{
+			$("#pwd").attr("readonly",true);
+			$("#pwd").css("background-color","#EEE");
+		}
+	});
+	$('.btn_submit').click(function(){
+		$(this).attr('disabled',true);
+		var pwd = $('#pwd').attr('value');
+		if(pwd.length>0){
+			var pwd_md5 = hex_md5(pwd);
+			$('#pwd').attr('value',pwd_md5);
+		}
+		<eq name="data.type" value="新增">
+		else{
+			alert('密码必填!');
+			$(this).attr('disabled',false);
+			return;
+		}
+		</eq>
+		$('#form1').submit();
+	});
+});
+function getpermission_addclerk(){
+	var id = $("#permission").val();
+	if(id){
+		$.get("/sys/account_permission/id/"+id, function(result){
+			$("#sel1").html(result);
+		});
+	}else{
+		$("#sel1").html('{$account.syscode.syscode_name}');
+	}
+}
+</script>
+<style>
+label {
+	width: 60px;
+	text-align: right;
+	display: inline-block
+}
+</style>
+<form id="form1" action="/sys/account_<eq name="data.type" value="新增">new<else/>upt</eq>" method="post">
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <thead>
+  <tr>
+    <th colspan="2">{$data.type}账户</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td colspan="2">
+		<label for="username">用户名: </label>
+		<eq name="data.type" value="修改">
+        {$account.sysaccount_username}
+        <input name="username" id="username" type="hidden" value="{$account.sysaccount_username}" />
+        <else/>
+        <input name="username" id="username" type="text" value="{$account.sysaccount_username}" />
+        </eq>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+		<label for="pwd">密码: </label>
+        <input type="password" name="pwd" id="pwd"<eq name="data.type" value="修改"> readonly="readonly" style="background-color:#EEE;"</eq> />
+        <eq name="data.type" value="修改"><label for="box">修改<input type="checkbox" id="box" name="box" /></label></eq>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+		<label for="name">姓名: </label>
+		<input name="name" id="name" type="text" value="{$account.sysaccount_name}" />
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+        <label for="tel">电话: </label>
+        <input type="text" name="tel" id="tel" value="{$account.sysaccount_tel}" />
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+		<label for="idcard">身份证号: </label>
+        <input name="idcard" id="idcard" type="text" value="{$account.sysaccount_idcard}" />
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+		<label for="isuse">使用: </label>
+		<select name="isuse" id="isuse">
+        	<option value="1"<eq name="account.sysaccount_isuse" value="1"> selected="selected"</eq>>是</option>
+        	<option value="0"<eq name="account.sysaccount_isuse" value="0"> selected="selected"</eq>>否</option>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+        <label for="permission">权限: </label>
+		<select name="permission" id="permission">
+        	<eq name="data.type" value="修改"><option value="">不改变</option></eq>
+        	<volist name="permission" id="vo">
+        	<option value="{$vo.syscode_id}">{$vo.syscode_name}</option>
+        	</volist>
+        </select>
+    </td>
+    <td id="sel1"></td>
+  </tr>
+  </tbody>
+  <tr>
+  	<td colspan="2" align="center" bgcolor="#EEEEEE">
+  		<input name="id" id="id" type="hidden" value="{$account.sysaccount_id}" />
+	  	<input type="button" class="sys_button btn_submit" value=" {$data.type} " />
+	  	<input type="button" class="sys_button" onClick="parent.window.close();" value=" 关闭 " />
+  	</td>
+  </tr>
+</table>
+</form>
+</body>
+</html>

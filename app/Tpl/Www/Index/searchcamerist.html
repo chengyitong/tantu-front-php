@@ -1,0 +1,60 @@
+<include file="public:header" />
+<script type="text/javascript" src="/static/js/jquery.lazyload.min.js"></script>
+<script>
+$(function() {
+    $("img.lazy").lazyload({ effect: "fadeIn" });
+})
+
+function fouc(id, obj) {
+    var user = $('#session').val();
+
+    if (user) {
+        $.get('/camerist/tofollow?uid=' + id, function(json) {
+            location.reload();
+        })
+    } else {
+        alert('请先登陆');
+    }
+}
+
+function searchCamerlist() {
+    var _val = global.trim($('#searchcon').val());
+    if ('' !== _val) {
+        window.location.href = '/index/searchcamerist?kw=' + _val;;
+    }
+}
+</script>
+<div class="container">
+    <div class="seacon1b clearfix">
+            <div class="input-group seacon1input">
+                <input type="text" onKeyDown="if(window.event.keyCode==13) {searchCamerlist();}" class="form-control searchTxt" id="searchcon" value="{:unescape(I('get.kw'))}" placeholder="摄影师昵称">
+                <span class="input-group-btn">
+            <button class="btn searchBtn" style="padding:2px 20px;background:#f16172;" type="button" onClick="location='?kw='+escape(global.trim($('#searchcon').val()));"><i class="glyphicon" style="background:url(/static/images/iconsearch.png) no-repeat; top: 3px;"></i></button>
+            </span> 
+          </div>
+    </div>
+</div>
+<!--修改的欢迎摄影师-->
+<!-- <div class="fanye" style="text-align: center;">{$data.fanye}</div>      -->
+<div class="container searchcameristcontainer">
+        <div class="con2 row">
+            <volist name="data.user_list" id="vouser">
+                <div class="searchcameristcons3 col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                    <div class="con3">
+                        <a href="/camerist/gallery?uid={$vouser.id}" target="_blank">
+                            <div class="con4" style="background:url({:camerist_t($vouser['albumimg'])}) #FFF;background-position: center;background-size:cover;"></div>
+                        </a>
+                        <div class="con5"><a href="/camerist/gallery?uid={$vouser.id}" target="_blank"><img class="img-circle lazy" data-original="/static/<php>if($vouser['avatar']) echo 'uploadfiles/images/'.$vouser['avatar'];else echo 'images/tx.png';</php>" src="" style="width: 60px; height: 60px;background:#fff;"></a>
+                            <h3>{:cstr($vouser['nickname'],$vouser['username'])}</h3>
+                            <h5 style="color:#888;line-height: 1.8em;">作品{$vouser.count_imgs}<br>人气{$vouser.renqi}&nbsp;&nbsp;粉丝{$vouser.fans_count}</h5>
+                            <php>if($vouser['id']!=$data['user']['id']){</php><span onClick="fouc({$vouser.id},this)" class="<php>if($vouser['followed']==1) echo 'fansbtn_2'; else echo 'fansbtn';</php>"><php>if($vouser['followed']==1) echo '已关注';else echo '关注';</php></span>
+                            <php>}</php>
+                        </div>
+                    </div>
+                </div>
+            </volist>
+            <div class="clearfix"></div>
+        </div>
+</div>
+<div class="fanye" style="text-align: center;padding-right:0px;margin-bottom: 20px;">{$data.fanye}</div>
+<include file="public:mfooter" />

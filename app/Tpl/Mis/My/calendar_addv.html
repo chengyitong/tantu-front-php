@@ -1,0 +1,209 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="/static/plugs/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="/static/js/global.js"></script>
+<style>
+ /*	选择背景效果  */
+::selection{ background-color: #E13300; color: white; }
+::moz-selection{ background-color: #E13300; color: white; }
+::webkit-selection{ background-color: #E13300; color: white; }
+/*	系统样式  */
+body {margin:0 0;cursor:default;}
+*{font-size:12px;font-family:"微软雅黑";}
+form {padding:0; margin:0;}
+a {text-decoration: none;}
+a:hover {cursor: pointer;text-decoration: underline;}
+img {border: 0;}
+.clearboth {clear:both;}
+table {font-size:12px;border-collapse:collapse;}
+td {empty-cells:show;}
+/*  button按钮样式  */
+.sys_button {color: black;height: 22px;text-align: center;cursor:pointer;background: url(/static/img/button.jpg)  repeat-x center center;border : #006699 1px solid;}
+.btn_green {background: url(/static/img/button_green.jpg)  repeat-x center center;border : #060 1px solid;}
+.btn_orange {background: url(/static/img/button_orange.jpg)  repeat-x center center;border : #C04805 1px solid;}
+	.btn_orange:active{background-image:url(/static/img/button_orange_a.jpg);}
+.btn_gray {background: url(/static/img/button_gray.jpg)  repeat-x center center;border : #333 1px solid;}
+.btn_red {background: url(/static/img/button_red.jpg)  repeat-x center center;border : #F00 1px solid;}
+.btn_yellow {background: url(/static/img/button_yellow.jpg)  repeat-x center center;border : #FF0 1px solid;}
+.btn_disabled {color:#999;background: url(/static/img/button_gray.jpg) repeat-x center center;border : #999 1px solid;cursor: not-allowed;}
+/*  loading  */
+#background {display: block;width: 100%;height: 100%;opacity: 0.6;filter: alpha(opacity=60);background: #000;position: absolute;top: 0;left: 0;z-index: 2000;}
+#progressBar {border: solid 2px #2E5B89;background: white url(/static/img/loading1.gif) no-repeat 10px 10px;display: block;width: 148px;height: 28px;position: fixed;top: 50%;left: 50%;margin-left: -106px;margin-top: -26px;padding: 10px 10px 10px 50px;text-align: left;line-height: 27px;font-weight: bold;position: absolute;z-index: 2001;}
+#loadingclose {position:absolute;top:5px;right:5px;background: url(/static/img/cancel.jpg) no-repeat;width:14px;height:14px;cursor:pointer;}
+</style>
+<title>calendar</title>
+</head>
+
+<body>
+<noscript>
+<iframe src="*.htm"></iframe>
+</noscript>
+<div style="width:100%;margin:0 auto;">
+
+<div align="right" style="padding:10px;background:#373737;font-size:20px;color:#FFF;font-family:'微软雅黑';font-weight:bold;">
+    添加事项
+</div>
+
+<div style="border:1px solid #373737;padding:10px;">
+<form action="/my/calendar_add" method="post" onSubmit="return chk();">
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+  <tr>
+    <td width="10%" align="right" valign="top">日期</td>
+    <td>{:I('get.d')}<input type="hidden" name="date" value="{:I('get.d')}" /></td>
+  </tr>
+  <tr>
+    <php>
+    $time = explode(':',now(2));
+    //if($time[0]<10) $time[0] = '0'.$time[0];
+    //if($time[1]<10) $time[1] = '0'.$time[1];
+    $t0 = $time[0];
+    $t1 = $time[1];
+    </php>
+    <td width="10%" align="right" valign="top"><span style="color:red;font-family:Verdana;font-weight:bold;">*</span> 时间</td>
+    <td><input type="hidden" name="time" id="time" value="{$t0}:{$t1}" />
+    	<select id="tmin" onChange="chgtime()">
+        <php>for($i=0;$i<24;$i++): if($i<10) $str='0'.$i; else $str=$i;</php>
+        	<option value="{$str}"<php>if($time[0]==$str) echo ' selected="selected"';</php>>{$str}</option>
+        <php>endfor;</php>
+        </select>
+        :
+        <select id="tsec" onChange="chgtime()">
+        <php>for($i=0;$i<60;$i++): if($i<10) $str='0'.$i; else $str=$i;</php>
+        	<option value="{$str}"<php>if($time[1]==$str) echo ' selected="selected"';</php>>{$str}</option>
+        <php>endfor;</php>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="right" valign="top"><span style="color:red;font-family:Verdana;font-weight:bold;">*</span> 标题</td>
+    <td><input type="text" name="title" id="title" value="" style="height:25px;width:450px;" /></td>
+  </tr>
+  <tr>
+    <td align="right" valign="top">内容</td>
+    <td><textarea name="content" id="content" rows="8" cols="70"></textarea></td>
+  </tr>
+  <tr style="display:none;">
+    <td align="right" valign="top">通知</td>
+    <td>
+    <select name="msg" id="msg">
+    	<option value="-1">不通知</option>
+    	<option value="0">准时</option>
+    	<option value="5">提前5分钟</option>
+    	<option value="15">提前15分钟</option>
+    	<option value="30">提前30分钟</option>
+    	<option value="60">提前60分钟</option>
+    </select>
+    手机
+    <input type="text" name="mobile" id="mobile" value="" style="height:25px;width:120px;" disabled="disabled" maxlength="11" />
+    <input type="checkbox" id="cmsg" disabled />
+    </td>
+  </tr>
+  <tr style="display:none;">
+    <td align="right" valign="top">邮件</td>
+    <td><input type="text" name="email" id="email" value="" style="height:25px;width:240px;" disabled="disabled" />
+    <input type="checkbox" id="cmail" disabled />
+    </td>
+  </tr>
+</table>
+<div align="center" style="margin-top:10px;">
+	<input type="submit" class="sys_button btn_orange" value=" 保存 " />
+</div>
+</form>
+<script>
+$(function(){
+	$("#mobile").keypress(function(event) {  
+		var keyCode = event.which;  
+		if (keyCode >= 48 && keyCode <=57)
+			return true;  
+		else  
+			return false;  
+	});
+	$('#msg').change(function(){
+		if(this.value=='-1'){
+			$('#mobile').val('');
+			$('#mobile').attr('disabled',true);
+			$('#email').val('');
+			$('#email').attr('disabled',true);
+			$('#cmsg').attr('disabled',true);
+			$('#cmail').attr('disabled',true);
+			$('#cmsg').attr('checked',false);
+			$('#cmail').attr('checked',false);
+		}else{
+			$('#mobile').val('{$data.u.sysaccount_tel}');
+			$('#mobile').attr('disabled',false);
+			$('#email').val('{$data.u.sysaccount_username}@bindow.cn');
+			$('#email').attr('disabled',false);
+			$('#cmsg').attr('disabled',false);
+			$('#cmail').attr('disabled',false);
+			$('#cmsg').attr('checked',true);
+			$('#cmail').attr('checked',true);
+		}
+	});
+	$('#cmsg').click(function(){
+		if($(this).attr('checked')=='checked'){
+			$('#mobile').val('{$data.u.sysaccount_tel}');
+			$('#mobile').attr('disabled',false);
+		}else{
+			if($('#cmail').attr('checked')!='checked'){
+				alert('手机和邮件必选一个!');
+				$(this).attr('checked',true);
+				return false;
+			}
+			$('#mobile').val('');
+			$('#mobile').attr('disabled',true);
+		}
+	});
+	$('#cmail').click(function(){
+		if($(this).attr('checked')=='checked'){
+			$('#email').val('{$data.u.sysaccount_username}@bindow.cn');
+			$('#email').attr('disabled',false);
+		}else{
+			if($('#cmsg').attr('checked')!='checked'){
+				alert('手机和邮件必选一个!');
+				$(this).attr('checked',true);
+				return false;
+			}
+			$('#email').val('');
+			$('#email').attr('disabled',true);
+		}
+	});
+});
+function chgtime(){
+	$('#time').val($('#tmin').val()+':'+$('#tsec').val());
+}
+function chk(){
+	if($('#time').val()==''){
+		alert('请输入时间!');
+		return false;
+	}
+	if($('#title').val()==''){
+		alert('请输入标题!');
+		return false;
+	}
+	if($('#content').val()==''){
+		$('#content').val($('#title').val());
+	}
+	if($('#msg').val()>=0){
+		if($('#cmsg').attr('checked')=='checked'){
+			if($('#mobile').val().length!=11){
+				alert('请输入11位手机号!');
+				return false;
+			}
+		}
+		if($('#cmail').attr('checked')=='checked'){
+			var search_str = /^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/;
+			var email_val = $("#email").val();
+			if(!search_str.test(email_val)){
+				alert('请输入正确格式的Email!');
+				return false;
+			}
+		}
+	}
+}
+</script>
+</div>
+</div>
+</body>
+</html>

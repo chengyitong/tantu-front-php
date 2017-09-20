@@ -1,0 +1,118 @@
+<include file="public:header" />
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap-datetimepicker.min.css">
+<style type="text/css">
+.table img {
+    width: 50px;
+}
+</style>
+<div>
+    <div class="container">
+        <form class="form-horizontal" method="get">
+            <fieldset>
+                <div id="legend" class="">
+                    <legend class="">查询条件</legend>
+                </div>
+                <div class="form-group">
+                    <label for="starttime" class="col-sm-2 control-label">活动有效期时间范围：</label>
+                    <div class="col-md-3">
+                        <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
+                            <input class="form-control" size="16" type="text" value="{$_GET['dtp_input1']}" readonly>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                        <input type="hidden" name="dtp_input1" id="dtp_input1" value="{$_GET['dtp_input1']}" />
+                        <span>到</span>
+                        <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
+                            <input class="form-control" size="16" type="text" value="{$_GET['dtp_input2']}" readonly>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                        <input type="hidden" name="dtp_input2" id="dtp_input2" value="{$_GET['dtp_input2']}" />
+                    </div>
+                    <label for="txtTitle" class="col-sm-2 control-label">标题或奖品</label>
+                    <div class="col-md-2">
+                        <input class="form-control" type="text" id="txtTitle" name="txtTitle" placeholder="标题或奖品关键字" value="{$_GET['txtTitle']}" />
+                        <button class="btn btn-success" style="margin-top: 30px; float: right;">查 询</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <table class="table table-bordered table-hover">
+        <caption>活动列表</caption>
+        <thead>
+            <tr>
+                <th>编号</th>
+                <th>标题</th>
+                <th>投稿数量</th>
+                <th>参加人数</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>奖品</th>
+                <th>主页缩略图</th>
+                <th>首页Banner图</th>
+                <th>列表缩略图</th>
+                <th>显示顺序</th>
+                <th>是否有外链</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <volist name="list" id="vo">
+                <tr>
+                    <td>{$vo.id}</td>
+                    <td>{$vo.subject}</td>
+                    <td>{$vo.product_count}
+                        <br/>
+                        <button type="button" class="btn btn-link" onclick="javascript:window.location.href='/product/index/event_id/{$vo.id}'">明细</button>
+                    </td>
+                    <td>{$vo.user_count}</td>
+                    <td>{$vo.start_time}</td>
+                    <td>{$vo.end_time}</td>
+                    <td>{$vo.award}</td>
+                    <td><img src='{$vo.subject_banner_index}'></td>
+                    <td><img src='{$vo.subject_banner_detail}'></td>
+                    <td><img src='{$vo.subject_banner_list}'></td>
+                    <td>{$vo.sortno}</td>
+                    <td><if condition='$vo.link eq null'>否<else/>是</if></td>
+                    <td>
+                        <button type="button" class="btn btn-primary" onclick="javascript:window.location.href='/event/edit/id/{$vo.id}'">编辑</button>
+                        <button type="button" style="margin-left: 10px;" class="btn btn-danger" onclick="del_event('{$vo.id}')">删除</button>
+                    </td>
+                </tr>
+            </volist>
+        </tbody>
+    </table>
+    <div>{$page}</div>
+</div>
+<script charset="utf-8" src="/static/js/jquery-1.10.2.min.js"></script>
+<script charset="utf-8" src="/static/js/bootstrap.min.js"></script>
+<script charset="utf-8" src="/static/js/bootstrap-datetimepicker.min.js"></script>
+<script charset="utf-8" src="/static/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script type="text/javascript">
+function del_event(event_id) {
+    if (confirm('活动数据删除后不可恢复，是否确认？')) {
+        $.post('/event/delEvent/event_id/' + event_id, '', function(res) {
+            if (1 == res['status']) {
+                alert(res['msg']);
+                location.reload();
+            }
+        }, 'json');
+    }
+}
+
+$('.form_date').datetimepicker({
+    language: 'zh-CN',
+    weekStart: 1,
+    todayBtn: 1,
+    autoclose: 1,
+    todayHighlight: 1,
+    startView: 2,
+    minView: 2,
+    forceParse: 0
+});
+</script>
+</body>
+
+</html>

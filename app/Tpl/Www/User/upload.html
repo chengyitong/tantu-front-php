@@ -1,0 +1,184 @@
+<include file="public:mheader"/>
+
+<style>
+.ff{
+	padding: 10px;
+	float: left;
+}
+.ff:hover{
+	background: #EEE;
+}
+.ffd{
+	background: #EEE;
+}
+.ubg{position:absolute;top:0;left:0;width:100%;height:100%;background:#333;opacity:0.5;display:none;}
+</style>
+
+<script>
+$(function(){
+	//step2();
+	upload_frompage = 'www';
+	$('.close').click(function(){
+		$('.ubg').hide();
+	});
+	$('.close').click(function(){
+		$('.ubg').hide();
+	});
+	$('.closes').click(function(){
+		$('.ubg').hide();
+	});
+});
+function step2(){
+    $('#folder').html('正在加载专辑...');
+	$.getJSON('/user/get_folder',function(json){
+		if(json.count>0){
+			$('#folder').html('');
+			$.each(json.list,function(index,data){
+				$('#folder').append('<div class="ff ff'+data.id+'"><a href="javascript:;" onclick="step3('+data.id+')">'+data.foldername+'</a> [<a href="javascript:;" onclick="delfolder('+data.id+')" style="color:#f16172;">删除</a>]</div>');
+			});
+			$('#folder').append('<div style="clear:both;"></div>');
+		}else $('#folder').html('该用户没有专辑，请先新建后再上传！');
+	});
+}
+function step3(fid){
+	$('#folderid').val(fid);
+	$('.ff').removeClass('ffd');
+	$('.ff'+fid).addClass('ffd');
+	$('#demo').show();
+	
+}
+function delfolder(fid){
+	if(!confirm('确定删除该相册!')) return;
+	$.getJSON('/user/folder_del?id='+fid+'&callback=?',function(json){
+		alert(json.info);
+		if(json.status==1){
+			$('.ff'+fid).remove();
+			$('#folderid').val('0');
+			$('#demo').hide();
+		}
+	});
+}
+function newfolder(){
+	$('#newfolder').show();
+	$('#foldername').focus();
+}
+function newf(){
+	if($('#foldername').val()==''){
+    	alert('请输入相册名!');
+    	return;
+	}
+	$.getJSON('/user/new_folder?fname='+$('#foldername').val(),function(json){
+		alert('创建成功!');
+		$('#foldername').val('');
+		$('#newfolder').hide();
+		step2();
+		closef();
+	});
+}
+function closef(){
+	$('#foldername').val('');
+	$('#newfolder').hide();
+}
+function finish_tip(){
+	out_str = '';
+	$('#finishbtn').click();
+	$('.ubg').show();
+}
+</script>
+
+<div class="container1200 center padding_b">
+<php>if($data['user']['mobile']!='' || $data['user']['email']!=''){</php>
+  <div class="pcon42 left">
+    <div style="padding: 10px 0;display: none;">
+    	请选择需要上传的相册：
+    	[<a href="javascript:;" onclick="newfolder()" style="color: #f16172;">新建相册</a>]
+	    <span id="newfolder" style="margin-left: 20px;display: none;">
+	    	<input type="text" id="foldername" placeholder="请输入相册名" value="" />
+	    	<input type="button" onclick="newf()" value="创建" />
+	    	<input type="button" onclick="closef()" value="关闭" />
+	    </span>
+    </div>
+    <div id="folder" style="border: #CCC 1px solid;display: none;"></div>
+    <input type="hidden" id="uid" value="0" />
+    <input type="hidden" id="folderid" value="{$data.fid}" />
+    
+    <div role="tabpanel" style="display: ;" class="tab-pane fade in active" id="demo" aria-labelledby="demo-tab">
+        <div class="row">
+            <input type="hidden" id="domain" value="{:qiniu_domain()}">
+            <input type="hidden" id="uptoken_url" value="/static/qiniu/jssdk/demo/upload_token_6_1.php">
+            <div align="center" id="savediv" style="background:#FF9;color:red;font-weight:bold;padding:10px;margin: 20px 0;border:#FC0 2px solid;">执行上传文件过程中切勿关闭窗口</div>
+            <div class="col-md-12">
+                <div id="container">
+            		<div style="margin: 0 auto 10px;width: 320px;"><button id="pickfiles" type="button" class="btn btn5 bgc">上传素材</button> </div>
+                    <div  data-toggle="modal" data-target="#myModalupload" id="finishbtn"></div>
+                </div>
+            </div>
+            <div style="clear:both;"></div>
+            <div align="center">温馨提示：建议每次选择上传的图片数量低于30张。</div>
+            <div style="display:none" id="success" class="col-md-12">
+                <div class="alert-success" style="padding: 10px;margin-top:10px;">
+                    队列全部文件处理完毕
+                </div>
+            </div>
+            <div class="col-md-12 ">
+                <table class="table table-striped table-hover text-left"   style="margin-top:40px;display:none">
+                    <thead>
+                      <tr>
+                        <th class="col-md-4">Filename</th>
+                        <th class="col-md-2">Size</th>
+                        <th class="col-md-6">Detail</th>
+                      </tr>
+                    </thead>
+                    <tbody id="fsUploadProgress">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <hr />
+    
+    <div class="uptxt">
+    <p>1.上传时关闭或刷新页面上传将终止，因人工或意外中止时可以重新打开进行续传</p>
+    <p>2.支持文件格式：jpg|.jpeg。</p>
+    <p>3.JPG/JPEG格式作品上传要求：最短边需≥600PX</p>
+    <p>4.为保障文件的正常上传，请将文件大小控制在20M以内</p>
+    </div>
+  </div>
+  <php>}else{</php>
+  <div style="text-align:center;margin:80px 0;">
+  <h2><a href="/user/my">请完善个人资料才能上传作品</a></h2>
+  </div>
+  <php>}</php>
+</div>
+
+
+<div class="modal fade" id="myModalupload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="false" aria-hidden="true">
+  <div class="modal-dialog mod1" style="height:280px;" >
+    <div class="modal-content modwh100 " >
+      <div class="modal-header modborder0" style="position:absolute;right:0;" >
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>
+            <img src="/static/images/success.jpg" width="100%" > 
+        <div class="mod2">
+          <div class="mod21" style="text-align:center;color:#333;">
+          	<h3>恭喜你成功上传<span id="count_finish" style="color:#f16172;"></span>张图片去填写信息吧！</h3>
+          </div>
+            <div class="col-sm-offset-4 col-sm-8" style="margin-top:30px;">
+                <button  class="bgc btn" style="text-align:center;cursor:pointer;width:140px;" onclick="location='/user/homepage_pending';"> 编辑图片 </button>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="closes" style="color:#289edb;cursor:pointer;" data-dismiss="modal">继续上传</span>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+  </div>
+</div>
+<div class="ubg"></div>
+<script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/plupload/moxie.js"></script>
+<script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/plupload/plupload.dev.js"></script>
+<!-- <script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/plupload/js/plupload.full.min.js"></script> -->
+<script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/plupload/i18n/zh_CN.js"></script>
+<script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/ui.js?rad={:time()}"></script>
+<script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/qiniu.js"></script>
+<script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/highlight.js"></script>
+<script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/main.js?rad={:time()}"></script>
+<script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+<include file="public:mfooter"/>

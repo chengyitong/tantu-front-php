@@ -1,0 +1,134 @@
+<include file="public:header" />
+{:loadplug_tooltip()}
+<div class="midline">
+<php>if(!$data['backurl'] || I('get.backbtn')=='no'):</php>
+	<input type="button" class="sys_button btn_disabled" value="返回上一级" />
+<else/>
+	<input type="button" class="sys_button btn_gray" onclick="location='/sys/code{$data.backurl}';" value="返回上一级" />
+<php>endif;</php>
+</div>
+<php>
+if($data['syscodeparentid']==326) echo '<div style="padding: 5px 0;">请在以下“值”一栏填入图片ID即可!</div>';
+</php>
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <thead>
+  <tr>
+    <th width="5%">ID</th>
+    <th width="16%">
+		编号
+    </th>
+    <th width="12%">名称</th>
+    <th width="12%">值</th>
+    <th>内容</th>
+    <th width="6%">使用</th>
+    <th width="13%">排序</th>
+    <th width="12%">操作</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td align="center" colspan="10"><a href="#newcode_row" onclick="showdis_newcode();">新增</a></td>
+  </tr>
+  <form id="newcode_form" name="newcode_form" method="post" action="/sys/code_new">
+      <input type="hidden" name="syscodeLevel" value="{$data.syscodeLevel}" />
+      <input type="hidden" name="syscodeparentid" value="{$data.syscodeparentid}" />
+  <tr id="newcode_tr"<neq name="_GET['done']" value="new"> style="display:none;"</neq>>
+    <td><a name="newsyscode_row"></a>&nbsp;</td>
+    <td>
+        <input type="text" name="syscodeNo" id="syscodeNo" style="width: 100px;" value="" />
+    </td>
+    <td>
+		<input type="text" name="syscodeName" id="syscodeName" style="width: 120px;" value="" />
+    </td>
+    <td>
+		<input type="text" name="syscodeValue" id="syscodeValue" style="width: 100px;" value="" />
+	</td>
+    <td><input type="text" name="syscodecontent" id="syscodeContent" style="width: 160px;" value="" /></td>
+    <td align="center">
+		<select name="syscodeisuse">
+        	<option value="1">是</option>
+        	<option value="0">否</option>
+        </select>
+    </td>
+    <td>
+		<input type="text" name="syscodeSortNo" id="syscodeSortNo" value="{$page['len']+1}" readonly="readonly" style="background-color: #EEE; width: 100px;" />
+    </td>
+    <td align="center">
+    	<input name="" type="button" onclick="gosub()" class="sys_button" value=" 新增 " />
+    </td>
+  </tr>
+  </form>
+  <volist name="data.code" id="vo">
+  <php>
+  if($vo['syscode_parentid']==326) $img = D('a_product')->where('id='.$vo['syscode_value'])->find();
+  </php>
+  <tr>
+    <td align="center">{$vo.syscode_id}</td>
+    <php>if($img):</php>
+    <td align="center">{$vo.syscode_no}
+    <img src="{:qiniu_domain()}{$img.imgkey}-slist?_={:time()}" height="40px" style="margin: 2px;" />
+    <else/>
+    <td class="tdellipsis">{$vo.syscode_no}
+    <php>endif;</php>
+    </td>
+    <td>
+  		<a href="/sys/code?do=sel&id={$vo.syscode_id}">
+  		{$vo.syscode_name}
+  		</a>
+  		<php>if($img) echo $img['name'].'.'.$img['imgext'];</php>
+    </td>
+    <td>{$vo.syscode_value}</td>
+    <td>{$vo.syscode_content}
+    <php>if($img){ echo '状态：'; if($img['isuse']) echo '正常'; else echo '失效'; }</php>
+    </td>
+    <td align="center"><eq name="vo.syscode_isuse" value="1">是<else/>否</eq></td>
+    <td align="center">
+    	<eq name="i" value="1">
+	    	<input type="button" value="↑" class="sys_button btn_disabled" />
+	    <else/>
+	    	<input type="button" value="↑" class="sys_button" onclick="location='/sys/csort?do=up&id={$vo.syscode_id}&url={:GetCurUrl()}';" />
+    	</eq>
+    	<eq name="i" value="$page.len">
+	    	<input type="button" value="↓" class="sys_button btn_disabled" />
+	    <else/>
+	    	<input type="button" value="↓" class="sys_button" onclick="location='/sys/csort?do=down&id={$vo.syscode_id}&url={:GetCurUrl()}';" />
+    	</eq>
+		<input type="button" value="转到" class="sys_button" onclick="global.openNew('/sys/gopage?id={$vo.syscode_id}');" />
+    </td>
+    <td align="center">
+    <input type="button" value="图片" class="sys_button btn_open<php>if($vo['syscode_imgid']>0) echo ' btn_orange';</php>" href="/sys/uploadfilev?table=syscode&fieldid=syscode_id&id={$vo.syscode_id}&src=/static/uploadfiles/sys/&field=syscode_imgid&rsl=" title="图片上传" />
+    <input type="button" value="编辑" class="sys_button btn_open" href="/sys/code_uptv?id={$vo.syscode_id}" title="修改窗口" />
+    <php>if($vo['syscode_candelete'] || $vo['syscode_parentid']==326):</php>
+    <input type="button" value="删除" class="sys_button btn_del" title="此操作将删除本条及以下全部内容且不得恢复, 确定?" href="/sys/code_del?url={:GetCurUrl()}" data-id="{$vo.syscode_id}" callback="" />
+    <php>endif;</php>
+    </td>
+  </tr>
+  </volist>
+  </tbody>
+  <include file="public:table_page" /></table>
+</div>
+<script>
+$(function() {
+	if($('#syscodeNo')) $('#syscodeNo').focus();
+});
+var subto=false;
+function gosub(){
+	if(!subto){
+		subto=true;
+		$('#newcode_form').submit();
+	}
+}
+function showdis_newcode(){
+	if($('#newcode_tr').css('display')=='none'){
+		$('#newcode_tr').css('display','');
+		if($('#syscodeNo').length>0) $('#syscodeNo').focus(); else{
+			if($('#syscodeName').length>0) $('#syscodeName').focus();
+		}
+		global.input_defwd();
+	}else{
+		$('#newcode_tr').css('display','none');
+	}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:header" />
+
+<table class="table_list table_search" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <form action="?" method="get">
+        <thead>
+            <tr>
+                <th colspan="4">
+        <div class="tdp">
+            <div></div>搜索条件
+        </div>
+        </th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td width="25%">
+					<label>名称</label>
+                    <input type="text" name="name_cn" value="{$where.name_cn}" />
+                </td>
+                <td width="25%">
+					<label>状态</label>
+                    <select name="isuse">
+                    	<option value="1" <php>if($where['isuse']=='1') echo 'selected';</php>>正常</option>
+                    	<option value="0" <php>if($where['isuse']=='0') echo 'selected';</php>>已删除</option>
+                    </select>
+                </td>
+                <td colspan="2">
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr align="center">
+                <td colspan="4"><input type="submit" class="sys_button btn_blue" value=" 搜索 " /></td>
+            </tr>
+        </tfoot>
+    </form>
+</table>
+<div class="midline">
+    <input type="button" class="sys_button btn_gray" id="btntocvs" value="导出表格" onclick="location = '{:seturlget('exp')}&exp=xls';" />
+</div>
+<php>endif;</php>
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th width="5%">ID.</th>
+            <th width="10%">银行中文名称</th>
+            <th width="15%">银行英文名称</th>
+            <th width="15%">中文地址</th>
+            <th width="15%">英文地址</th>
+            <th width="10%">地址坐标</th>
+            <th>创建时间</th>
+        <php>if(I('get.exp')!='xls'):</php>
+            <th width="15%">其他操作</th>
+        <php>endif;</php>
+	</tr>
+</thead>
+<tbody>
+<volist name="data.list" id="vo">
+    <tr align="center">
+        <td>{$vo.id}</td>
+        <td>{$vo.bankname_cn}</td>
+        <td>{$vo.bankname_en}</td>
+        <td>{$vo.bankaddr_cn}</td>
+        <td>{$vo.bankaddr_en}</td>
+        <td>{$vo.location_x},{$vo.location_y}</td>
+        <td>{$vo.ctime}</td>
+    <php>if(I('get.exp')!='xls'):</php>
+    <td>
+        <input type="button" class="sys_button btn_blue btn_open" value=" 小图 " href="/index/images?w=260&h=200&type=info_bank_thumb&id={$vo.id}" />
+        <input type="button" class="sys_button btn_blue btn_open" value=" 大图 " href="/index/images?w=720&h=350&type=info_bank&id={$vo.id}" />
+        <input type="button" class="sys_button btn_blue btn_open" value=" 编辑 " href="/info/bank_editv?id={$vo.id}" />
+        <input type="button" class="sys_button btn_blue" value=" 删除 " onclick="if (confirm('确定删除?'))
+                    location = '/info/scenic_del?id={$vo.id}';" /> 
+    </td>
+    <php>endif;</php>
+    </tr>
+</volist>
+<tr align="center">
+
+        <form action="/info/bank_add" method="post">
+    
+            <td>新增</td>
+            <td><input type="text" name="bankname_cn" value="" /></td>
+            <td><input type="text" name="bankname_en" value="" /></td>
+    
+            <td><input type="text" name="bankaddr_cn" value="" /></td>
+            <td><input type="text" name="bankaddr_en" value="" /></td>
+            <td></td>
+            <td></td>
+    
+            <td>
+    
+                <input type="submit" class="sys_button btn_orange" value=" 提交 " />
+    
+            </td>
+    
+        </form>
+    
+    </tr>
+</tbody>
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:table_page" />
+<php>endif;</php>
+</table>
+<php>if(I('get.exp')!='xls'):</php>
+</body>
+</html>
+<php>endif;</php>

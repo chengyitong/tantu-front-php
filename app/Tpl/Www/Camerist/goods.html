@@ -1,0 +1,251 @@
+<include file="public:cheader" />
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.flex-images.css">
+<script type="text/javascript" src="/static/js/jquery.flex-images.min.js"></script>
+<script>
+function onkey() {
+    if (window.event.keyCode == 13) window.open('/index/search?kw=' + escape($('#searchcon').val()));
+}
+
+function banner() {
+    var bn_id = 0;
+    var bn_id2 = 1;
+    var speed33 = 4000;
+    var qhjg = 1;
+    var MyMar33;
+    $("#banner .ind1").hide();
+    $("#banner .ind1").eq(0).fadeIn("slow");
+    if ($("#banner .ind1").length > 1) {
+        var width = $(window).width();
+        var left = (width - 1920) / 2;
+        //$("#banner .ind1").css('margin-left',left);
+        $("#banner_id li").eq(0).addClass("nuw");
+
+        function Marquee33() {
+            bn_id2 = bn_id + 1;
+            if (bn_id2 > $("#banner .ind1").length - 1) {
+                bn_id2 = 0;
+            }
+            $("#banner .ind1").eq(bn_id).css("z-index", "2");
+            $("#banner .ind1").eq(bn_id2).css("z-index", "1");
+            $("#banner .ind1").eq(bn_id2).show();
+            $("#banner .ind1").eq(bn_id).fadeOut("slow");
+            $("#banner_id li").removeClass("nuw");
+            $("#banner_id li").eq(bn_id2).addClass("nuw");
+            bn_id = bn_id2;
+        };
+
+        MyMar33 = setInterval(Marquee33, speed33);
+
+        $("#banner_id li").click(function() {
+            var bn_id3 = $("#banner_id li").index(this);
+            if (bn_id3 != bn_id && qhjg == 1) {
+                qhjg = 0;
+                $("#banner .ind1").eq(bn_id).css("z-index", "2");
+                $("#banner .ind1").eq(bn_id3).css("z-index", "1");
+                $("#banner .ind1").eq(bn_id3).show();
+                $("#banner .ind1").eq(bn_id).fadeOut("slow", function() { qhjg = 1; });
+                $("#banner_id li").removeClass("nuw");
+                $("#banner_id li").eq(bn_id3).addClass("nuw");
+                bn_id = bn_id3;
+            }
+        })
+        $("#banner_id").hover(
+            function() {
+                clearInterval(MyMar33);
+            },
+            function() {
+                MyMar33 = setInterval(Marquee33, speed33);
+            }
+        )
+    } else {
+        $("#banner_id").hide();
+    }
+}
+</script>
+<div class="wrapper">
+    <div class="fans">
+        <div class="fans-list clearfix">
+            <div class="fans-margin">
+                <div class="flex-images" style="margin: 15px 18px 0 18px;">
+                </div>
+                <div class="list2 float">
+                    <div style=" width:100%; height:272px;"><img src="../../../../static/images/ablumbg.png" /></div>
+                    <div style="font-size:20px; text-align:center; margin-top:20px">风景</div>
+                    <div style=" text-align:center; margin:10px; color:#b9c1c7">3张图片</div>
+                </div>
+                <div class="list2 float">
+                    <div style=" width:100%; height:272px;"><img src="../../../../static/images/ablumbg.png" /></div>
+                    <div style="font-size:20px; text-align:center; margin-top:20px">风景</div>
+                    <div style=" text-align:center; margin:10px; color:#b9c1c7">3张图片</div>
+                </div>
+                <div class="list2 float">
+                    <div style=" width:100%; height:272px;"><img src="../../../../static/images/ablumbg.png" /></div>
+                    <div style="font-size:20px; text-align:center; margin-top:20px">风景</div>
+                    <div style=" text-align:center; margin:10px; color:#b9c1c7">3张图片</div>
+                </div>
+                <div class="list2 float">
+                    <div style=" width:100%; height:272px;"><img src="../../../../static/images/ablumbg.png" /></div>
+                    <div style="font-size:20px; text-align:center; margin-top:20px">风景</div>
+                    <div style=" text-align:center; margin:10px; color:#b9c1c7">3张图片</div>
+                </div>
+                <div class="list2 float">
+                    <div style=" width:100%; height:272px;"><img src="../../../../static/images/ablumbg.png" /></div>
+                    <div style="font-size:20px; text-align:center; margin-top:20px">风景</div>
+                    <div style=" text-align:center; margin:10px; color:#b9c1c7">3张图片</div>
+                </div>
+                <div class="list2 float">
+                    <div style=" width:100%; height:272px;"><img src="../../../../static/images/ablumbg.png" /></div>
+                    <div style="font-size:20px; text-align:center; margin-top:20px">风景</div>
+                    <div style=" text-align:center; margin:10px; color:#b9c1c7">3张图片</div>
+                </div>
+                <div class="list2 float">
+                    <div style=" width:100%; height:272px;"><img src="../../../../static/images/ablumbg.png" /></div>
+                    <div style="font-size:20px; text-align:center; margin-top:20px">风景</div>
+                    <div style=" text-align:center; margin:10px; color:#b9c1c7">3张图片</div>
+                </div>
+                <div class="list2 float">
+                    <div style=" width:100%; height:272px;"><img src="../../../../static/images/ablumbg.png" /></div>
+                    <div style="font-size:20px; text-align:center; margin-top:20px">风景</div>
+                    <div style=" text-align:center; margin:10px; color:#b9c1c7">3张图片</div>
+                </div>
+                <div class="list2 float">
+                    <div style=" width:100%; height:272px;"><img src="../../../../static/images/ablumbg.png" /></div>
+                    <div style="font-size:20px; text-align:center; margin-top:20px">风景</div>
+                    <div style=" text-align:center; margin:10px; color:#b9c1c7">3张图片</div>
+                </div>
+                <div class="list2 float">
+                    <div style=" width:100%; height:272px;"><img src="../../../../static/images/ablumbg.png" /></div>
+                    <div style="font-size:20px; text-align:center; margin-top:20px">风景</div>
+                    <div style=" text-align:center; margin:10px; color:#b9c1c7">3张图片</div>
+                </div>
+                <div class="list2 float">
+                    <div style=" width:100%; height:272px;"><img src="../../../../static/images/ablumbg.png" /></div>
+                    <div style="font-size:20px; text-align:center; margin-top:20px">风景</div>
+                    <div style=" text-align:center; margin:10px; color:#b9c1c7">3张图片</div>
+                </div>
+                <div class="list2 float">
+                    <div style=" width:100%; height:272px;"><img src="../../../../static/images/ablumbg.png" /></div>
+                    <div style="font-size:20px; text-align:center; margin-top:20px">风景</div>
+                    <div style=" text-align:center; margin:10px; color:#b9c1c7">3张图片</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+$(function() {
+    banner();
+    imglist('type=tj');
+});
+
+function imglist(url) {
+    var temp = '';
+    url += '{$data.sql}';
+    $.getJSON('/index/get_images?per=20&' + url, function(json) {
+        if (!json.r) {
+            $(".flex-images").html('当前分类没有图片');
+        } else {
+            $.each(json.r, function(index, data) {
+                var width = data.width;
+                var height = data.height;
+                temp += "<a href='/index/detail?id=" + data.id + "' target='_blank'><div class='item cell' data-w='" + width + "' data-h='" + height + "'><img class='lazy' src='" + data.imgurl + "' style='width:100%;height:100%;'><div class='discuz' style='position:absolute;bottom:0px;padding:5px 10px;width:100%;background:rgba(0,0,0,0.2);'><div style='float:left'><img src='/index/avatar_url/uid/" + data.uid + "' style='border-radius:12px;width:24px' />" + data.nickname + "</div><div style='float:right;margin-top:4px;'><img src='/static/images/iconheart.png' style='margin-top: -3px;width:13px;height:13px;' /> " + data.likes + " <img src='/static/images/iconeye.png' style='margin-top: -3px;width:13px;height:13px;' />" + data.visits + " <img src='/static/images/iconstar.png' style='margin-top: -3px;width:13px;height:13px;' />" + data.fav + " </div><div style='clear:both'></div></div></div></a>"
+            });
+            $(".flex-images").html(temp);
+            var ttt = true;
+            if (json.type == 'tj') ttt = false;
+            $('.flex-images').flexImages({ 'rowHeight': 290, 'container': '.item', 'truncate': true });
+            $('.cell').mouseover(function() {
+                $(this).find('.discuz').show();
+            }).mouseout(function() {
+                $(this).find('.discuz').hide();
+            });
+        }
+    });
+}
+// for scroll bar appear;
+$(window).trigger("resize");
+$(function() {
+    $('.ula ul li').click(function() {
+        var num = $(this).index();
+        for (var i = 0; i < 8; i++) {
+            $('.ula ul li').eq(i).children('img').attr("src", "/static/images/item" + i + ".png");
+        }
+        $(this).children('img').attr("src", "/static/images/item_c" + num + ".png");
+        $(this).siblings().removeClass('ind_active');
+        $(this).addClass('ind_active');
+        imglist($(this).attr('data-url'));
+    });
+    $('.carousel-caption').fadeIn(1000);
+    $('.go-top').click(function() {
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+        return false;
+    });
+})
+
+function loging() {
+    var mobile = $('#mobile').val();
+    var pass = $('#password').val();
+    var remember = 1;
+
+    if (!mobile) {
+        alert('请输入用户名');
+        return false;
+    }
+    if (!pass) {
+        alert('请输入密码');
+        return false;
+    }
+    if ($('#remember').is("checked")) {
+        remember = 60;
+    }
+    $.get("/index/loging?m1=" + mobile + "&p1=" + pass + "&remember=" + remember, function(data) {
+        var arr = data.split(':');
+        if (arr[0] == 1) location.reload();
+        else alert(arr[1]);
+    });
+}
+
+function showthreg() {
+    $('#threg').show();
+    $('#reg').hide();
+
+}
+
+function showreg() {
+    $('#reg').show();
+    $('#threg').hide();
+
+}
+
+function reging() {
+    var mobile = $('#regmobile').val();
+    var pass = $('#regpassword').val();
+    var pass2 = $('#regpassword2').val();
+    if (!mobile) {
+        alert('请输入用户名');
+        return false;
+    }
+    if (!pass) {
+        alert('请输入密码');
+        return false;
+    }
+    if (pass != pass2) {
+        $('.wrong').show();
+        return false;
+
+    }
+
+    $.get("/index/reging?m1=" + mobile + "&p1=" + pass, function(data) {
+        var arr = data.split(':');
+        if (arr[0] == 1) location.reload();
+        else alert(arr[1]);
+    });
+}
+
+function qqlogin() {
+    $.get("https://graph.qq.com/user/get_user_info?oauth_consumer_key=100330589&access_token=50545FCBB1E1D4F765498E25930D1D5D&openid=3F552A489D765CC72A8EAD289E6ECD14&format=json", function(data) {
+        console.log(data);
+    });
+}
+</script>
+<include file="public:mfooter" />

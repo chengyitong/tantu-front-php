@@ -1,0 +1,12 @@
+<include file="public:header" />
+{:loadplug_editarea('texts',I('get.ftype'))}
+<script>
+function my_save(){
+	var txt = editAreaLoader.getValue("texts");
+	var src = "{:I('get.path')}";
+	$.getJSON('/sys/files_save?callback=?',{path:src,content:txt},function(data){alert(data.info);});
+}
+</script>
+<textarea id="texts" style="width:100%;">{$editfile}</textarea>
+</body>
+</html>

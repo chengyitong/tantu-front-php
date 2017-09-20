@@ -1,0 +1,57 @@
+<include file="public:cheader" />
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.flex-images.css">
+<script type="text/javascript" src="/static/js/jquery.flex-images.min.js"></script>
+<script>
+function onkey() {
+    if (window.event.keyCode == 13) window.open('/index/search?kw=' + escape($('#searchcon').val()));
+}
+</script>
+<style>
+td {
+    background: #fff;
+    padding: 12px 8px;
+    color: #373737;
+    width: 25%;
+    border: 1px solid #eee;
+}
+
+.title {
+    color: #888;
+}
+
+table {
+    border: 1px solid #eee;
+}
+</style>
+<div class="wrapper" style="margin:30px auto 50px;width: 1200px;">
+    <table width="100%" border="1" cellpadding="5" cellpadding="1">
+        <tr>
+            <td><span class="title">姓名：</span>保密 </td>
+            <td><span class="title">性别：</span>
+                <php>if($target_user['gander']==1) echo '男';else echo '女';</php>
+            </td>
+            <td><span class="title">邮箱：</span>
+                <php>if($target_user['email_show']) echo $target_user['email']; else echo '保密';</php>
+            </td>
+            <td><span class="title">手机：</span>
+                <php>if($target_user['mobile_show']) echo $target_user['mobile']; else echo '保密';</php>
+            </td>
+        </tr>
+        <tr>
+            <td><span class="title">生日：</span>
+                <php>if($target_user['birth']!='0000-00-00') echo $target_user['birth'];</php>
+            </td>
+            <td colspan="3"><span class="title">现居：</span>{:str_replace('|;|',' ',$target_user['address'])}</td>
+        </tr>
+        <tr>
+            <td style="color: #09f;"><span class="title">身份：</span>
+                <php>
+                    $sf = D('syscode')->where('syscode_id in (0'.$target_user['shenfen'].'0) and syscode_parentid=318 and syscode_isuse=1')->order('syscode_sortno')->select();
+                </php>
+                <volist name="sf" id="vo">{$vo.syscode_name}&nbsp;</volist>
+            </td>
+            <td colspan="3"><span class="title">简介：</span>{$target_user.introduce}</td>
+        </tr>
+    </table>
+</div>
+<include file="public:mfooter" />

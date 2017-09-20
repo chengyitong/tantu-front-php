@@ -1,0 +1,83 @@
+<include file="public:header" />
+{:loadplug_editor('syscoderemark3');}
+<script>
+$(function() {
+});
+</script>
+<style>
+label {
+	width: 60px;
+	text-align: right;
+	display: inline-block
+}
+tr{margin:5px 0;}
+</style>
+<form action="/info/uptadv?id={$data.r.id}" method="post">
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <thead>
+  <tr>
+    <th>信息修改</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>
+		<label>备注: </label>
+		<input name="remark" id="remark" type="text" value="{$data.r.remark}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>类别: </label>
+        <select name="classid">
+            <option>请选择</option>
+            <volist name="data.class" id="vo">
+            <option value="{$vo.syscode_id}"<php>if($vo['syscode_id']==$data['r']['classid']) echo ' selected';</php>>{$vo.syscode_name}</option>
+            </volist>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>开启类型: </label>
+        <select name="type">
+            <option value="">无动作</option>
+            <option value="content"<php>if("content"==$data['r']['type']) echo ' selected';</php>>详细页面</option>
+            <option value="webview"<php>if("webview"==$data['r']['type']) echo ' selected';</php>>内部网页</option>
+            <option value="web"<php>if("web"==$data['r']['type']) echo ' selected';</php>>外部网页</option>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>目标参数: </label>
+        <input type="text" name="url" value="{$data.r.url}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>开始时间: </label>
+        <input name="stime" id="stime" type="datetime" value="{$data.r.stime}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>结束时间: </label>
+        <input name="etime" id="etime" type="datetime" value="{$data.r.etime}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label >创建时间: </label>
+        <input name="ctime" id="ctime" type="text" value="{$data.r.ctime}" readonly="readonly" style="background-color:#EEE;" />
+    </td>
+  </tr>
+  
+  </tbody>
+  <tr>
+  	<td align="center" bgcolor="#EEEEEE"><input type="submit" class="sys_button" value=" 修改 " /> <input type="button" class="sys_button" onClick="parent.window.close();" value=" 关闭 " /></td>
+  </tr>
+</table>
+</form>
+</body>
+</html>

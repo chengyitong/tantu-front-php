@@ -1,0 +1,496 @@
+<div class="footer clearfix">
+    <div class="container row footer-inner">
+        <div class="col-sm-6">
+            <p class="foottitle">关于</p>
+            <div class="about">
+                <p style="line-height: 22px;">探图是一个以图会友的原创图片社区，致力于摄影作品的发现、分享、售卖，是世界各地优秀摄影师和平民艺术家的聚集地。</p>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <p class="foottitle">关于探图</p>
+            <div class="about">
+                <a href="/index/content?id=314" target="_blank">
+                    <p>关于我们</p>
+                </a>
+                <a href="/index/content?id=315" target="_blank" style="display: none;">
+                    <p>授权协议</p>
+                </a>
+                <a href="/index/content?id=325" target="_blank">
+                    <p>服务条款</p>
+                </a>
+            </div>
+        </div>
+        <div class="col-sm-2 col-xm-6">
+            <p class="foottitle">联系我们</p>
+            <div class="about">
+                <p>020-37589885</p>
+                <p><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2562199003&site=qq&menu=yes"><img src="/static/images/qq.jpg"></a></p>
+            </div>
+        </div>
+        <div class="col-sm-2 col-xm-6" style="text-align: center;">
+            <img src="/static/images/qq_qrcode.jpg" width="80">
+        </div>
+    </div>
+    <div class="copyright clearfix">
+        Copyright © 2010-2017 探图版权所有 粤ICP备16107621号-1
+    </div>
+</div>
+<!--<div class="nav_fixed">
+  <div class="middle">
+    <div class="feedback"> <a href="#" target="_blank"> <img src="/static/images/write_icon.png" width="28px" height="28px"> <i>
+      <svg class="svg-icon icon-advice">
+        <use xlink:href="#icon-advice"></use>
+      </svg>
+      </i> 
+      </a> </div>
+    <div class="favor"> <a href=""> <img src="/static/images/sc.png" style="position: relative;right: 2px;"></a> </div>
+    <div class="history"> <a href=""> <img src="/static/images/time_icon.png" width="28px" height="28px"> <i>
+      <svg class="svg-icon icon-history">
+        <use xlink:href="#icon-history"></use>
+      </svg>
+      </i> 
+      </a> </div>
+  </div>
+  <div class="bottom">
+    <div class="con_weixin"> <img src="/static/images/wechat.png" height="28px" width="28px"> <i>
+      <svg class="svg-icon icon-weixin">
+        <use xlink:href="#icon-weixin"></use>
+      </svg>
+      </i> 
+      <div class="inner"></div>
+    </div>
+    <div class="con_qq"> <img src="/static/images/qq_icon.png" width="28px" height="28px">  </div>
+    <div class="go-top"> <img src="/static/images/up.png" width="28px" height="28px"> </div>
+  </div>
+</div>-->
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width:582px; width:582px;margin-top:185px;">
+        <div class="modal-content" style=" width:100%; height:100%">
+            <div class="modal-header" style="border:0px">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div id="threg">
+                <div class="modal-body">
+                    <div class="mod2" style="height:auto;">
+                        <div class="center mod2151"> <img src="/static/images/logocol.png" width="150px"> </div>
+                        <div class="mod21">
+                            <h5>用户注册</h5>
+                        </div>
+                        <div class="clearfix mod22a" style="height:auto;">
+                            <div class="form-group">
+                                <label for="regmobile" class="col-sm-4 control-label">邮箱/手机:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="regmobile" onKeyUp="chkmailmobile()" placeholder="请输入正确的邮箱或手机号" style="border-radius:0;background:#eaeaea;border:#c3c3c3;">
+                                </div>
+                            </div>
+                            <div class="form-group" id="divcode" style="display:none;">
+                                <label for="regpassword" class="col-sm-4 control-label">验证码:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" onkeydown="tocode();" id="code" style="border-radius:0;background:#eaeaea;border:#c3c3c3;">
+                                </div>
+                                <div style="position:absolute;top:120px;right:40px;">
+                                    <input type="button" class="form-control bgc" id="sendsms" value="获取验证码" onclick="send()" style="border-radius:0;">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="regmobile" class="col-sm-4 control-label">用户名:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="username" placeholder="4~16个字符，字母/数字/中文/下划线" style="border-radius:0;background:#eaeaea;border:#c3c3c3;">
+                                    <div style="position:absolute;right:-108px;top:8px">注册后不可修改</div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="regpassword" class="col-sm-4 control-label">密码:</label>
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control" id="regpassword" placeholder="设置密码" style="border-radius:0;background:#eaeaea;border:#c3c3c3;">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="regpassword2" class="col-sm-4 control-label">确认密码:</label>
+                                <div class="col-sm-8">
+                                    <input type="password" class="form-control" onkeydown="toreg();" id="regpassword2" placeholder="再次输入密码" style="border-radius:0;background:#eaeaea;border:#c3c3c3;">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-4 col-sm-8">
+                                    <div class="bgc form-control" style="text-align:center;cursor:pointer;" onclick="reging()"> 注 册 </div>
+                                </div>
+                            </div>
+                            <div style="margin-left: 95px;text-align:center;padding-bottom:6px;border-bottom:1px solid #CCC;margin-bottom:10px;">已拥有帐号？去<span style="color:#f16172;" onclick="tologin()" class="cursor loging">登录</span></div>
+                            <div class="floatright">一键登录：&nbsp;<a href="/static/qq.php"><img src="/static/images/qqlogin2.png" /></a></div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <h6 class="float">完成此注册，即表明您同意了我们的</h6>
+                    <h6 class="float mod4col"><a href="/index/content?id=325" target="_blank">使用条款和隐私策略</a></h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModallogin" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog mod1">
+        <div class="modal-content modwh100" style="height:auto;">
+            <div class="modal-header modborder0">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="mod2" style="height:auto;">
+                    <!--<div class="center" style="font-size:20px;text-align:center;" > <span class="userreg fontcolor" style="cursor:pointer">会员登录</span>&nbsp;&nbsp;|&nbsp;&nbsp;<span class="telreg" style="cursor:pointer">手机快速登录</span> </div>-->
+                    <div class="center mod2151"> <img src="/static/images/logocol.png" width="150px"> </div>
+                    <div class="mod21">
+                        <h5>用户登录</h5>
+                    </div>
+                    <div class="clearfix mod22a">
+                        <div class="">
+                            <label for="mobile" class="col-sm-4 control-label">帐号:</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="mobile" placeholder="输入邮箱/手机/用户名" style="border-radius:0;background:#eaeaea;border:#c3c3c3;">
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="">
+                            <label for="password" class="col-sm-4 control-label">密码:</label>
+                            <div class="col-sm-8">
+                                <input type="password" class="form-control" id="password" onkeydown="tochk();" placeholder="输入密码" style="border-radius:0;background:#eaeaea;border:#c3c3c3;">
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="">
+                            <div class="col-sm-offset-4 col-sm-8">
+                                <div class="bgc form-control" style="text-align:center;cursor:pointer;" onclick="loging()"> 登 录 </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div style="margin-left:95px;">
+                            <div class="checkbox " style="padding-left:36px;height: 30px;margin-bottom:0;">
+                                <label>
+                                    <input type="checkbox"> 下次自动登录
+                                </label>
+                                <div class="floatright" style="color:#09F;"><a href="/index/forget" target="_blank">忘记密码</a></div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div style="text-align:center;padding-bottom:6px;border-bottom:1px solid #CCC;margin-bottom:10px;">还没有帐号？赶快去<span class="cursor reging" onclick="toregin()" style="color:#f16172;">注册</span></div>
+                        </div>
+                        <!--<div class="telreg_panel" style="margin-top:-15px;">
+                  <div class="form-group">
+                        <label for="regmobile" class="col-sm-4 control-label">手机号:</label>
+                        <div class="col-sm-8">
+                          <input type="text" class="form-control" id="regtel" onkeyup="this.value=this.value.replace(/\D/g,'')" style="border-radius:0;background:#eaeaea;border:#c3c3c3;">
+                        </div>
+                    </div>
+                  <div class="form-group">
+                        <label for="regpassword" class="col-sm-4 control-label">验证码:</label>
+                        <div class="col-sm-8">
+                          <input type="text" class="form-control" onkeydown="tocode();" id="code" style="border-radius:0;background:#eaeaea;border:#c3c3c3;">
+                        </div>
+                    </div>
+                        <div style="position:absolute;top:96px;right:40px;">
+                          <input type="button" class="form-control bgc" id="sendsms" value="获取验证码" onclick="send()" style="border-radius:0;">
+                        </div>
+                  <div class="form-group">
+                    <div class="col-sm-offset-4 col-sm-8">
+                        <div  class="bgc form-control" style="text-align:center;cursor:pointer;" onclick="smsreging()"> 登 录 </div>
+                    </div>
+                  </div>
+                </div> -->
+                        <div class="clearfix"></div>
+                        <div class="floatright">一键登录：&nbsp;<a href="/static/qq.php"><img src="/static/images/qqlogin2.png" /></a></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer clearfix mod3">
+                <h6 class="float">完成此注册，即表明您同意了我们的</h6>
+                <h6 class="float mod3col"><a href="/index/content?id=325" target="_blank">使用条款和隐私策略</a></h6>
+                <h6 class="float-right mod3col"></h6>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal-->
+<div class="modal fade" id="colModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-height:364px; max-width:582px; width:582px; height:364px; margin-top:185px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title"><h5>收藏图片</h5></h4>
+            </div>
+            <div class="modal-body">
+                <div id="flist" style="width:547px; height:200px;  border:1px solid #bbbbbb; position:relative">
+                    <div style="height:150px;overflow:auto;">
+                        <volist name="data.favclass" id="vo">
+                            <div class="afid">
+                                <input id="fid{$vo.id}" type="radio" name="fid" value="{$vo.id}" />&nbsp;
+                                <label for="fid{$vo.id}">{$vo.foldername}</label>
+                            </div>
+                        </volist>
+                    </div>
+                    <div style="position:absolute; height:50px; background-color:#f8f8f8; padding:10px 15px ;bottom:0px ; width:100%">
+                        <input id="foldername" type="text" placeholder="请输入收藏文件夹名" style="line-height:29px; width:80%; border:1px solid #cccccc;border-radius: 3px;padding-left:5px;" />
+                        <button style="text-align:center; line-height:29px; background-color:#000; color:#FFF; width:20%; position:absolute; right:10px;border-radius: 5px; " onClick="newf()">创建收藏夹</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary allbgc" onClick="fav()" style="border:0px">确定</button>
+                <input id="picid" type="hidden" value="{$data.r.id}" />
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<input id="userid" type="hidden" value="{$data.user.id}" />
+<!-- /.carousel <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="APPID" data-redirecturi="http://ttwww.bindow.cn/" charset="utf-8"></script>-->
+<style>
+.control-label {
+    color: #999999;
+    text-align: right;
+    line-height: 34px;
+}
+
+.fontcolor {
+    color: #f16172;
+}
+
+.telreg_panel {
+    display: none
+}
+
+.afid {
+    height: 36px;
+    padding: 10px 15px;
+}
+
+.afid:hover {
+    background: #f8f8f8;
+}
+</style>
+<script>
+function fav() { <
+    php >
+        if (!$fav): < /php>
+    if (isNaN($('input[name="fid"]:checked').val())) {
+        alert('请选择收藏夹');
+        return;
+    } <
+    php > endif; < /php>
+    location = '/index/tofav?id=' + $('#picid').val() + '&fcid=' + $('input[name="fid"]:checked').val();
+}
+
+function newf() {
+    if ($('#foldername').val() == '') {
+        alert('请输入收藏夹名!');
+        return;
+    }
+    $.getJSON('/user/new_favclass?fname=' + $('#foldername').val(), function(json) {
+        alert('创建成功!');
+        $('#flist').prepend('<div class="afid"><input id="fid' + json.id + '" type="radio" name="fid" value="' + json.id + '" />&nbsp;<label for="fid' + json.id + '">' + json.foldername + '</label></div>');
+        $('#foldername').val('');
+    });
+}
+// for scroll bar appear;
+$(window).trigger("resize");
+
+$(function() {
+    $('.userreg').click(function() {
+        $('.telreg').removeClass('fontcolor');
+        $('.userreg').addClass('fontcolor');
+        $('.telreg_panel').hide();
+        $('.userreg_panel').show();
+    });
+    $('.telreg').click(function() {
+        $('.userreg').removeClass('fontcolor');
+        $('.telreg').addClass('fontcolor');
+        $('.userreg_panel').hide();
+        $('.telreg_panel').show();
+    });
+
+    $('.carousel-caption').fadeIn(1000);
+    $('.go-top').click(function() {
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+        return false;
+    });
+    $('#btn1').click(function() {
+        location = '/index/search?kw=&' + $(this).attr('data-url');
+    });
+
+});
+
+
+function loging() {
+    var mobile = $('#mobile').val();
+    var pass = $('#password').val();
+    var remember = 1;
+
+    if (!mobile) {
+        alert('请输入用户名');
+        return false;
+    }
+    if (!pass) {
+        alert('请输入密码');
+        return false;
+    }
+    if ($('#remember').is("checked")) {
+        remember = 60;
+    }
+    $.get("/index/loging?m1=" + global.trim(mobile) + "&p1=" + global.trim(pass) + "&remember=" + global.trim(remember), function(data) {
+        var arr = data.split(':');
+        if (arr[0] == 1) location.reload();
+        else alert(arr[1]);
+    });
+}
+
+function showthreg() {
+    $('#threg').show();
+    $('#reg').hide();
+
+}
+
+function showreg() {
+    $('#reg').show();
+    $('#threg').hide();
+
+}
+
+function reging() {
+    var mobile = $('#regmobile').val();
+    var code = $('#code').val();
+    var username = $('#username').val();
+    var pass = $('#regpassword').val();
+    var pass2 = $('#regpassword2').val();
+    if (!isNaN(mobile) && mobile.length == 11) {
+        if (code.length != 4 || isNaN(code)) {
+            alert('请输入4位数字验证码');
+            return false;
+        }
+    } else if (mobile.indexOf('@') < 0 || mobile.indexOf('.') < 0) {
+        alert('请输入正确的邮箱');
+        return false;
+    }
+    if (!username) {
+        alert('请输入用户名');
+        return false;
+    }
+    if (!pass) {
+        alert('请输入密码');
+        return false;
+    }
+    if (pass != pass2) {
+        alert('两次输入密码不一致');
+        return false;
+    }
+
+    $.get("/index/reging?m1=" + global.trim(mobile) + "&u1=" + global.trim(username) + "&p1=" + global.trim(pass) + '&code=' + global.trim(code), function(data) {
+        var arr = data.split(':');
+        alert(arr[1]);
+        if (arr[0] == 1) location.reload();
+    });
+}
+
+function tochk(e) {
+
+    if (window.event.keyCode == 13) {
+
+        loging();
+
+    }
+
+}
+
+function toreg(e) {
+
+    if (window.event.keyCode == 13) {
+
+        reging();
+
+    }
+
+}
+
+function tocode(e) {
+
+    if (window.event.keyCode == 13) {
+
+        smsreging();
+
+    }
+
+}
+
+function tologin() {
+    $('#myModal').modal('hide');
+    $('#myModallogin').modal('show');
+}
+
+function toregin() {
+    $('#myModallogin').modal('hide');
+    $('#myModal').modal('show');
+}
+
+function chkmailmobile() {
+    var val = $('#regmobile').val();
+    if (!isNaN(val) && val.length == 11) {
+        $('#divcode').show();
+    } else {
+        $('#divcode').hide();
+    }
+}
+
+function send() {
+    var tel = $('#regmobile').val();
+    if (tel.length != 11 || isNaN(tel)) {
+        alert('请输入正确的手机号码');
+        return;
+    }
+    $.getJSON('/index/sms_vcode?mobile=' + global.trim(tel), function(data) {
+
+        if (data.rstatus == 0) {
+            alert(data.info);
+        } else {
+            var i = 60;
+            $("#sendsms").attr("disabled", "disabled");
+
+            var _time = setInterval(function() {
+                i = i - 1;
+                $("#sendsms").val("（" + i + "）秒").css("color", "#333");
+                if (i == 0) {
+                    $("#sendsms").removeAttr("disabled");
+                    $("#sendsms").val("获取验证码").css("color", "#fff");
+                    clearInterval(_time);
+                }
+            }, 1000);
+        }
+    });
+}
+
+function smsreging() {
+
+    var code = $('#code').val();
+    var tel = $('#regmobile').val();
+    if (tel.length != 11 || isNaN(tel)) {
+        alert('请输入正确的手机号码');
+        return;
+    }
+    if (!code) {
+        alert('请输入验证码');
+        return false;
+    }
+
+    $.get("/index/reging_sms?m1=" + global.trim(tel) + "&code=" + global.trim(code), function(data) {
+        var arr = data.split(':');
+        if (arr[0] == 1) location.reload();
+        else alert(arr[1]);
+    });
+}
+</script>
+<div style="display:none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1261057114&web_id=1261057114" language="JavaScript"></script>
+</div>
+</body>
+
+</html>

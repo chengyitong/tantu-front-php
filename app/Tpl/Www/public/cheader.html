@@ -1,0 +1,245 @@
+<include file="public:header" />
+<style>
+#fmsel2 {
+    max-height: 500px;
+    overflow: auto;
+}
+
+.selpics_div {
+    float: left;
+    border: 1px solid #EEE;
+    margin: 0 5px 5px 0;
+    /*width: 264px;
+  height: 90px;*/
+    cursor: pointer;
+}
+
+.selpics_div:hover {
+    border: 1px solid #333;
+    background: #EEE;
+}
+
+.selpics_div img {
+    max-height: 100px;
+    max-width: 200px;
+}
+
+.cbanner {
+    background-position: center;
+    background-size: cover;
+    background-clip: border-box;
+}
+</style>
+<script>
+$(function() {
+    $("html,body").animate({ "scrollTop": "300px" }, 1000);
+});
+var doing = false,
+    _uid = '{:session("uid")}';
+
+function toupload() {
+    if (doing || $('#userfile').val() == '') return false;
+    doing = true;
+    $('#fengmianModal2').modal('hide');
+    loading.show(0, '图片上传中,请稍候...');
+    $('#form_1').submit();
+}
+
+function selpic() {
+    if (doing) return false;
+    $('#fengmianModal2').modal('show');
+    $('#fmsel1').show();
+    $('#fmsel2').hide();
+    //$('#userfile').val('').click();
+}
+
+function selpic2_back() {
+    $('#fmsel1').show();
+    $('#fmsel2').hide();
+}
+
+function selpic2_do1() {
+    if (doing) return false;
+    $('#fmsel1').hide();
+    $('#fmsel2').show().html('Loading...');
+    var str = '';
+    $.getJSON('/user/getpics?callback=?', function(json) {
+        if (json.list == null) { $('#fmsel2').show().html('您没有作品！'); return false; }
+        $.each(json.list, function(index, data) {
+            str += '<div class="selpics_div" onclick="selpic2_do1_chk(\'' + data.imgkey + '\')"><img src="' + data.imgurl + '"/></div>';
+        });
+        if (str != '') $('#fmsel2').show().html('<div style="text-align:left;margin-bottom:5px;"><input type="button" class="btn btn-default" onclick="selpic2_back()" value="返回" /></div>' + str + '<div style="clear:both;"></div>');
+        else $('#fmsel2').show().html('您没有作品！');
+    });
+}
+
+function selpic2_do1_chk(key) {
+    $('#fengmianModal2').modal('hide');
+    loading.show(0, '图片设置中,请稍候...');
+    $.get('/camerist/setpics?uid={:session("uid")}&key=' + key, function(data) {
+        loading.hide();
+        doing = false;
+        $('.cbanner').css({ "background-image": "url(" + data + ")" });
+    });
+}
+
+function selpic2_do2() {
+    if (doing) return false;
+    $('#userfile').val('').click();
+}
+
+function api_avatar_err(info) {
+    alert(info);
+    doing = false;
+    loading.hide();
+}
+
+function api_avatar_ok(name) {
+    loading.hide();
+    doing = false;
+    $('.cbanner').css({ "background-image": "url(/static/uploadfiles/albumimg/" + name + ")" });
+}
+
+function onkey() {
+    if (window.event.keyCode == 13) location = '/index/search?kw=' + escape(global.trim($('#searchcon2').val()));
+}
+
+function fouc(id) {
+    var user = $('#session').val();
+
+    if (user) {
+        $.get('/camerist/tofollow?uid=' + id, function(json) {
+            location.reload();
+        })
+    } else {
+        alert('请先登陆');
+    }
+}
+</script>
+<div class="cbanner" style="background-image:url({:imgurl_tt3($target_user['albumimg'],0)});">
+</div>
+<input type="hidden" id="session" value="{$data.user.id}" />
+<div class="wrapper photographer" style="border-bottom: 1px solid #eee;">
+    <div class="container" style="width: 100%;">
+        <div class="photographer-nav row" style="position:relative;">
+            <div class="col-lg-5 col-md-6 col-sm-12 col-xs-12">
+                <div class="float">
+                    <php>if($target_user['avatar']==''){if($target_user['avatarimg']==''){</php><img width="120" style="border-radius:60px;" src="/static/images/tx.png" />
+                    <php>}else{</php><img src="/static/uploadfiles/images/{$target_user.avatarimg}" width="120" style="border-radius:60px;" />
+                    <php>}}else{</php><img src="/static/uploadfiles/images/{$target_user.avatar}" width="120" style="border-radius:60px;" />
+                    <php>}</php>
+                </div>
+                <div class="float" style="margin:5px;">
+                    <div class="clearfix" style="line-height: 30px;"><span style="font-size:22px;">{:cstr($target_user['nickname'],'匿名')}</span> &nbsp;&nbsp;
+                        <php>if($target_user['id']!=$data['user']['id']){</php><span onClick="fouc({$target_user.id})" class="<php>if($target_user['followed']==1) echo 'fansbtn_2'; else echo 'fansbtn';</php>"><php>if($target_user['followed']==1) echo '取消关注';else echo '关注';</php></span>
+                        <php>}</php>
+                    </div>
+                    <div style="color:#7e7e7e;padding:10px 0;">个性签名：
+                        <php>if($target_user['desc']) echo $target_user['desc'];else echo '此家伙很懒没留下签名';</php>
+                    </div>
+                    <div style="width:280px;">
+                        <div class="float" style="width:20%;"><a href="http://www.jiathis.com/send/?webid=weixin&url={:GetCurUrl()}&title=探图" target="_blank"><img src="/static/images/iconwechat.png" /></a></div>
+                        <div class="float" style="width:20%;"><a href="http://www.jiathis.com/send/?webid=tsina&url={:GetCurUrl()}&title=探图" target="_blank"><img src="/static/images/iconsina.png" /></a></div>
+                        <div class="float" style="width:20%;"><a href="http://www.jiathis.com/send/?webid=qzone&url={:GetCurUrl()}&title=探图" target="_blank"><img src="/static/images/iconqzone.png" /></a></div>
+                        <div class="float" style="width:20%;"><a href="http://www.jiathis.com/send/?webid=renren&url={:GetCurUrl()}&title=探图" target="_blank"><img src="/static/images/iconrenren.png" /></a></div>
+                        <div class="float" style="width:20%;"><a href="http://www.jiathis.com/send/?webid=douban&url={:GetCurUrl()}&title=探图" target="_blank"><img src="/static/images/icondou.png" /></a></div>
+                        <div class="clear"></div>
+                    </div>
+                    <div style="margin:10px 0;"><span style="color:#f16172;">{$target_user.visit}</span>访问数</div>
+                </div>
+            </div>
+            <php>if($data['user']['id']==I('get.uid')):</php>
+            <iframe name="ifrm1" src="/user/waits" style="position:absolute;top:-100px;left:-100px;width:0px;height:0px;" frameborder="0"></iframe>
+            <form action="/camerist/abanner_up?uid={:I('get.uid')}" target="ifrm1" method="post" id="form_1" enctype="multipart/form-data">
+                <div class="floatright">
+                    <div>
+                        <button class="btn btn-default" type="button" onClick="selpic()">设置封面</button>&nbsp;<span style="font-size:.8em;">（建议上传图片尺寸1920*600,文件大小不超过20M）</span>
+                        <input type="file" id="userfile" name="userfile" size="20" style="position: absolute;left: -100px;top: -100px;width: 0;height: 0;" onChange="toupload();" />
+                    </div>
+                </div>
+            </form>
+            <php>endif;</php>
+                <div class="cheader-nav col-lg-7 col-md-6 col-sm-12 col-xs-12">
+                    <ul>
+                        <li onClick="location='/camerist/gallery?uid={$target_user.id}';" <php>if($data['headmenu'] == 'gallery') echo 'class="ind_active"';</php> data-url=""> 作品展示&nbsp;{$data.image_count} </li>
+                        <li onClick="location='/camerist/album?uid={$target_user.id}';" <php>if($data['headmenu'] == 'album') echo 'class="ind_active"';</php> data-url="classid=1"> 专辑&nbsp;{$data.folder_count} </li>
+                        <li onClick="location='/camerist/fans?uid={$target_user.id}';" <php>if($data['headmenu'] == 'fans') echo 'class="ind_active"';</php> data-url="classid=1"> 粉丝&nbsp;{$data.fans_count} </li>
+                        <li onClick="location='/camerist/followers?uid={$target_user.id}';" <php>if($data['headmenu'] == 'followers') echo 'class="ind_active"';</php> data-url="classid=1"> 关注&nbsp;{$data.followers_count} </li>
+                        <li onClick="location='/camerist/ziliao?uid={$target_user.id}';" <php>if($data['headmenu'] == 'ziliao') echo 'class="ind_active"';</php> data-url="classid=1"> 详细资料 </li>
+                        <li onClick="location='/camerist/collection?uid={$target_user.id}';" <php>if($data['headmenu'] == 'collection') echo 'class="ind_active"';</php> data-url="classid=1"> 收藏 </li>
+                    </ul>
+                </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="fengmianModal2" tabindex="-1" role="dialog" aria-labelledby="fengmianModalLabel2" aria-hidden="true">
+    <div class="modal-dialog" style="max-width:882px; width:882px;margin-top:185px;">
+        <div class="modal-content" style=" width:100%; height:100%">
+            <div class="modal-header" style="border:0px">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div id="threg">
+                <div class="modal-body">
+                    <div class="mod2" style="height:auto;width:850px;">
+                        <div class="center mod2151"> <img src="/static/images/logocol.png" width="150px"> </div>
+                        <div class="mod21" style="height: auto;">
+                            <h5>设置封面</h5>
+                            <div id="fmsel1">
+                                <div style="margin-bottom: 20px;">
+                                    <div class="bgc form-control" style="margin: auto;width: 30%;text-align:center;cursor:pointer;" onClick="selpic2_do1()"> 选择专辑中图片 </div>
+                                </div>
+                                <div style="margin-bottom: 10px;">
+                                    <div role="tabpanel" style="display: ;" class="tab-pane fade in active" id="demo" aria-labelledby="demo-tab">
+                                        <div class="row">
+                                            <input type="hidden" id="domain" value="{:qiniu_domain()}">
+                                            <input type="hidden" id="uptoken_url" value="/static/qiniu/jssdk/demo/upload_token_6_1.php">
+                                            <div class="col-md-12">
+                                                <div id="container">
+                                                    <div class="bgc form-control" id="pickfiles" style="margin: auto;width: 30%;text-align:center;cursor:pointer;" data-func="selpic2_do2"> 上传一张封面图 </div>
+                                                    <div data-toggle="modal" data-target="#myModalupload" id="finishbtn"></div>
+                                                </div>
+                                            </div>
+                                            <div style="clear:both;"></div>
+                                            <div style="display:none" id="success" class="col-md-12">
+                                                <div class="alert-success" style="padding: 10px;margin-top:10px;">
+                                                    队列全部文件处理完毕
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 ">
+                                                <table class="table table-striped table-hover text-left" style="margin-top:40px;display:none">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="col-md-4">Filename</th>
+                                                            <th class="col-md-2">Size</th>
+                                                            <th class="col-md-6">Detail</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="fsUploadProgress">
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/plupload/moxie.js"></script>
+                                    <script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/plupload/plupload.dev.js"></script>
+                                    <!-- <script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/plupload/js/plupload.full.min.js"></script> -->
+                                    <script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/plupload/i18n/zh_CN.js"></script>
+                                    <script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/ui.js?rad=1488361329"></script>
+                                    <script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/qiniu.js"></script>
+                                    <script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/highlight.js"></script>
+                                    <script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/main2.js?rad={:time()}"></script>
+                                    <script type="text/javascript">
+                                    hljs.initHighlightingOnLoad();
+                                    </script>
+                                </div>
+                            </div>
+                            <div id="fmsel2" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,73 @@
+<include file="public:mheader"/>
+
+<div class="container1200 center padding_b">
+<div class="ptips"><img src="/static/images/tipsicon1.png" width="15" height="15" style="margin:10px; float:left"> <h6>温馨提示：推荐使用<b>支付宝或财付通</b>，如选择银行账号体现将产生<b>2元/笔手续费</b></h6></div>
+  <div class="pcon42 left">
+    <h6 class="mal63">您已设置了淘宝支付宝账户，可以在下方输入相应信息来修改账号资料</h6>
+    <form action="/user/refix_account" method="post">
+    <table class="mal63">
+      <tr class="ma163tr">
+        <td style="width:109px"><font color="red">*</font>账号类型：<br></td>
+        <td>
+          <select style="width:236px" name="cashtype" id="cashtype"> 
+        	<volist name="data.cashtype" id="vo">
+            <option value="{$vo.syscode_id}" <php>if($vo['syscode_id']==$data['user']['cashtype']) echo 'selected = "selected"';</php>>{$vo.syscode_name}</option>
+            </volist>
+          </select>
+        <a href="https://memberprod.alipay.com/account/reg/index.htm"><font style="font-size:14px" color="blue">淘宝支付宝申请地址</font></a>|<a href="https://www.tenpay.com/v2/register/reg_index.shtml?ADTAG=TENPAY_V3.LOGIN.QUICK_LOGIN.NEW_ACCO"><font style="font-size:14px" color="blue">QQ财付通宝申请地址</font></a></td> 
+      </tr>
+    <tr>
+    	<td colspan="2">
+        	<div id="bank">
+        		<volist name="data.cashbank" id="vo2">
+            	<div class="float bank rabank{$i}" onclick="radiobank({$i})">
+                	<input type="radio" style="margin: 5px;" name="cashbank" value="{$vo2.syscode_name}" <php>if($vo2['syscode_name']==$data['user']['cashbank']) echo 'checked = "checked"';</php> /> 
+                	<div class="bankicon floatright"><img src="/static/uploadfiles/sys/{$vo2.imgname}"/></div>
+                </div>
+                </volist>
+                <div class="clearfix"></div>
+            </div>
+         </td>
+      </tr>
+      <tr  class="ma163tr">
+        <td style="width:109px"><font color="red">*</font>收款账号:<br></td>
+        <td><input type="text" name="cashaccount" value="{$data.user.cashaccount}" ></td>
+      </tr>
+      <tr  class="ma163tr" >
+        <td style="width:109px"><font color="red">*</font>收款人:<br></td>
+        <td><input type="text" name="casher" value="{$data.user.casher}" ><font style="font-size:14px;"> 是您有效证件上的姓名</font></td>
+        
+      </tr>
+    </table>
+    
+    <table class="mal63">
+    <tr class="ma163tr">
+    <td style="width:109px"></td>
+      <td style="width:220px" colspan="2"><div class="almid"><button type="submit" class="btn btn2 bgc">保存</button> </div></td>
+    </tr>
+    </table>
+    </form>
+  </div>
+</div>
+<script>
+ $(function(){
+	if($('#cashtype').val()==303){
+		$('#bank').show();
+	}else{
+		$('#bank').hide();
+	}
+	$('#cashtype').change(function(e){
+		var st = $('#cashtype').val();
+		if(st==303){
+			$('#bank').show();
+		}else{
+			$('#bank').hide();
+		}
+	})
+	/*function radiobank(id){
+		$('.rabank'+id).children('div').css('border','1px solid #FC0;');
+		$('.rabank'+id).find("input[type=radio]").attr("checked", 'checked');
+	}*/
+});
+</script>
+<include file="public:mfooter"/>

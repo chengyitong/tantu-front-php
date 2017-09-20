@@ -1,0 +1,23 @@
+<include file="public:cheader" />
+<div class="wrapper1" style="min-height:300px;">
+    <div class="fans">
+        <div class="fans-list clearfix" style="margin-top:20px;">
+            <div class="fans-margin">
+                <php>if(!$data['list']) echo '没有收藏夹';</php>
+                <volist name="data.list" id="vo">
+                    <div class="list3 float ff{$vo.id}">
+                        <div class="list3 float">
+                            <div class="list32 float">
+                                <div<php>if($vo['show']):</php> onclick="location='/camerist/collection_list?uid={:I('get.uid')}&id={$vo.id}';"
+                                    <php>endif;</php> style="cursor:pointer;width:100%; height:272px;background:url({$vo.topimg});background-position: center;background-size:cover;border-bottom:1px solid #eeeff2;" ></div>
+                            <div style="font-size:20px; text-align:center; margin-top:20px">{$vo.foldername} <img src="/static/images/<php>if($vo['show']) echo 'unlock.png'; else echo 'locked.png';</php>" height="20" /></div>
+                            <div style=" text-align:center; margin:10px; color:#b9c1c7">{$vo.img_count}张图片</div>
+                        </div>
+                    </div>
+            </div>
+            </volist>
+        </div>
+    </div>
+</div>
+</div>
+<include file="public:mfooter" />

@@ -1,0 +1,141 @@
+<include file="public:header" />
+<style type="text/css">
+.navbar-wrapper {
+    background: #f16172;
+}
+/*样式追加*/
+
+/*重写 tab start*/
+
+.nav-tabs {
+    border: none;
+}
+
+.nav-tabs>li {
+    margin: 0;
+}
+
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:hover,
+.nav-tabs>li.active>a:focus {
+    cursor: default;
+    background-color: transparent;
+    border: 1px solid #f16172;
+    color: #f16172;
+    border-radius: 4px;
+}
+
+.nav-tabs>li>a {
+    margin: 0 5px;
+    border-radius: 4px;
+    padding: 6px 12px;
+}
+.nav-tabs>li>a:hover {
+    background: none;
+    border: 1px solid #f16172;
+}
+
+/*重写 tab end*/
+
+</style>
+<script type="text/javascript">
+$(function() {
+    $('.top .red-button-select').click(function() {
+        $('.top .red-button-select').addClass('red-button-default');
+        $(this).removeClass('red-button-default');
+    });
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+        var is_my_tab = '#tab_myevents'==$(e.target).attr('href');
+        var is_end_tab = '#tab_end'==$(e.target).attr('href');
+        if((is_my_tab && '' == document.getElementById("my_event_content").innerHTML)
+            ||(is_end_tab && ''== document.getElementById("end_event_content").innerHTML)){
+                var _url = is_my_tab ? '/event/get_my_events' : '/event/get_end_events';
+                var _tips = is_my_tab ? 'tips_nothing_my' : 'tips_nothing_end';
+                var _target = is_my_tab ? 'my_event_content' : 'end_event_content';
+                $.getJSON(_url,function(res){
+                    if(0==res['flag']){
+                        $('#'+_tips).show();
+                    }
+                    else{
+                        $('#'+_tips).hide();
+                        var tmp = "";
+                        $(res['events']).each(function(index,event){
+                            console.log(event);
+                            tmp +="<div class='event-main-cell' onclick=\"eventNavigating('"+event['id']+"','"+event['link']+"')\"";
+                            if(1 == index%2){
+                                tmp += " style='margin-left: 0.35%;'";
+                            }
+                            tmp += ">";
+                            tmp += "<img src='"+event['subject_banner_list']+"' />";
+                            tmp += "<div class='event-main-text-container'>";
+                            tmp += "<h2>"+event['subject']+"</h2>";
+                            if(event['link']!=null && event['link']!="" && event['link']!="null"){
+                                tmp += "<p style='margin-top: 20px;'>奖品："+event['award']+"</p>";
+                                tmp += "<p style='margin-bottom: 30px'>已投稿："+event['product_count']+"</p>";
+                                if(event['dayLeft']>=0){
+                                    tmp += "<p style='background-color: black;display: inline; padding: 3px 5px 3px 5px; margin-top: 30px;'>距结束时间：<span style='color:#f16172'>"+event['dayLeft']+"天</span></p>";
+                                }
+                                else{
+                                    tmp += "<div class='btncon' style='margin:50px auto 0 auto; background-color: grey'>已结束</div>";
+                                }
+                            }
+                            tmp += "</div></div> ";
+                        });
+                        $('#'+_target).html(tmp);
+                    }
+                });
+            }
+    });
+});
+
+function eventNavigating(id, link){
+    if(link!=null && link!="" && link!="null"){
+      window.open(link,'_blank');
+    }
+    else{
+      location.href='/event/event/id/'+id;
+    }
+}
+
+</script>
+<div class="event-main">
+    <div class="top" style="width: 360px">
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active"><a href="#tab_processing" data-toggle="tab">正在进行</a></li>
+            <li><a href="#tab_myevents" data-toggle="tab">我的参赛</a></li>
+            <li><a href="#tab_end" data-toggle="tab">已结束</a></li>
+        </ul>
+    </div>
+</div>
+<div style="color: white;overflow: hidden; margin-bottom: 20px;min-height: 400px;padding-top: 10px;">
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade in active" id="tab_processing">
+            <div class="event-main-list-container">
+                <volist name="event_list_processing" id='vo' key='k'>
+                    <div class="event-main-cell" onclick="eventNavigating('{$vo.id}','{$vo.link}')" <if condition='$k%2 eq 0'>style="margin-left: 0.35%;"</if> >
+                        <img src="{$vo.subject_banner_list}" />
+                        <div class="event-main-text-container">
+                            <h2>{$vo.subject}</h2>
+                            <if condition="$vo.link ==null || $vo.link ==''">
+                            <p style="margin-top: 20px;">奖品：{$vo.award}</p>
+                            <p style="margin-bottom: 30px">已投稿：{$vo.product_count}</p>
+                            <p style="background-color: black;display: inline; padding: 3px 5px 3px 5px; margin-top: 30px;">距结束时间：<span style="color:#f16172">{$vo.dayLeft}天</span></p>
+                            </if>
+                        </div>
+                    </div>        
+                </volist>
+            </div>
+        </div>
+        <div class="tab-pane fade in active" id="tab_myevents">
+            <div class="center-block" id='tips_nothing_my' style="color: #f16172; margin: 50px 0 0 200px;display: none;">暂无相关数据</div>
+            <div class="event-main-list-container" id="my_event_content"></div>
+        </div>
+        <div class="tab-pane fade in active" id="tab_end">
+            <div class="center-block" id='tips_nothing_end' style="color: #f16172; margin: 50px 0 0 200px;display: none;">暂无相关数据</div>
+            <div class="event-main-list-container" id="end_event_content"></div>
+        </div>
+    </div>
+</div>
+
+<include file="public:footer"/>

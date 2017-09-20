@@ -1,0 +1,21 @@
+<include file="public:mheader"/>
+<style type="text/css">
+#txt{min-height:120px;}
+#txt a{color:blue; text-decoration: underline;}
+#txt a:hover{text-decoration:none;}
+</style>
+<div class="container1200 center padding_b"> 
+
+  <div style="margin:30px 0;">
+    <span>
+        <button class="btn btn-default" onclick="location='/user/message';" type="button">返回</button>
+    </span>
+  </div>
+    <h3 style="text-align:center;">{$data.r.title}</h3><br>
+   
+    <p id="txt">{$data.r.msgs}</p>
+</div>
+<script>
+
+</script>
+<include file="public:mfooter"/>

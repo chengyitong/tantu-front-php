@@ -1,0 +1,144 @@
+<style>
+img[src=""]{
+opacity: 0;
+}
+</style>
+<script>
+$(function(){
+	$('.seacon1col').click(function(){
+		$('.seacon1col').html('');
+		var icon = '<i class="glyphicon glyphicon-ok"></i>';
+		$(this).html(icon);
+	});	
+});
+
+    function addlikes(id){
+        var storage = window.localStorage;
+        if(!storage || !(storage.setItem('a', 123) , storage.getItem('a') == 123)){
+            alert('当前浏览器不支持投票功能！');
+        }
+        else{
+            var _likes_list = null;
+            if(null!=storage.getItem('likes_list')){
+                _likes_list = JSON.parse(storage.getItem('likes_list'));
+            }
+
+            var _date = new Date().toLocaleDateString();
+
+            if(null!=_likes_list && undefined!=_likes_list[id] && _date==_likes_list[id]){
+                return;
+            }//existed
+            else{
+                $.getJSON('/index/imglike?id='+id,function(json){
+                    $('#likes'+id).html(json.nums);
+                    if(null==_likes_list){
+                        _likes_list = {};
+                    }                    
+                    _likes_list[id]=_date;
+                    storage.setItem('likes_list',JSON.stringify(_likes_list));
+                });
+            }
+        }
+    }
+
+   var picid = 0;
+   function addfav(id){
+	var uid = $('#userid').val();
+	if(uid){  
+		$.getJSON('/index/has_fav?id='+id,function(json){
+			
+			if(json.status=='0'){
+				$('#colModal').modal('show');
+				picid=id;
+			}
+		});
+	}else{
+		$('#myModallogin').modal('show');
+	}
+   }
+function fav(){
+	<php>if(!$fav):</php>
+	if(isNaN($('input[name="fid"]:checked').val())){
+		alert('请选择收藏夹');return;
+	}
+	<php>endif;</php>
+	location='/index/tofav?id='+picid+'&fcid='+$('input[name="fid"]:checked').val();	
+}
+	function newf(){
+		if($('#foldername').val()==''){
+			alert('请输入收藏夹名!');
+			return;
+		}
+		$.getJSON('/user/new_favclass?fname='+$('#foldername').val(),function(json){
+			alert('创建成功!');
+			$('#flist').prepend('<div class="afid"><input id="fid'+json.id+'" type="radio" name="fid" value="'+json.id+'" />&nbsp;<label for="fid'+json.id+'">'+json.foldername+'</label></div>');
+			$('#foldername').val('');
+		});
+	}
+$(function(){
+	imglist('');
+});
+	function imglist(url){
+		var temp = '';
+		url += '{$data.sql}';
+		var i = 0;
+		$.getJSON('/index/get_images?'+url,function(json){
+			if(!json.r){
+				$(".flex-images").html('<div style="margin:0 auto;padding:60px;">没有找到图片</div>');
+			}else{
+				if($('.alls')){
+					$('.alls').html(json.total);
+				}
+				if($('.fanye')){
+					$('.fanye').html(json.fanye);
+				}
+				$.each(json.r,function(index,data){
+					var width = data.width;
+					var height = data.height;
+					if(height>width){
+						
+						var w = ((width*250)/height);
+						var h = 250;
+						
+					}else if(height==width){
+						var w = 250;
+						var h = 250;
+					}else{
+						var w = ((width*250)/height);
+						var h = 250;
+					}
+					if(null==data.nickname||''==data.nickname){
+                        data.nickname="匿名";
+                    }
+					
+					temp+= "<div class='item cell' data-w='"+width+"' data-h='"+height+"'><img class='lazy' src='' data-original='"+data.imgurl+"' style='width:100%;height:100%;cursor:pointer;' onclick=\"window.open('/index/detail?id="+data.id+"');\"><div class='discuz' style='position:absolute;bottom:0px;padding:5px 10px;width:100%;background:rgba(0,0,0,0.2);'><div  onclick=\"window.open('/camerist/gallery?uid="+data.uid+"');\" class='float' style='cursor:pointer;'><img src='/index/avatar_url/uid/"+data.uid+"' style='border-radius:12px;width:24px' />"+data.nickname+"</div><div style='float:right;margin-top:4px;'><img src='/static/images/iconheart.png' style='margin-top: -3px;width:13px;height:13px;cursor:pointer;' onClick=\"addlikes("+data.id+")\" />&nbsp;<span id='likes"+data.id+"'>"+data.likes+"</span>&nbsp;&nbsp;&nbsp;<img src='/static/images/iconeye.png' style='margin-top: -3px;width:18px;height:13px;' />&nbsp;"+data.visits+"&nbsp;&nbsp;&nbsp;<img src='/static/images/iconstar.png' style='margin-top: -3px;width:13px;height:13px;cursor:pointer;' onClick=\"addfav("+data.id+")\" id='fav"+data.id+"' />&nbsp;"+data.fav+" </div><div style='clear:both'></div></div></div>"
+					//temp+= "<a href='/index/detail?id="+data.id+"'><div class='cell' style='width:"+w+"px; height: "+h+"px; background-image: url("+data.imgurl+");color:#fff;'><div class='discuz' style='position:absolute;bottom:5px;right:10px;'><img src='/static/images/iconheart.png' /> "+data.downloads+" <img src='/static/images/iconeye.png' /> "+data.visits+"  <img src='/static/images/iconstar.png' /> "+data.fav+" </div></div></a>"
+				});
+			  $(".flex-images").html(temp);
+				$('.flex-images').flexImages({'rowHeight':290,'container':'.item','truncate':false });
+    			$("img.lazy").lazyload({effect: "fadeIn"});
+				$(window).scroll();
+			  /*$("#freewall").html(temp);
+			  var wall = new Freewall("#freewall");
+			  wall.reset({
+				selector: '.cell',
+
+				animate: true,
+				cellW: 20,
+				cellH: 250,
+				onResize: function() {
+				  wall.fitWidth();
+				}
+			  });
+			  wall.fitWidth();*/
+				$('.cell').mouseover(function(){
+					$(this).find('.discuz').show();
+				}).mouseout(function(){
+					$(this).find('.discuz').hide();
+				});
+			}
+		});
+	}
+      // for scroll bar appear;
+      $(window).trigger("resize");
+</script>

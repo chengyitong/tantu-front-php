@@ -1,0 +1,536 @@
+<include file="public:mheader" />
+<!-- Add fancyBox -->
+<style>
+/*  loading  */
+#background {
+	display: block;
+	width: 100%;
+	height: 100%;
+	opacity: 0.6;
+	filter: alpha(opacity=60);
+	background: #000;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 2000;
+}
+#progressBar {
+	border:solid 2px #2E5B89;
+	background-color:white;
+	background-repeat:no-repeat;
+	background-position:10px 12px;
+	display:block;
+	position:absolute;
+	padding:4px 20px 5px 33px;
+	text-align:left;
+	line-height:27px;
+	font-weight:bold;
+	position: absolute;
+	z-index: 2001;
+}
+#loadingclose {
+	position:absolute;
+	top:5px;
+	right:5px;
+	background:url(../img/cancel.jpg) no-repeat;
+	width:14px;
+	height:14px;
+	cursor:pointer;
+}
+.typedefault{width:50%;border-radius: 4px; height:40px; padding:10px;background-color:#eaf1fb; cursor:default;}
+.typechose{ background-color:#5dc560; color:#FFF}
+.typec_chose,{background:url(/static/images/gou.png) no-repeat 2px 8px;}
+input{padding:4px;border-radius: 4px;border: 1px solid #bec5cf; height:31px;margin:5px 0;}
+label{margin:6px;}
+.tags{
+	padding:3px 6px;background:url(/static/images/cha.png) no-repeat #f9f9f9;background-position: right 5px top 5px;padding-right: 20px;margin:0 5px 5px 0;float: left;cursor: pointer;border:#dddddd 1px solid;
+}
+.clearboth{
+	clear: both;
+}
+</style>
+<link rel="stylesheet" href="/static/plugs/fancybox/v2.1.5.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="/static/plugs/fancybox/v2.1.5.js?v=2.1.5"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".fancybox").fancybox({
+			"type":"iframe",
+			"scrolling": "auto",
+			"width":"800px",
+			"height":"600px",
+			"autoDimensions": false
+		});
+		$('.typedefault').click(function(){
+			$(this).siblings().removeClass('typechose');	
+			$(this).addClass('typechose');
+			var obj=$(this).attr('data-obj');
+			$('#'+obj).val($(this).data('id'));
+		});
+		$('.typec').click(function(){
+			if($(this).hasClass('typec_chose')) $(this).removeClass('typec_chose');
+			else $(this).addClass('typec_chose');
+				var ids=',',names='';
+			$('.typec_chose').each(function(){
+				ids+=$(this).data('id')+',';
+				names+=$(this).attr('data-name')+' ';	
+											
+			});
+			$('#typec_ids').val(ids);
+			$('#typec_names').val(names);
+			
+		});
+		$('.color').click(function(){
+			
+			if($(this).hasClass('color_chose')) {
+				$(this).removeClass('color_chose');
+				$(this).html('');
+			}
+			else {
+				$(this).addClass('color_chose');
+				$(this).html('<i class="glyphicon glyphicon-ok"></i>');
+				
+			}
+				var ids=',',names='';
+			$('.color_chose').each(function(){
+				ids+=$(this).data('id')+',';
+				names+=$(this).attr('data-name')+' ';	
+											
+			});
+			$('#color_ids').val(ids);
+			$('#color_names').val(names);
+			
+		});
+	});
+	
+	function subm(){
+		var tagname = $('#ipt_taglist').val();
+		var name = $('#name').val();
+		var classid = $('#classid').val();
+		
+		 var val=$('input:radio[name="banquan"]:checked').val();
+            if(val==null){
+                alert("请选择图片属性!");
+                return false;
+            }
+		// if(name==''){alert('请填写作品名称');return false;}
+		// if(classid=='0'){alert('请选择所属类别');return false;}
+		// if(tagname==''){alert('请填写所属标签');return false;}
+		$('#form1').submit();	
+	}
+</script>
+
+<div class="container1200 center " style="min-height:820px">
+	<div class="pcon42 left">
+	   <div class="hpage2">
+	   <a href="/user/homepage_pending"><div class="hpage2txt <php>if($data['w']=='-2') echo 'hpselect';</php>"><div class="hpage2txt2"> <p>待处理作品</p><p>{$data.num1}</p></div></div></a>
+	   <a href="/user/homepage_pending?status=0"><div class="hpage2txt <php>if($data['w']=='0') echo 'hpselect';</php>"><div class="hpage2txt2"><p>待审核作品</p><p>{$data.num2}</p></div></div></a>
+	   <a href="/user/homepage_pending?status=-1"><div class="hpage2txt <php>if($data['w']=='-1') echo 'hpselect';</php>"><div class="hpage2txt2"><p>未通过作品</p><p>{$data.num3}</p></div></div></a>
+	   <a href="/user/homepage_pending?status=1"><div class="hpage2txt <php>if($data['w']=='1') echo 'hpselect';</php>"><div class="hpage2txt2"><p>已发布作品</p><p>{$data.num4}</p></div></div></a>
+	   <div class="clearfix"></div>
+	   </div>
+   </div>
+   <br />
+   <script>
+   var doing = false;
+   function toupload(){
+   	if(doing || $('#userfile').val()=='') return false;
+   	doing = true;
+   	loading.show(0,'图片上传中,请稍候...');
+   	$('#form_1').submit();
+   }
+   function selpic(){
+   	if(doing) return false;
+   	$('#userfile').val('').click();
+   }
+   function api_avatar_err(info){
+   	alert(info);
+   	doing = false;
+   	loading.hide();
+   }
+   function api_avatar_ok(name){
+   	loading.hide();
+   	doing = false;
+   	$('.imgthumb').attr("src","/static/uploadfiles/imgthumb/"+name);
+   }
+   </script>
+
+  <if condition='$data.r eq null'> 
+  <h1>批量编辑图片信息</h1>
+  </if>
+
+  <div class="float-left" style="max-width:600px; min-width:400px; width:100%; <if condition='$data.r eq null'> display: none; </if>" >
+    <div style="width:400px ; height:290px; position:relative;left:150px;text-align:center; border:3px solid #d2dde8"> <img src="../../../../static/images/p1.png" style="position:absolute ; bottom:0px; right:0px;" />
+      <div style=" margin:0px auto; display: flex;height: 100%;"> <img src="{$data.r.imgurl}" class="imgthumb" style="margin: auto;max-width:100%;max-height:100%;" /></div>
+      <php>if(!in_array($data['r']['imgext'],array('jpg','png','jpeg','gif'))):</php>
+      <iframe name="ifrm1" src="/user/waits" style="position:absolute;top:-100px;left:-100px;width:0px;height:0px;" frameborder="0"></iframe>
+      <form action="/user/imgthumb_up?id={:I('get.id')}" target="ifrm1" method="post" id="form_1" enctype="multipart/form-data">
+      <div style="margin-top: 20px;" align="left">
+      	<div>[<a href="javascript:;" onClick="selpic()" style="color: blue;">上传缩略图</a>]<input type="file" id="userfile" name="userfile" size="20" style="position: absolute;left: -100px;top: -100px;width: 0;height: 0;" onChange="toupload();" /></div>
+      </div>
+      </form>
+      <php>endif;</php>
+      <form action="/user/production_save?haspass={:I('get.haspass')}&page={:I('get.page')}" method="post" id="form1">
+      <input type="hidden" name="id" value="{$_GET['id']}" />
+          <div align="left" style="margin-top:20px;">
+            <label class="width" for="size">状态:</label><php>
+              if($data['r']['haspass']=='-2') echo '待处理';
+              elseif($data['r']['haspass']=='-1') echo '未通过<br>'.$vo['passstr'];
+              elseif($data['r']['haspass']=='0') echo '待审核';
+              elseif($data['r']['haspass']=='1') echo '已发布';
+              </php><br />
+            <label class="width" for="size">图片尺寸:</label>{$data.r.size}B<br />
+            <label class="width" for="resolution">图片分辨率:</label>{$data.r.width}X{$data.r.height}<br />
+            	<div style="display: none;">
+		            <label class="width" for="brand">品牌:</label>
+		            <input name="brand" id="brand" type="text" value="{$data.r.brand}" /><br />
+                    <label class="width" for="model">型号:</label>
+                    <input name="model" id="model" type="text" value="{$data.r.model}" /><br />
+                    
+                    <label class="width" for="jiaoju">焦距:</label>
+                    <input name="jiaoju" id="jiaoju" type="text" value="{$data.r.jiaoju}" /><br />
+                    <label class="width" for="guangquan">光圈:</label>
+                    <input name="guangquan" id="guangquan" type="text" value="{$data.r.guangquan}" /><br />
+                    <label class="width" for="kuaimen">快门:</label>
+                    <input name="kuaimen" id="kuaimen" type="text" value="{$data.r.kuaimen}" /><br />
+                    <label class="width" for="iso">ISO:</label>
+                    <input name="iso" id="iso" type="text" value="{$data.r.iso}" /><br />
+                    <label class="width" for="baoguang">曝光:</label>
+                    <input name="baoguang" id="baoguang" type="text" value="{$data.r.baoguang}" /><br />
+                    <label class="width" for="jingtou">镜头:</label>
+                    <input name="jingtou" id="jingtou" type="text" value="{$data.r.jingtou}" /><br />
+                    <label class="width" for="taketime">拍摄时间:</label>
+                    <input name="taketime" id="taketime" type="text" value="<php>if($data['r']['taketime']=='0000-00-00 00:00:00') echo '';else echo $data['r']['taketime'];</php>" />
+                </div>
+          </div>
+    </div>
+  </div>
+  <div class="float-left" style="max-width:600px; min-width:383px; width:100%;">
+    <div style="margin:10px auto">
+    	<input type="hidden" value="1" name="status" />
+    	
+      <div class="float text-right" style="width:80px;"><font color="#FF0000">*</font>属性：</div>
+      <div style="height: 20px;position:relative" >
+        	<input style="position: relative;top: -10px;" type="radio" id="banquan1" value="1" name="banquan" <php>if($data['r']['banquan']==1) echo 'checked';</php> /><label for="banquan1" style="position: relative;top: -20px;" >版权保护</label><img src="/static/images/p3.png" style="margin-top: -43px;padding:7px" title="版权保护作品&#10;只作平台展示&#10;交流作用。" />
+    		
+        <php>if($data['r']['banquan']==2){</php>
+        	<input style="position: relative;top: -10px;" type="radio" id="banquan2" value="2" name="banquan" checked disabled /><label for="banquan2" style="position: relative;top: -20px;" >版权释放（<a href="/index/content?id=444" target="_blank" style="color:#09F">CC0协议</a>）</label><img src="/static/images/p3.png" style="margin-top: -43px;padding:7px" title="版权释放表示作品&#10;已经释放版权，他&#10;人可免费下载或者&#10;商用，想了解更多&#10;可点击CCO协议。" />
+        <php>}</php>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    
+     <div class="clearfix"></div>
+    
+    <div style="margin:10px auto ;padding-left: 37px;">
+    <a href="/index/content?id=470" target="_blank" style="color:#09F">图片标题标签撰写参考标准</a>
+    </div>
+    <div style="margin:10px auto ; height:31px">
+      <div class="float text-right" style="width:80px;padding-top:7px;">标题：</div>
+      <div >
+        <input type="text" name="name" id="name" class="default" value="{$data.r.name}" style="margin-top: 0px;width: 310px;border-radius: 4px;border: 1px solid #bec5cf; height:31px" />
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    
+    <div style="margin:10px auto">
+      <div class="float text-right" style="width:80px;padding-top:7px">分类：</div>
+      <div style="width:400px; position:relative" >
+        <select type="text" class="default" name="classid" id="classid" onchange="mtype(this.value)" style="width: 310px;border-radius: 4px;border: 1px solid #bec5cf; height:31px;">
+        	<option value="0">请选择</option>
+            <volist name="data.class" id="vo_cl">
+            <php>
+            $chk = '';
+            $arr = explode(',',$data['r']['classids']);
+            if(in_array($vo_cl['id'],$arr)) $chk = 'selected';
+            </php>
+        	<option value="{$vo_cl.id},{$vo_cl.classname}" {$chk}>{$vo_cl.classname} <php>if($chk=='selected') echo '[当前分类]';</php></option>
+            </volist>
+        </select>
+      </div>
+      <div class="float-left" style="display: none;">
+        <div style="border:1px solid #c8d6e3; min-height:30px; width:310px">
+        	<div style="padding:10px">
+                <volist name="data.class" id="vo_cl">
+                <php>
+                $chk = '';
+                $arr = explode(',',$data['r']['classids']);
+                if(in_array($vo_cl['id'],$arr)) $chk = 'typec_chose';
+                </php>
+                    <div data-id="{$vo_cl.id}" data-name="{$vo_cl.classname}" id="class{$vo_cl.id}" class="float-left typec {$chk}" style="padding:5px 5px 5px 15px; margin:5px; background-color:#e9f1fc;cursor:default;">{$vo_cl.classname}</div>
+                </volist>
+                <div class="clearfix"></div>
+            </div> 
+            <input type="hidden" id="typec_ids" name="classids" value="{$data.r.classids}" />
+            <input type="hidden" id="typec_names" name="classlist" value="{$data.r.classlist}" />
+      	</div>
+      </div>
+      <div class="clearfix"></div>
+        
+    </div>
+     <div style="margin:10px auto ; height:31px">
+      <div class="float text-right" style="width:80px; padding-top:7px">关键词：</div>
+      <div class="float-left" >
+            <div class="input-group" style="width:310px;display:none;">
+      			<input type="text" class="form-control" id="tagname" onkeyup="tagkeyup()" />
+              <span class="input-group-btn" style="padding-top:5px;">
+                <button class="btn btn-default" onclick="newtag()" type="button">新增</button>
+              </span>
+            </div><!-- /input-group -->
+
+		<script>
+		var naa = false;
+        function aa(){
+            if(event.keyCode == "32"){
+				if(!naa) return;
+				naa = false;
+                var val = $.trim($('#a').val());
+				if(val=='') return;
+				goon = true;
+				$('.tags').each(function(){
+					if($(this).html()==val){
+						alert('您输入的关键词已存在!');
+						goon = false;
+					}
+				});
+				if(goon) tag_js(val);
+				$('#a').val('');
+				$('#da').width(30);
+            }else{
+				naa = true;
+                var w = $('#a').textWidth();
+                $('#da').width(w+30);
+            }
+        }
+        </script>
+        <div style="border: 1px solid #c3c3c3;width:310px;cursor:text;padding:5px 0 0 5px;border-radius: 4px;border: 1px solid #bec5cf;display:none;" onclick="$('#a').focus();">
+            <volist name="data.taglist" id="vo">
+            <php>if($vo=='') continue;</php>
+                <div class="tags" data-name="{$vo}" onclick="tagdel(this)">{$vo}</div>
+            </volist>
+            <div style="float:left;overflow:hidden;width:30px;" id="da"><input type="text" id="a" onkeydown="aa()" onkeyup="aa()" style="border:0;padding:0;border-radius:0;height:auto;outline:none;-webkit-appearance: none;width:100%;" /></div>
+            <div style="clear:both;"></div>
+        </div>
+        
+        <div id="taglist" class="default" style="padding: 10px 10px 5px;word-wrap: break-word;width: 310px;min-height:80px;border-radius: 4px;border: 1px solid #92b9f8;display:none;">
+            <volist name="data.taglist" id="vo">
+            <php>if($vo=='') continue;</php>
+                <div class="tags" data-name="{$vo}" onclick="tagdel(this)">{$vo}</div>
+            </volist>
+            <div class="clearboth"></div>
+        </div>
+        
+        <textarea name="taglist" id="ipt_taglist" style="border: 1px solid #c3c3c3;width:310px;height:80px;cursor:text;padding:5px 0 0 5px;border-radius: 4px;border: 1px solid #bec5cf;" ></textarea>
+        <br /><span style="font-size:11px;">（关键词之间用空格分开）</span>
+        <div style="min-height:30px; width:310px;display: none;margin-top: 5px;" id="kwsel">
+            <div style="padding:10px">
+                <h5 class="float-left" align="left" style="margin-top:0;">关键词推荐</h5> <h5 class="float-right" style="margin-top:0;color: blue;cursor: pointer;" onclick="mtype($('#classid').val())">换一批</h5>
+                <div class="clearfix"></div>
+                <div id="tags">
+                </div>
+                <div class="clearfix"></div>
+            </div>        
+      	</div>
+        
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+    <div style="margin:10px auto">
+      <div class="float text-right" style="width:80px;padding-top:7px">颜色：</div>
+      <div class="float-left" >
+        <div style="min-height:30px; width:310px">
+        	<div style="padding:0 10px">
+                <volist name="data.color" id="vo_color">
+                <php>
+                $chk = '';
+                $arr = explode(',',$data['r']['colorids']);
+                if(in_array($vo_color['id'],$arr)) $chk = '<i class="glyphicon glyphicon-ok"></i>';
+                </php>
+                <div class="seacon1col color" data-id="{$vo_color.id}" data-name="{$vo_color.colorname}" style="cursor: pointer;background-color:{$vo_color.colorvalue};">
+                    {$chk}
+                </div>
+                <!--
+                <php>
+                $chk = '';
+                $arr = explode(',',$data['r']['colorids']);
+                if(in_array($vo_color['id'],$arr)) $chk = 'color_chose';
+                </php>
+                    <div data-id="{$vo_color.id}" data-name="{$vo_color.colorname}" id="class{$vo_color.id}" class="float-left color {$chk}" style="padding:5px 5px 5px 15px; margin:5px; background-color:#e9f1fc;cursor:default;">{$vo_color.colorname}</div>-->
+                </volist>
+                <div class="clearfix"></div>
+            </div> 
+            <input type="hidden" id="color_ids" name="colorids" value="{$data.r.colorids}" />
+            <input type="hidden" id="color_names" name="colorlist" value="{$data.r.colorlist}" />
+      	</div>
+      </div>
+      <div class="clearfix"></div>
+        
+    </div>
+    
+    <div style="margin:10px auto 0;">
+      <div class="float text-right" style="width:80px; padding-top:7px">专辑：</div>
+      <div style="width:400px; position:relative" >
+        <select onchange="mnew(this.value)" type="text" class="default" name="folderid" id="folderid" style="width: 310px;border-radius: 4px;border: 1px solid #bec5cf; height:31px;">
+            <volist name="data.folder" id="vo">
+        	<option value="{$vo.id}" <php>if($data['r']['folderid']==$vo['id']) echo 'selected';</php>>{$vo.foldername} <php>if($data['r']['folderid']==$vo['id']) echo '[当前专辑]';</php></option>
+            </volist>
+            <option value="new" style="color:#999;display: none;">新建专辑</option>
+        </select>
+        <div style="padding: 8px;" align="right">[<span style="cursor: pointer;" data-toggle="modal" data-target="#myalbum">新建专辑</span>]</div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+   
+    <script>
+	function mnew(val){
+		if(val=='new'){
+			//$('#myalbum').show();
+			//$('#myalbum').addClass('in');
+			$('#folderid').attr({"data-toggle":"modal","data-target":"#myalbum"});
+		}else{
+			$('#folderid').removeAttr("data-toggle","data-target");
+		}
+	}
+	function mtype(val){
+		var str = val.split(",");
+		var strs ='';
+		$.getJSON('/user/get_tags?cid='+str[0],function(json){
+			if(json.count>0){
+				$.each(json.list,function(index,data){
+					strs+='<div class="float-left chosetag" onClick="chosetag(this)" style="padding:5px; margin:5px; background-color:#f9f9f9;cursor:default;border:#dddddd 1px solid;" data-id="'+data.id+'" data-name="'+data.tagname+'"><span style="font-weight:bold;color:#F60;">+</span>'+data.tagname+'</div>';
+					
+				});
+				$('#tags').html(strs);
+				$('#kwsel').show();
+			}else $('#kwsel').hide();
+		});
+		
+	}
+	function chosetag(obj){
+		var tagname = $(obj).data('name');
+		var tagid = $(obj).data('id');
+		var goon = true;
+		/*
+		$('.tags').each(function(){
+			if($(this).html()==tagname){
+				alert('您输入的关键词已存在!');
+				goon = false;
+			}
+		});*/
+		if(goon) tag_js(tagname);
+		$('#a').focus();
+	}
+	function newtag(){
+		var tagname = $('#tagname').val();
+		if(tagname=='') return;
+		var goon = true;
+		$('.tags').each(function(){
+			if($(this).html()==tagname){
+				alert('您输入的关键词已存在!');
+				goon = false;
+			}
+		});
+		$('#tagname').val('');
+		if(goon) tag_js(tagname);
+	}
+	function tag_js(tagname){
+		//$('.clearboth').remove();
+		//$('#taglist').append('<div class="tags" data-name="'+tagname+'" onclick="tagdel(this)">'+tagname+'</div><div class="clearboth"></div>');
+		$('#da').before('<div class="tags" data-name="'+tagname+'" onclick="tagdel(this)">'+tagname+'</div>');
+		tag_rejs(tagname);
+	}
+	function tag_rejs(tagname){
+		var str = $('#ipt_taglist').val();
+			str += tagname+' ';
+		$('#ipt_taglist').val(str);
+	}
+	function tagdel(obj){
+		//if(confirm('确定移除此项?')){
+			$(obj).remove();
+			tag_rejs();
+		//}
+	}
+	function tagkeyup(){
+		if(event.keyCode==13) newtag();
+	}
+    function newf2(){
+    	if($('#foldername').val()==''){
+        	alert('请输入专辑名!');
+        	return;
+    	}
+    	$.getJSON('/user/new_folder?fname='+$('#foldername').val(),function(json){
+    		alert('创建成功!');
+    		$('#folderid').prepend('<option value="'+json.id+'">'+json.foldername+'</option>');
+    		$('#foldername').val('');
+    		global.n_select_value('folderid',json.id);
+			$('#folderid').removeAttr("data-toggle","data-target");
+			$(".close").click();
+    	});
+    }
+	$(function(){
+		mtype($('#classid').val());
+		$(".close").click(function(){
+			$('#folderid').removeAttr("data-toggle","data-target");
+		});
+		$("#myalbum").click(function(){
+			$('#folderid').removeAttr("data-toggle","data-target");
+		});
+	})
+    </script>
+    
+    <div style="margin:10px auto ;">
+      <div class="float text-right" style="width:80px; padding-top:7px">作品简介：</div>
+      <div >
+        <textarea class="default" name="desc" style="width: 310px;border-radius: 4px;border: 1px solid #bec5cf; min-height:80px;">{$data.r.desc}</textarea>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    
+    <div class="clearfix"></div>
+       <div style="margin-left:60px" > <input class="btn bgc" onclick="subm()" type="button" style="width:200px; height:52px; border-radius:4px; margin:20px 0 0 20px;" value="确认发布" /></div>
+       <div style="margin-left:60px" > <input type="button" class="btn btn-default" onclick="location='/user/homepage_pending?status={:I('get.haspass')}&curpage={:I('get.page')}';" style="width:200px; height:52px; border-radius:4px; margin:20px" value="返回列表" /></div>
+  </div>
+   <div class="clearfix"></div>
+   </form>
+
+</div>
+<br />
+
+<!--Modal-->
+<div class="modal fade" id="myalbum" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog mod1">
+    <div class="modal-content modwh100">
+      <div class="modal-header modborder0" style="background-color:#eceff1">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title text-center" >创建专辑</h4>
+      </div>
+      <div class="modal-body">
+        <div class="mod2">
+          <div class="clearfix almod22a">
+            <div style="margin:0 auto;width:300px;">
+                <label for="mobile" class="control-label"><font color="red">*</font>专辑名:</label> 
+                <div>
+                  <input class="form-control" id="foldername"  type="text">
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="">
+                
+                <div class="clearfix"></div>
+                
+            </div>
+            <div class="" style="margin: 40px 100px;">
+            <div>
+                	<div class="alsumitbgc form-control" style="text-align:center;cursor:pointer;width:122px;margin:0 auto;" onclick="newf2()"> 确 定 </div>
+                <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+</div>
+
+<include file="public:mfooter"/> 

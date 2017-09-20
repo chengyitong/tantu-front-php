@@ -1,0 +1,104 @@
+<include file="public:mheader"/>
+
+<div class="container1200 center padding_b"> 
+
+  <div class="pcon42 left">
+ 
+    <div class="hpage2">
+    <div class="hpage2txt"><div class="hpage2txt2"> <p>待处理作品</p><p>6</p></div></div>
+    <div class="hpage2txt hpselect"><div class="hpage2txt2"><p>待审核作品</p><p>6</p></div></div>
+    <div class="hpage2txt"><div class="hpage2txt2"><p>未通过作品</p><p>6</p></div></div>
+    <div class="hpage2txt"><div class="hpage2txt2"><p>已发布作品</p><p>6</p></div></div>
+    <div class="clearfix"></div>
+    </div>
+    <br /><br />
+    
+    <div class="hp2page1">
+    <div class="hp2page11"></div>
+    <div class="hp2page12">
+    <h5>鱼油保健品</h5></li>
+    <h5>[编号]111111111111</h5>
+    <h5>[编号]111111111111</h5>
+    <h5>[编号]111111111111</h5>
+    <h5>[编号]111111111111</h5>
+    <h5>[编号]111111111111</h5>
+    </div>
+    <div class="hp2page13">
+    <button type="submit" class="btn hpbtn bgc">修改编辑</button>
+    <h5>删除</h5>
+    </div>
+    <div class="hp2pagechackbox" ><input type="checkbox" /></div>
+    </div>
+    
+     <div class="hp2page1">
+    <div class="hp2page11"></div>
+    <div class="hp2page12">
+    <h5>鱼油保健品</h5></li>
+    <h5>[编号]111111111111</h5>
+    <h5>[编号]111111111111</h5>
+    <h5>[编号]111111111111</h5>
+    <h5>[编号]111111111111</h5>
+    <h5>[编号]111111111111</h5>
+    </div>
+    <div class="hp2page13">
+    <button type="submit" class="btn hpbtn bgc">修改编辑</button>
+    <h5>删除</h5>
+    </div>
+    <div class="hp2pagechackbox" ><input type="checkbox" /></div>
+    </div>
+    
+     <div class="hp2page1">
+    <div class="hp2page11"></div>
+    <div class="hp2page12">
+    <h5>鱼油保健品</h5></li>
+    <h5>[编号]111111111111</h5>
+    <h5>[编号]111111111111</h5>
+    <h5>[编号]111111111111</h5>
+    <h5>[编号]111111111111</h5>
+    <h5>[编号]111111111111</h5>
+    </div>
+    <div class="hp2page13">
+    <button type="submit" class="btn hpbtn bgc">修改编辑</button>
+    <h5>删除</h5>
+    </div>
+    <div class="hp2pagechackbox" ><input type="checkbox" /></div>
+    </div>
+    <div class="clearfix"></div>    
+    <br />
+    <br />
+     <div class="float-right">
+     <button type="submit" class="btn btn7 ">批量删除</button><input type="checkbox" style=" margin-top:15px" />全选
+     
+     </div> 
+     <div class="clearfix"></div> 
+    
+    <br />
+    <br />
+    
+    
+    
+
+  </div>
+</div>
+<script>
+ $(function(){
+	if($('#cashtype').val()==303){
+		$('#bank').show();
+	}else{
+		$('#bank').hide();
+	}
+	$('#cashtype').change(function(e){
+		var st = $('#cashtype').val();
+		if(st==303){
+			$('#bank').show();
+		}else{
+			$('#bank').hide();
+		}
+	})
+	/*function radiobank(id){
+		$('.rabank'+id).children('div').css('border','1px solid #FC0;');
+		$('.rabank'+id).find("input[type=radio]").attr("checked", 'checked');
+	}*/
+});
+</script>
+<include file="public:mfooter"/>

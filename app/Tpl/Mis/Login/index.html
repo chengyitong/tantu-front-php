@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link rel="stylesheet" type="text/css" href="/static/css/mis_login.css" />
+<script type="text/javascript" src="/static/plugs/jquery-1.7.1.min.js"></script>
+<title>BDMIS 登录</title>
+</head>
+<body>
+<table align="center" width="1003" height="613" border="0" cellpadding="0" cellspacing="0">
+<form id="form1" name="form1" method="post" action="/login/in">
+	<tr>
+		<td colspan="5"><img src="/static/img/login_01.gif" width="1003" height="53" alt=""></td>
+	</tr>
+	<tr>
+		<td rowspan="4" background="/static/img/login_02.gif" width="20" height="560"></td>
+		<td colspan="3" background="/static/img/login_03.gif" width="962" height="235">
+        <div style="padding: 150px 0 0 305px; font-family: '微软雅黑'; font-size: 18px;">
+	        欢迎使用 BDMIS
+        </div>
+        </td>
+		<td rowspan="4" background="/static/img/login_04.gif" width="21" height="560"></td>
+	</tr>
+	<tr>
+		<td background="/static/img/login_05.gif" width="394" height="53"></td>
+		<td background="/static/img/login_06.gif" width="206">
+        	<table width="100%" border="0" cellspacing="2" cellpadding="0">
+        	  <tr>
+        	    <td align="right">帐户</td>
+        	    <td style="padding-left:5px;"><input name="uid" id="uid" type="text" tabindex="1" onkeydown="topwd();" /></td>
+        	    <td align="center" rowspan="2"><input type="button" class="btn_submit" onclick="chk();" value=" 登 录 " tabindex="3" /></td>
+      	    </tr>
+        	  <tr>
+        	    <td align="right">密码</td>
+        	    <td style="padding-left:5px;"><input name="pwd" id="pwd" type="password" tabindex="2" onkeydown="tochk();" /></td>
+        	    <!--td align="center"><input type="button" onclick="closeWindows();" value="退出" tabindex="4" /></td-->
+      	    </tr>
+      	  </table>
+   	  </td>
+		<td background="/static/img/login_07.gif" width="362" height="53"></td>
+	</tr>
+	<tr>
+		<td colspan="3" background="/static/img/login_08.gif" width="962" height="213"></td>
+	</tr>
+	<tr>
+		<td colspan="3" background="/static/img/login_09.gif" width="962" height="59"></td>
+	</tr>
+</form>
+</table>
+<script type="text/javascript" src="/static/plugs/md5.js"></script>
+<script type="text/javascript" src="/static/js/mis_login.js"></script>
+</body>
+</html>

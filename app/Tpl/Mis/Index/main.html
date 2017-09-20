@@ -1,0 +1,46 @@
+<include file="public:header"/>
+<style>
+.div_r{width:220px;height:180px;float:left;margin-right:20px;}
+.div_t{background:#99BBE8;padding:5px 10px;}
+.div_c{color:#373737;}
+ul {margin: 0;padding: 0;}
+li{;padding:3px 10px;list-style:none;}
+li:hover{background-color:#E2EFFF;}
+</style>
+<div style="line-height:1.6em;">
+	<div align="center" style="margin:30px;">
+        欢迎登录 {$storename}管理信息系统 {$version}
+    </div>
+    <div class="div_r">
+    	<div class="div_t">系统运行</div>
+        <div class="div_c">
+        	<ul>
+            	<li>登陆时间: {:session('bdmis_time')}</li>
+            	<li id="ttime">loading...</li>
+            </ul>
+        </div>
+    </div>
+<script>
+$(function(){
+	getlogdt();
+});
+function getlogdt(){
+	var logintime = "{:session('bdmis_time')}";
+	var dt = new Date(logintime.replace(/-/g,"/"));
+	var dtnow = new Date();
+	var tt = dt.dateDiff('n',dtnow);
+	var hh = Math.floor(tt/60);
+	var dd = Math.floor(hh/24);
+	var ddt = '';
+	if(dd>0) ddt = dd+'天';
+	var hht = '';
+	hh = hh % 24;
+	if(hh>0) hht = hh+'小时';
+	tt = tt % 60;
+	$('#ttime').html('在线时长: '+ddt+hht+tt+'分钟');
+	setTimeout('getlogdt()',60000);
+}
+</script>
+</div>
+</body>
+</html>

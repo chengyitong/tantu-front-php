@@ -1,0 +1,24 @@
+body 
+{
+color:white;
+background: #016aa9;
+cursor: default;  
+}
+table {
+	font-size:12px;
+}
+input[type="text"] {
+	border:#85c8e0 1px solid;
+	background-color:#292929;
+	color:#FFF;
+	height:14px;
+	width:90px;
+}
+input[type="password"] {
+	border:#85c8e0 1px solid;
+	background-color:#292929;
+	color:#FFF;
+	height:14px;
+	width:90px;
+}
+.btn_submit {color: black;height: 22px;text-align: center;cursor:pointer;background: url(../img/button.jpg)  repeat-x center center;border : #006699 1px solid;}

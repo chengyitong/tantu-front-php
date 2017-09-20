@@ -1,0 +1,121 @@
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:header" />
+
+<table class="table_list table_search" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <form action="?" method="get">
+        <thead>
+            <tr>
+                <th colspan="4">
+        <div class="tdp">
+            <div></div>搜索条件
+        </div>
+        </th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td width="25%">
+                    <label>手机</label>
+                    <input type="text" name="mobile" value="{$where.mobile}" />
+                </td>
+                <td width="25%">
+					<label>昵称</label>
+                    <input type="text" name="nickname" value="{$where.nickname}" />
+                </td>
+                <td colspan="2">
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr align="center">
+                <td colspan="4"><input type="submit" class="sys_button btn_blue" value=" 搜索 " /></td>
+            </tr>
+        </tfoot>
+    </form>
+</table>
+<div class="midline">
+    <input type="button" class="sys_button btn_gray" id="btntocvs" style="display: none;" value="导出表格" onclick="location = '{:seturlget('exp')}&exp=xls';" />
+</div>
+<php>endif;</php>
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th width="5%">{:sortby('id','ID')}</th>
+            <th width="8%">头像</th>
+            <th width="10%">用户名</th>
+            <th width="10%">手机</th>
+            <th width="10%">昵称</th>
+            <th width="15%">邮箱</th>
+            <th width="12%">{:sortby('lastlogin','上次登录')}</th>
+            <th width="12%">创建时间</th>
+            <th width="6%">{:sortby('products','作品')}{:sortby('waits','待审')}</th>
+    <php>if(I('get.exp')!='xls'):</php>
+    <th>其他操作</th>
+    <php>endif;</php>
+</tr>
+</thead>
+<tbody>
+<tr align="center">
+
+        <form action="/user/add" method="post">
+    
+            <td>新增</td>
+            <td>-</td>
+            <td><input type="text" name="username" value="" /></td>
+            <td><input type="text" name="mobile" value="" /></td>
+            <td><input type="text" name="nickname" value="" /></td>
+            <td><input type="text" name="email" value="" /></td>
+            <td colspan="2">用户默认密码6个8</td>
+            <td colspan="2">
+    
+                <input type="submit" class="sys_button btn_orange" value=" 提交 " />
+    
+            </td>
+    
+        </form>
+    
+    </tr>
+<volist name="data.list" id="vo">
+<php>
+$bimg = 'btn_gray';
+$bimg_src = '';
+$imgs = D('a_images')->where("type='user_avatar' and targetid=".$vo['id'])->order('id desc')->find();
+if($imgs){
+	$bimg = 'btn_blue';
+	$bimg_src = '/static/uploadfiles/images/'.$imgs['name'];
+}
+</php>
+    <tr align="center">
+        <td>{$vo.id}</td>
+        <td><php>if($bimg_src!=''):</php><img src="{$bimg_src}" width="30" style="margin: 2px;" /><else/>&nbsp;<php>endif;</php></td>
+        <td>{$vo.username}</td>
+        <td>{$vo.mobile}</td>
+        <td>{$vo.nickname}</td>
+        <td>{$vo.email}</td>
+        <td>{$vo.lastlogin}</td>
+        <td>{$vo.ctime}</td>
+        <td>
+        <span style="cursor:pointer;<php>if($vo['waits']>0) echo 'color: red;';</php>" onclick="parent.addTab('图片库','/product/index?uid={$vo.id}','','291');">{$vo.products}({$vo.waits})</span>
+        </td>
+    <php>if(I('get.exp')!='xls'):</php>
+    <td style="padding: 2px;">
+    	<input type="button" class="sys_button" value="关注" onclick="parent.addTab('关注及粉丝','/user/ff?type=follow&id={$vo.id}','','357');" />
+    	<input type="button" class="sys_button" value="粉丝" onclick="parent.addTab('关注及粉丝','/user/ff?type=fans&id={$vo.id}','','357');" />
+    	<input type="button" class="sys_button" value="相册" onclick="parent.addTab('相册','/user/album?uid={$vo.id}','','-1');" />
+    	<input type="button" class="sys_button {$bimg} btn_open" value="头像" href="/index/images?w=160&h=160&type=user_avatar&id={$vo.id}" />
+        <input type="button" class="sys_button <php>if($vo['isverify']==1) echo 'btn_red';</php> btn_open" value="编辑" href="/user/editv?id={$vo.id}" />
+        <input type="button" class="sys_button btn_blue" value="删除" onclick="if (confirm('确定删除?'))
+                    location = '/user/del?id={$vo.id}';" /> 
+    </td>
+    <php>endif;</php>
+    </tr>
+</volist>
+</tbody>
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:table_page" />
+<php>endif;</php>
+</table>
+<php>if(I('get.exp')!='xls'):</php>
+</body>
+</html>
+<php>endif;</php>

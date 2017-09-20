@@ -1,0 +1,98 @@
+<include file="public:header" />
+{:loadplug_tooltip()}
+<table class="table_list table_search" width="100%" border="0" cellspacing="0" cellpadding="0">
+<form action="?" method="get">
+  <thead>
+  <tr>
+    <th colspan="4">
+    <div class="tdp">
+    	<div></div>搜索条件
+    </div>
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+  	<td width="25%">
+	  	<label>用户名</label>
+	  	<input type="text" name="username" value="{$where.username}" />
+  	</td>
+  	<td width="25%">
+	  	<label>姓名</label>
+	  	<input type="text" name="name" value="{$where.name}" />
+  	</td>
+  	<td width="25%">
+	  	<label>电话</label>
+	  	<input type="text" name="tel" value="{$where.tel}" />
+  	</td>
+  	<td width="25%">
+  	</td>
+  </tr>
+  </tbody>
+  <tfoot>
+  <tr align="center">
+  	<td colspan="4"><input type="submit" class="sys_button" value=" 搜索 " /></td>
+  </tr>
+  </tfoot>
+</form>
+</table>
+<div class="midline">
+	<input type="button" class="sys_button btn_gray btn_open" value="新增账户" href="/sys/account_newv" title="新增账户信息" />
+	<input type="button" class="sys_button btn_gray" id="btntocvs" value="导出表格" />
+</div>
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <thead>
+  <tr>
+    <th width="5%">ID</th>
+    <th width="15%">用户名</th>
+    <th width="10%">姓名</th>
+    <th width="12%">电话</th>
+    <th width="20%">身份证</th>
+    <th width="10%">权限</th>
+    <th width="5%">状态</th>
+    <th width="8%">在线</th>
+    <th>操作</th>
+  </tr>
+  </thead>
+  <tbody>
+  <volist name="data.account" id="vo">
+  <tr align="center">
+    <td>{$vo.sysaccount_id}</td>
+    <td>{$vo.sysaccount_username}</td>
+    <td>{$vo.sysaccount_name}</td>
+    <td>{$vo.sysaccount_tel}</td>
+    <td>{$vo.sysaccount_idcard}</td>
+    <td>{$vo.syscode.syscode_name}</td>
+    <td><eq name="vo.sysaccount_isuse" value="0">×<else/>√</eq></td>
+    <td><php>if(DateDiff('s',$vo['sysaccount_onlinetime'],now())<30):</php>
+    <span class="tooltip_n" title="{$vo['sysaccount_lastlogin']}">√</span>
+	    <php>if($vo['sysaccount_id']>1):</php>
+	    <eq name="vo.sysaccount_id" value="$s_uid">
+	    <input type="button" class="sys_button btn_disabled tooltip_n" title="强制下线" value="T" />
+	    <else/>
+	    <input type="button" onclick="if(confirm('是否强制此用户下线?')) location='/sys/account_t?id={$vo['sysaccount_id']}';" class="sys_button btn_orange tooltip_n" title="强制下线" value="T" />
+	    </eq>
+	    <php>endif;</php>
+    <php>else:</php>
+    ×
+    <php>endif;</php></td>
+    <td>
+    	<if condition="($s_uid neq '1') and ($vo.sysaccount_id eq '1')">
+    	<input type="button" value="修改" class="sys_button btn_disabled" />
+    	<else/>
+    	<input type="button" class="sys_button btn_open" value="修改" href="/sys/account_uptv/id/{$vo.sysaccount_id}" title="修改账户信息" />
+    	</if>
+	    <if condition="($vo.sysaccount_id eq 1) or ($vo.sysaccount_id eq $s_uid)">
+	    <input type="button" value="删除" class="sys_button btn_disabled" />
+	    <else/>
+	    <input type="button" class="sys_button btn_del" value="删除" href="/sys/account_del" data-id="{$vo.sysaccount_id}" callback="" />
+	    </if>
+    </td>
+  </tr>
+  </volist>
+  </tbody>
+  <include file="public:table_page" />
+</table>
+</div>
+</body>
+</html>

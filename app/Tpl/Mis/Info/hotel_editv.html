@@ -1,0 +1,148 @@
+<include file="public:header" />
+{:loadplug_editor('syscoderemark3');}
+<script>
+$(function() {
+});
+</script>
+<style>
+label {
+	width: 120px;
+	text-align: right;
+	display: inline-block
+}
+tr{margin:5px 0;}
+</style>
+<form action="/index/do_edit?table=a_hotelinfo_list" method="post">
+<input name="id" type="hidden" value="{$data.r.id}" />
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <thead>
+  <tr>
+    <th>信息修改</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>
+		<label>设施名称: </label>
+        <input name="name_cn" id="name_cn" type="text" value="{$data.r.name_cn}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>英文设施名称: </label>
+		<input name="name_en" id="name_en" type="text" value="{$data.r.name_en}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>地址: </label>
+        <input type="text" name="address_cn" value="{$data.r.address_cn}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>英文地址: </label>
+        <input name="address_en" type="text" value="{$data.r.address_en}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>简介: </label>
+        <textarea name="text_cn" rows="6" cols="80">{$data.r.text_cn}</textarea >
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>英文简介: </label>
+        <textarea name="text_en" rows="8" cols="80">{$data.r.text_en}</textarea >
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>备注: </label>
+        <input type="text" name="remark_cn" value="{$data.r.remark_cn}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>英文备注: </label>
+        <input type="text" name="remark_en" value="{$data.r.remark_en}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>电话: </label>
+        <input type="text" name="tel" value="{$data.r.tel}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>喜欢人数: </label>
+        <input type="text" name="like" value="{$data.r.like}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>类型: </label>
+        <select name="type">
+            <option value="content"<php>if($data['r']['type']=='content') echo ' selected';</php>>详细页</option>
+            <option value="web"<php>if($data['r']['type']=='web') echo ' selected';</php>>外部浏览器</option>
+            <option value="webview"<php>if($data['r']['type']=='webview') echo ' selected';</php>>内部浏览器</option>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>超链接: </label>
+        <input type="text" name="url" value="{$data.r.url}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>英文超链接: </label>
+        <input type="text" name="url_en" value="{$data.r.url_en}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>内文按钮中文名称: </label>
+        <input type="text" name="btn_cn" value="{$data.r.btn_cn}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>内文按钮英文名称: </label>
+        <input type="text" name="btn_en" value="{$data.r.btn_en}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>按钮类型: </label>
+        <select name="btn_type">
+        	<option value="">请选择</option>
+            <option value="web"<php>if($data['r']['btn_type']=='web') echo ' selected';</php>>外部浏览器</option>
+            <option value="webview"<php>if($data['r']['btn_type']=='webview') echo ' selected';</php>>内部浏览器</option>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>超链接: </label>
+        <input type="text" name="btn_url" value="{$data.r.btn_url}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label >创建时间: </label>
+        {$data.r.ctime}
+    </td>
+  </tr>
+  
+  </tbody>
+  <tr>
+  	<td align="center" bgcolor="#EEEEEE"><input type="submit" class="sys_button" value=" 修改 " /> <input type="button" class="sys_button" onClick="parent.window.close();" value=" 关闭 " /></td>
+  </tr>
+</table>
+</form>
+</body>
+</html>

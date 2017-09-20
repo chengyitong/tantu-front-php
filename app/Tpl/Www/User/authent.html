@@ -1,0 +1,145 @@
+<include file="public:mheader"/>
+<script src="/static/js/global.js" type="text/javascript"></script>
+<style>
+/*  loading  */
+#background {display: block;width: 100%;height: 100%;opacity: 0.6;filter: alpha(opacity=60);background: #000;position: absolute;top: 0;left: 0;z-index: 2000;}
+#progressBar {border:solid 2px #2E5B89;background-color:white;background-repeat:no-repeat;background-position:10px 12px;display:block;position:absolute;padding:4px 20px 5px 33px;text-align:left;line-height:27px;font-weight:bold;position: absolute;z-index: 2001;}
+#loadingclose {position:absolute;top:5px;right:5px;background:url(../img/cancel.jpg) no-repeat;width:14px;height:14px;cursor:pointer;}
+</style>
+<div class="container center">
+<php>if($data['user']['isverify']==-1){</php>
+    <div class="p4tips">
+        <div class="p4tipdetal">
+        <h5>尊敬的会员，您补充上传手持证件审核不通过！{$data.user.verifyresult} 请重新上传</h5> 
+        <img src="/static/images/tipsicon.png" width="16" height="15" style="float:left">
+        <h6>温馨提示:只有补充手持证件，并审核通过才能体现。探网将对您的以下资料进行保密。</h6>
+        </div>
+    </div>
+<php>}</php>
+<php>if($data['user']['isverify']==0||$data['user']['isverify']==-1){</php>
+<div class="p4detal1">
+
+    <div class="p4detalmt p4detal11">账号类型：</div>
+    <div class="p4detalmt p4detal12">个人用户</div>
+
+	<script>
+    function upimg1(obj){
+        if ($(obj).val() != '') {
+            loading.show();
+            $('#form_1').submit();
+        }
+    }
+    function api_upload1(filename){
+        $('#sfz1').attr('src','/static/uploadfiles/authend/'+filename);
+        loading.hide();
+    }
+    function upimg0(obj){
+        if ($(obj).val() != '') {
+            loading.show();
+            $('#form_0').submit();
+        }
+    }
+    function api_upload0(filename){
+        $('#sfz0').attr('src','/static/uploadfiles/authend/'+filename);
+        loading.hide();
+    }
+    </script>
+
+	<iframe name="ifrm0" src="about:blank" style="position:absolute;top:-100px;left:-100px;width:0px;height:0px;" frameborder="0"></iframe>
+
+	<div class="p4detalmt p4detal11"><font color="red">*</font>手持身份证正面照：</div>
+    <div class="p4detalmt p4detal12">
+        <form action="/user/sfz0" target="ifrm0" method="post" id="form_0" enctype="multipart/form-data">
+        <input type="file" name="avatar" id="avatar0" style="position:absolute;width:0px;height:0px;left:-100px;top:-100px;" onChange="upimg0(this)" />
+        <div class="p4detal121" onClick="$('#avatar0').click();"><php>if($data['user']['idcardimga']) echo '<img id="sfz0" src="/static/uploadfiles/authend/'.$data['user']['idcardimga'].'" width="170" height="170" style="margin-top: -70px;" />';</php><h5>上传图片</h5></div>
+        </form>
+        <div class="p4detal121" style="background-image:url(/static/images/p41.png)"></div>
+        <div class="p4detal122">
+        <ol>
+        <li class="p4detal122lifont">请上传本人手持身份证正面上半身免冠照片；</li>
+        <li class="p4detal122lifont">证件信息清晰可见。且不能被遮挡；</li>
+        <li class="p4detal122lifont">仅支持JPG格式，图片大小不超过5M；</li>
+        </ol>
+            <div><font class="p4detal122lifont" color="#ff7303">详细>></font></div>
+        </div>
+        <div class="p4detal11"></div>
+        <div class="p4detal12"> 
+            <div class="p4detal123"></div>
+            <div class="p4detal123">示例</div>
+            <div class="p4detal123"></div>
+        </div>
+    </div>
+
+	<iframe name="ifrm1" src="about:blank" style="position:absolute;top:-100px;left:-100px;width:0px;height:0px;" frameborder="0"></iframe>
+
+	<div class="p4detalmt p4detal11"><font color="red">*</font>手持身份证反面照：</div>
+    <div class="p4detalmt p4detal12">
+        <form action="/user/sfz1" target="ifrm1" method="post" id="form_1" enctype="multipart/form-data">
+        <input type="file" name="avatar" id="avatar1" style="position:absolute;width:0px;height:0px;left:-100px;top:-100px;" onChange="upimg1(this)" />
+        <div class="p4detal121" onClick="$('#avatar1').click();"><php>if($data['user']['idcardimga']) echo '<img id="sfz1" src="/static/uploadfiles/authend/'.$data['user']['idcardimgb'].'" width="170" height="170" style="margin-top: -70px;" />';</php><h5>上传图片</h5></div>
+        </form>
+        <div class="p4detal121" style="background-image:url(/static/images/p42.png)"></div>
+        <div class="p4detal122">
+            <ol>
+            <li class="p4detal122lifont">请上传本人手持身份证反面上半身免冠照片；</li>
+            <li class="p4detal122lifont">证件信息清晰可见。且不能被遮挡；</li>
+            <li class="p4detal122lifont">仅支持JPG格式，图片大小不超过5M；</li>
+            </ol>
+            <div><font class="p4detal122lifont" color="#ff7303">详细>></font></div>
+        </div>
+        <div class="p4detal11"></div>
+        <div class="p4detal12">
+            <div class="p4detal123"></div>
+            <div class="p4detal123">示例</div>
+            <div class="p4detal123"></div>
+        </div>
+    </div>
+
+    <form action="/user/refix_authent" method="post" id="form1">
+    
+    <div class="p4detalmt p4detal11"><font color="red">*</font>真实姓名：</div>
+    <div class="p4detalmt p4detal12"> <input type="text" class="form-control deinputtext" name="realname" value="{$data.user.realname}" ></div>
+    <div class="p4detalmt p4detal11"><font color="red">*</font>身份证号码：</div>
+    <div class="p4detalmt p4detal12"><input type="text" class="form-control deinputtext" name="idcard" value="{$data.user.idcard}" ></div>
+    
+    <div class="p4detalmt p4detal11" style="padding:7px 0"><font color="red">*</font>身份证到期时间：</div>
+    <div class="p4detalmt p4detal12">
+    <input type="date" class="form-control p4detalinputw" name="idcardedate" id="idcardedate" value="{$data.user.idcardedate}" >
+    <input type="checkbox" style="margin:10px" name="idcend" value="2099-12-31" >长期（若证件有效期为长期，请勾选长期）
+    </div> 
+    
+    <div class="p4detalmt p4detal11"></div>
+    <div class="p4detalmt p4detal12">
+    <input type="checkbox" style="margin:10px; float:left" id="rule"  ><h6>《探图规则》  《探图网原创作品审查规则》  《探图网独家签约会员协议》  《探图网非独家签约会员协议》</h6>
+    </div> 
+    </form>
+	<div class="p4detalmt p4detal11"></div>
+    <div class="p4detalmt p4detal12">
+        <div class="almid">
+         <button class="btn btn2 bgc" onclick="subm()">提交审查</button> 
+        </div>
+    </div> 
+
+
+</div>
+  
+<php>}elseif($data['user']['isverify']==1){</php>
+<div class="container1200 center">
+<h4>审核中，请耐心等候~</h4>
+</div>
+<php>}elseif($data['user']['isverify']==2){</php>
+<div class="container1200 center">
+<h4>审核通过~</h4>
+</div>
+<php>}</php>
+<div class="container1200 bg4"></div>
+<script>
+function subm(){
+	if($('#rule').is(':checked')){
+		$('#form1').submit();
+	}else{
+		alert('请同意相关协议。');
+	}
+}
+</script>
+<include file="public:mfooter"/> 

@@ -1,0 +1,168 @@
+<include file="public:header"/>
+
+<style>
+#fmsel2{
+	max-height: 500px;
+	overflow: auto;
+}
+.selpics_div{
+	float: left;
+	border: 1px solid #EEE;
+	margin: 0 5px 5px 0;
+	width: 264px;
+	height: 40px;
+	cursor: pointer;
+}
+.selpics_div:hover{
+	border: 1px solid #333;
+	background: #EEE;
+}
+.selpics_div img{
+	max-height: 100px;
+	max-width: 100px;
+}
+.pcon1wh{
+	background-position:center;background-size:cover;
+}
+</style>
+<script>
+var doing = false;
+function toupload2(){
+	if(doing || $('#userfile2').val()=='') return false;
+	doing = true;
+	$('#fengmianModal2').modal('hide');
+	loading.show(0,'图片上传中,请稍候...');
+	$('#form_2').submit();
+}
+function selpic2(){
+	if(doing) return false;
+	$('#fengmianModal2').modal('show');
+	$('#fmsel1').show();
+	$('#fmsel2').hide();
+	//$('#userfile2').val('').click();
+}
+function selpic2_back(){
+	$('#fmsel1').show();
+	$('#fmsel2').hide();
+}
+function selpic2_do1(){
+	if(doing) return false;
+	$('#fmsel1').hide();
+	$('#fmsel2').show().html('Loading...');
+	var str = '';
+	$.getJSON('/user/getpics?callback=?',function(json){
+		if(!json.list){
+			$('#fmsel2').show().html('您没有作品！');
+			return;
+		}
+		$.each(json.list, function(index, data){
+			str += '<div style="background:url('+data.imgurl+');background-position:center;" class="selpics_div" onclick="selpic2_do1_chk(\''+data.imgkey+'\')"></div>';
+		});
+		if(str!='') $('#fmsel2').show().html('<div style="text-align:left;margin-bottom:5px;"><input type="button" class="btn btn-default" onclick="selpic2_back()" value="返回" /></div>'+str+'<div style="clear:both;"></div>');
+		else $('#fmsel2').show().html('您没有作品！');
+	});
+}
+function selpic2_do1_chk(key){
+	$('#fengmianModal2').modal('hide');
+	loading.show(0,'图片设置中,请稍候...');
+	$.get('/user/setpics?key='+key,function(data){
+		loading.hide();
+		doing = false;
+		$('.pcon1wh').css({"background-image":"url("+data+")"});
+	});
+}
+function selpic2_do2(){
+	if(doing) return false;
+	$('#userfile2').val('').click();
+}
+function api_avatar_err2(info){
+	alert(info);
+	doing = false;
+	loading.hide();
+}
+function api_avatar_ok2(name){
+	loading.hide();
+	doing = false;
+	$('.pcon1wh').css({"background-image":"url(/static/uploadfiles/albumimg/"+name+")"});
+}
+</script>
+<div class="h50"></div>
+<div class="container-fluid conpersoninit text-center">
+  <div class="pcon1wh" <php>
+  if($data['user']['usertopimg']){
+  	$usertopimg = explode('_',$data['user']['usertopimg']);
+  	if(count($usertopimg)>1) echo 'style="background-image:url('.imgurl_t3($data['user']['usertopimg'],0).');"';
+  	else echo 'style="background-image:url(/static/uploadfiles/albumimg/'.$data['user']['usertopimg'].');"';
+  }else if($data['banner']['imgname']) echo 'style="background-image:url(/static/uploadfiles/sys/'.$data['banner']['imgname'].');"';
+  </php>></div>
+  
+  <iframe name="ifrm2" src="/user/waits" style="position:absolute;top:-100px;left:-100px;width:0px;height:0px;" frameborder="0"></iframe>
+  <form action="/user/abanner_up?uid={:I('get.uid')}" target="ifrm2" method="post" id="form_2" enctype="multipart/form-data">
+  <div class="floatright" style="padding: 10px;">
+  	<div><button class="btn btn-default" type="button" onClick="selpic2()">设置封面</button>&nbsp;<span style="font-size:.8em;">（建议上传图片尺寸1920*260，文件大小不超过20M）</span><input type="file" id="userfile2" name="userfile2" size="20" style="position: absolute;left: -100px;top: -100px;width: 0;height: 0;" onChange="toupload2();" /></div>
+  </div>
+  </form>
+  
+  <div class="pcon1icon"><php>if($data['user']['avatar']==''){if($data['user']['avatarimg']==''){</php><img style="background:#fff;" class="img-circle" src="/static/images/tx.png" /><php>}else{</php><img style="background:#fff;" src="{$data.user.avatarimg}" width="40" class="img-circle" /><php>}}else{</php><img src="/static/uploadfiles/images/{$data.user.avatar}" class="img-circle" /><php>}</php> </div>
+  <div class="pa--20">
+    <h5>{$data.user.nickname}</h5>
+  </div>
+</div>
+<div class="container-fluid conpersoninit bg1">
+  <div class="pcon2">
+    <ul>
+      <a href="/user/homepage" ><li <php>if($data['headmenu'] == 'homepage') echo 'class="select"';</php>>我的首页</li></a>
+      <a href="/user/homepage_pending" ><li <php>if($data['headmenu'] == 'homepage_pending') echo 'class="select"';</php>>作品管理</li></a>
+      <a href="/user/album" ><li <php>if($data['headmenu'] == 'album') echo 'class="select"';</php>>专辑管理</li></a>
+      <a href="/user/collection" ><li <php>if($data['headmenu'] == 'collection') echo 'class="select"';</php>>收藏</li></a>
+      <a href="/user/message" ><li style="position:relative;" <php>if($data['headmenu'] == 'message') echo 'class="select"';</php>>消息<php>if($message['noread_count']>0){</php><div style="position:absolute;top:22px;right: 10px;background:#F03;width:8px;height:8px;border-radius:4px;"></div><php>}</php></li></a>
+      <a href="/user/my" ><li <php>if($data['headmenu'] == 'ziliao') echo 'class="select"';</php>>资料设置</li></a>
+      <a href="/camerist/gallery?uid={$data.user.id}" target="_blank" ><li style="margin-left: 50px;" <php>if($data['headmenu'] == 'gallery') echo 'class="select"';</php>>我的空间</li></a>
+    </ul>
+  </div>
+</div>
+<div class="container1200 center bg2  " <php>if($data['headmenu'] != 'ziliao') echo 'style="display:none;"';</php>>
+  <div class="pcon3">
+    <ul>
+      	<a href="/user/my" ><li <php>if($data['menu'] == 'my') echo 'class="select1"';</php>>基本资料</li></a>
+        <!--<a href="/user/account" ><li <php>if($data['menu'] == 'account') echo 'class="select1"';</php>>账户资料</li></a>-->
+        <a href="/user/authent" ><li <php>if($data['menu'] == 'authent') echo 'class="select1"';</php>>认证信息</li></a>
+        <!--<a href="/user/binding" ><li <php>if($data['menu'] == 'binding') echo 'class="select1"';</php>>手机绑定</li></a>-->
+        <a href="/user/modify" ><li <php>if($data['menu'] == 'modify') echo 'class="select1"';</php>>修改密码</li></a>
+    </ul>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="fengmianModal2" tabindex="-1" role="dialog" aria-labelledby="fengmianModalLabel2" aria-hidden="true">
+  <div class="modal-dialog" style="max-width:882px; width:882px;margin-top:185px;">
+    <div class="modal-content" style=" width:100%; height:100%">
+      <div class="modal-header" style="border:0px">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>
+      <div id="threg">
+          <div class="modal-body">
+            <div class="mod2" style="height:auto;width:850px;">
+              <div class="center mod2151" > <img src="/static/images/logocol.png" width="150px" > </div>
+              
+              <div class="mod21" style="height: auto;">
+                <h5>设置封面</h5>
+                <div id="fmsel1">
+	              <div style="margin-bottom: 20px;">
+	              	<div  class="bgc form-control" style="margin: auto;width: 30%;text-align:center;cursor:pointer;" onClick="selpic2_do1()"> 选择专辑中图片 </div>
+	              	</div>
+	              <div style="margin-bottom: 10px;">
+	              	<div  class="bgc form-control" style="margin: auto;width: 30%;text-align:center;cursor:pointer;" onClick="selpic2_do2()"> 上传一张封面图 </div>
+	              	</div>
+	             </div>
+                <div id="fmsel2" style="display: none;">
+	              	
+	             </div>
+              </div>
+              
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

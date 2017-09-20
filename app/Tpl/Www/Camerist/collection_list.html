@@ -1,0 +1,29 @@
+<include file="public:cheader" />
+<div class="container1200 center padding_b">
+    <div class="pcon42 left">
+        <br />
+        <div class="text-center" style="margin:20px;position:relative;">
+            <span style="position:absolute;left:0;">
+                <button class="btn btn-default" onclick="history.back()" type="button">返回</button>
+                <span class="abtn" id="anum"></span>
+            </span>
+            <span style="font-size:22px;">《{$data.folder.foldername}》 收藏夹</span>
+        </div>
+        <volist name="data.fav" id="vof">
+            <div class="album1 ff{$vof.id}" style="position:relative;">
+                <a href="/index/detail?id={$vof.productid}" target="_blank">
+                    <div class="album11" style="background:url({$vof.topimg});background-position: center;background-size:cover;">
+                    </div>
+                </a>
+                <div class="album12">
+                    <a href="/index/detail?id={$vof.id}" target="_blank"><h4 style="padding-top:20px;">{$vof.name}</h4></a>
+                </div>
+            </div>
+        </volist>
+        <div class="clearfix"></div>
+    </div>
+    <br />
+    <br />
+</div>
+</div>
+<include file="public:mfooter" />

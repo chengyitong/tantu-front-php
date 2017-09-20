@@ -1,0 +1,100 @@
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:header" />
+
+<table class="table_list table_search" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <form action="?" method="get">
+        <thead>
+            <tr>
+                <th colspan="4">
+        <div class="tdp">
+            <div></div>搜索条件
+        </div>
+        </th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td width="25%">
+                    <label>id</label>
+                    <input type="text" name="id" value="{$where.id}" />
+                </td>
+                <td width="25%">
+					<label>设备号</label>
+                    <input type="text" name="devicetoken" value="{$where.devicetoken}" />
+                </td>
+                <td colspan="2">
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr align="center">
+                <td colspan="4"><input type="submit" class="sys_button btn_blue" value=" 搜索 " /></td>
+            </tr>
+        </tfoot>
+    </form>
+</table>
+<div class="midline">
+    <input type="button" class="sys_button btn_gray" id="btntocvs" value="导出表格" onclick="location = '{:seturlget('exp')}&exp=xls';" />
+</div>
+<php>endif;</php>
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th width="5%">ID.</th>
+            <th width="15%">设备号</th>
+            <th width="15%">最后上线坐标</th>
+            <th width="15%">最后上线时间</th>
+            <th width="15%">酒店手机</th>
+            <th width="20%">创建时间</th>
+    <php>if(I('get.exp')!='xls'):</php>
+    <th>其他操作</th>
+    <php>endif;</php>
+</tr>
+</thead>
+<tbody>
+<volist name="data.list" id="vo">
+    <tr align="center">
+        <td>{$vo.id}</td>
+        <td>{$vo.devicetoken}</td>
+        <td>{$vo.lastlocation_x},{$vo.lastlocation_y}</td>
+        <td>{$vo.lastonline}</td>
+        <td>{$vo.hotelmobile}</td>
+        <td>{$vo.ctime}</td>
+    <php>if(I('get.exp')!='xls'):</php>
+    <td>
+        <input type="button" class="sys_button btn_blue btn_open" value=" 编辑 " href="/hotel/editv?id={$vo.id}" />
+        <input type="button" class="sys_button btn_blue" value=" 删除 " onclick="if (confirm('确定删除?'))
+                    location = '/product/del?id={$vo.id}';" /> 
+    </td>
+    <php>endif;</php>
+    </tr>
+</volist>
+<tr align="center">
+
+        <form action="/device/device_add" method="post">
+    
+            <td>新增</td>
+    
+            <td><input type="text" name="devicetoken" value="" /></td>
+            <td></td>
+            <td></td>
+            <td><input type="text" name="hotelmobile" value="" /></td>
+            <td></td>
+            <td>
+    
+                <input type="submit" class="sys_button btn_orange" value=" 提交 " />
+    
+            </td>
+    
+        </form>
+    
+    </tr>
+</tbody>
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:table_page" />
+<php>endif;</php>
+</table>
+<php>if(I('get.exp')!='xls'):</php>
+</body>
+</html>
+<php>endif;</php>

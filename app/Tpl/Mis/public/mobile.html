@@ -1,0 +1,53 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/static/css/global.css" />
+<script type="text/javascript" src="/static/plugs/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="/static/js/global.js"></script>
+<script type="application/javascript" src="/static/js/iscroll.js"></script>
+<script type="text/javascript">
+var scrollContent,scrollNav;
+function loaded() {
+	scrollContent = new iScroll('contentWrapper');
+}
+document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+document.addEventListener('DOMContentLoaded', loaded, false);
+</script>
+<style type="text/css">
+body {background:url(/static/plugs/plupload/bg.jpg);}
+.xgll_zrqy_nr{
+	display:inline;
+	SCROLLBAR-FACE-COLOR: #ad8a60;
+	SCROLLBAR-HIGHLIGHT-COLOR: #ad8c5f;
+	SCROLLBAR-SHADOW-COLOR: #ad8c5f;
+	SCROLLBAR-3DLIGHT-COLOR: #dab88a;
+	SCROLLBAR-ARROW-COLOR: #ffffff;
+	SCROLLBAR-TRACK-COLOR: #ffffff;
+	SCROLLBAR-DARKSHADOW-COLOR: #633600;
+	overflow-x:hidden;
+	overflow-y:auto;
+}
+article {
+	position:absolute;
+	top:0; bottom:0; left:0; right:0;
+}
+.zrqy_nkx{
+	padding:5px 10px 5px 5px;
+}
+</style>
+<title>BDMIS PAGE</title>
+</head>
+<body>
+<noscript>
+<iframe src="*.htm"></iframe>
+</noscript>
+<div class="xgll_zrqy_nr">
+<article id="contentWrapper">
+<div class="zrqy_nkx">
+hello
+</div>
+</article>
+</div>
+</body>
+</html>

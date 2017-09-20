@@ -1,0 +1,510 @@
+<style type="text/css">
+.upload-container {
+    float: left;
+    width: 665px;
+    border-right: solid 2px #cfcfcf;
+    padding-bottom: 20px;
+    min-height: 645px;
+}
+
+.upload-image {
+    width: 188px;
+    height: 188px;
+    margin: 20px 10px 20px 15px;
+    border: solid 1px #cfcfcf;
+    display: inline-block;
+}
+
+.upload-image-selected {
+    border-color: #269edc;
+}
+
+.upload-image-selected .checkbox-state {
+    background-color: #269edc;
+}
+
+.upload-image>span {
+    display: block;
+    margin-top: 100px;
+    width: 150px;
+    text-align: center;
+    overflow: hidden;
+    height: 20px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.upload-loading {
+    color: white;
+    margin-top: 60px;
+    height: 30px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    /* For IE 8*/
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#66000000, endColorstr=#66000000)";
+}
+
+.upload-loading>span {
+    margin: 8px;
+    width: 180px;
+    display: block;
+    position: absolute;
+    text-align: center;
+}
+
+.upload-loading-percentage {
+    background-color: #269edc;
+    height: 100%;
+    width: 0;
+    color: white;
+}
+
+.checkbox-state {
+    background-color: white;
+    width: 32px;
+    height: 30px;
+    display: inline-block;
+    float: left;
+}
+
+.remove-img {
+    width: 32px;
+    height: 30px;
+    float: right;
+    cursor: pointer;
+}
+
+.img-operate {
+    display: none;
+}
+
+.edit_container {
+    float: left;
+    width: 295px;
+    margin: 20px 5px;
+}
+
+.edit-row-content {
+    width: 210px;
+    border-radius: 4px;
+    border: 1px solid #bec5cf;
+    height: 31px;
+}
+</style>
+<form style="display: inline-block;">
+<div id="upload_container" class="upload-container">
+    <input type="hidden" id="domain" value="{:qiniu_domain()}">
+    <input type="hidden" id="uptoken_url" value="/static/qiniu/jssdk/demo/upload_token_6_1.php">
+    <div style="margin: 20px auto 5px 15px;">
+        <input type="checkbox" id="chk_select_all" />
+        <label for="chk_select_all">本页全选</label>
+        <span id="lbl_select_count" style="margin-left:5px;color: grey;font-size: 12px;">已选择0张</span></div>
+    <div class="upload-image" style="cursor: pointer;" id="pickfiles">
+        <img style="display: block;margin: 58px 60px auto auto;" src="/static/images/select_images.jpg" />
+    </div>
+</div>
+<div class="edit_container">
+    <div class="float-left" style="max-width:600px; min-width:295px; width:100%;">
+        <div>
+            <input id="btnSaveImages" class="btn bgc" type="button" style="width:300px; height:42px; border-radius:4px;margin: 10px 0 10px 5px;" value="发布图片" />
+        </div>
+        <div style="margin:10px auto">
+            <input type="hidden" value="1" name="status" />
+            <div class="float text-right" style="width:80px;">
+                <font color="#FF0000">*</font>属性：</div>
+            <div style="height: 20px;position:relative;top: -5px;">
+                <input style="position: relative;" type="radio" id="banquan1" value="1" name="banquan" checked="checked" />
+                <label for="banquan1" style="position: relative;">版权保护</label><img src="/static/images/p3.png" style="margin-left:7px" title="版权保护作品&#10;只作平台展示&#10;交流作用。" />
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
+        <div style="margin:10px auto ;padding-left: 37px;">
+            <a href="/index/content?id=470" target="_blank" style="color:#09F">图片标题标签撰写参考标准</a>
+        </div>
+        <div style="margin:10px auto ; height:31px">
+            <div class="float text-right" style="width:80px;padding-top:7px;">标题：</div>
+            <div>
+                <input type="text" name="name" id="name" class="default edit-row-content" value="" style="margin-top: 0px; height:31px" />
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div style="margin:10px auto">
+            <div class="float text-right" style="width:80px;padding-top:7px">分类：</div>
+            <div style="position:relative">
+                <select type="text" class="default edit-row-content" name="classid" id="classid" onchange="mtype(this.value)" style="height:31px;">
+                    <option value="0">请选择</option>
+                </select>
+            </div>
+            <div class="float-left" style="display: none;">
+                <div style="border:1px solid #c8d6e3; min-height:30px; width:310px">
+                    <div style="padding:10px">
+                        <div class="clearfix"></div>
+                    </div>
+                    <input type="hidden" id="typec_ids" name="classids" value="" />
+                    <input type="hidden" id="typec_names" name="classlist" value="" />
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div style="margin:10px auto ; height:31px">
+            <div class="float text-right" style="width:80px; padding-top:7px">关键词：</div>
+            <div class="float-left">
+                <!-- /input-group -->
+                <div style="border: 1px solid #c3c3c3;width:310px;cursor:text;padding:5px 0 0 5px;border-radius: 4px;border: 1px solid #bec5cf;display:none;" onclick="$('#a').focus();">
+                    <div style="float:left;overflow:hidden;width:30px;" id="da">
+                        <input type="text" id="a" onkeydown="aa()" onkeyup="aa()" style="border:0;padding:0;border-radius:0;height:auto;outline:none;-webkit-appearance: none;width:100%;" />
+                    </div>
+                    <div style="clear:both;"></div>
+                </div>
+                <div id="taglist" class="default" style="padding: 10px 10px 5px;word-wrap: break-word;width: 310px;min-height:80px;border-radius: 4px;border: 1px solid #92b9f8;display:none;">
+                    <div class="clearboth"></div>
+                </div>
+                <textarea name="taglist" id="ipt_taglist" class="edit-row-content" style="height:80px;cursor:text;padding:5px 0 0 5px;"></textarea>
+                <br /><span style="font-size:11px;">（关键词之间用空格分开）</span>
+                <div style="min-height:30px; width:200px;display: none;margin-top: 5px;" id="kwsel">
+                    <div style="padding:10px">
+                        <h5 class="float-left" align="left" style="margin-top:0;">关键词推荐</h5>
+                        <h5 class="float-right" style="margin-top:0;color: blue;cursor: pointer;" onclick="mtype($('#classid').val())">换一批</h5>
+                        <div class="clearfix"></div>
+                        <div id="tags">
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
+        <div style="margin:10px auto">
+            <div class="float text-right" style="width:80px;padding-top:7px">颜色：</div>
+            <div class="float-left">
+                <div style="min-height:30px; width:310px">
+                    <div style="padding:0 10px" id="color_list_container">
+                        <div class="clearfix"></div>
+                    </div>
+                    <input type="hidden" id="color_ids" name="colorids" value="" />
+                    <input type="hidden" id="color_names" name="colorlist" value="" />
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div style="margin:10px auto 0;">
+            <div class="float text-right" style="width:80px; padding-top:7px">专辑：</div>
+            <div style="position:relative">
+                <select onchange="mnew(this.value)" type="text" class="default edit-row-content" name="folderid" id="folderid">
+                    <option value="new" style="color:#999;display: none;">新建专辑</option>
+                </select>
+                <div style="padding: 8px;" align="right">[<span style="cursor: pointer;" data-toggle="modal" data-target="#myalbum">新建专辑</span>]</div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div style="margin:10px auto ;">
+            <div class="float text-right" style="width:80px; padding-top:7px">作品简介：</div>
+            <div>
+                <textarea class="default edit-row-content" name="desc" id="desc" style="min-height:80px;"></textarea>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+  </form>
+<br />
+<!--Modal-->
+<div class="modal fade" id="myalbum" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog mod1">
+        <div class="modal-content modwh100">
+            <div class="modal-header modborder0" style="background-color:#eceff1">
+                <button type="button" class="close" onclick="closeMyalbum()"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title text-center">创建专辑</h4>
+            </div>
+            <div class="modal-body" style="overflow: hidden;">
+                <div class="mod2">
+                    <div class="clearfix almod22a">
+                        <div style="margin:0 auto;width:300px;">
+                            <label for="mobile" class="control-label">
+                                <font color="red">*</font>专辑名:</label>
+                            <div>
+                                <input class="form-control" id="foldername" type="text">
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="">
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="" style="margin: 40px 100px;">
+                            <div>
+                                <div class="alsumitbgc form-control" style="text-align:center;cursor:pointer;width:122px;margin:0 auto;" onclick="newf2()"> 确 定 </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/plupload/moxie.js"></script>
+<script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/plupload/plupload.dev.js"></script>
+<script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/plupload/i18n/zh_CN.js"></script>
+<script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/ui.js?rad={:time()}"></script>
+<script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/qiniu.js"></script>
+<script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/highlight.js"></script>
+<script type="text/javascript" src="/static/qiniu/jssdk/demo/scripts/upload_config.js?rad={:time()}"></script>
+<script type="text/javascript">
+hljs.initHighlightingOnLoad();
+
+var edit_select_images = new Array();
+var m_selected_class_name = "upload-image-selected";
+var edit_prop_data;
+
+$(function() {
+    //check-all
+    $('#chk_select_all').change(function() {
+        if ($(this).prop('checked') == true) {
+            doAllUploadImagesSelected();
+        } else {
+            edit_select_images = new Array();
+            $.each($("." + m_selected_class_name), function(i, item) {
+                $(item).removeClass(m_selected_class_name);
+            });
+        }
+        updateSelectTips();
+    });
+
+    //colors
+    $('.color').click(function() {
+        if ($(this).hasClass('color_chose')) {
+            $(this).removeClass('color_chose');
+            $(this).html('');
+        } else {
+            $(this).addClass('color_chose');
+            $(this).html('<i class="glyphicon glyphicon-ok"></i>');
+
+        }
+        var ids = ',',
+            names = '';
+        $('.color_chose').each(function() {
+            ids += $(this).data('id') + ',';
+            names += $(this).attr('data-name') + ' ';
+
+        });
+        $('#color_ids').val(ids);
+        $('#color_names').val(names);
+    });
+
+    //get init datas
+    if (!edit_prop_data) {
+        $.getJSON('/product/get_edit_data', function(data) {
+            edit_prop_data = data;
+            if (edit_prop_data.class.length > 0) {
+                var _html = "";
+                $.each(edit_prop_data.class, function(i, item) {
+                    _html += '<option value="' + item.id + ',' + item.classname + '">' + item.classname + ' </option>';
+                });
+                $("#classid").append(_html);
+            }
+
+            if (edit_prop_data.color.length > 0) {
+                var _html = "";
+                $.each(edit_prop_data.color, function(i, item) {
+                    _html += '<div class="seacon1col color" data-id="' + item.id + '" data-name="' + item.colorname + '" style="cursor: pointer;background-color:' + item.colorvalue + ';" onClick="onColorClick(this)"></div>';
+                });
+                $("#color_list_container").prepend(_html);
+            }
+
+            if (edit_prop_data.color.length > 0) {
+                var _html = "";
+                $.each(edit_prop_data.folder, function(i, item) {
+                    _html += '<option value="' + item.id + '">' + item.foldername + '</option>';
+                });
+                $("#folderid").prepend(_html);
+            }
+        });
+    }
+
+    //get to deal products
+    $.getJSON('/product/get_todeal_products', function(data) {
+        if(data.imgs) {
+          $.each(data.imgs, function(index, item) {
+            appendProductImage(item.imgurl, item.imgkey, item.name, item.id);
+          });
+        }        
+    });
+
+
+    mtype($('#classid').val());
+    $(".close").click(function() {
+        $('#folderid').removeAttr("data-toggle", "data-target");
+    });
+    $("#myalbum").click(function() {
+        $('#folderid').removeAttr("data-toggle", "data-target");
+    });
+});
+
+function onColorClick(e) {
+    var _this = e;
+    if ($(_this).hasClass('color_chose')) {
+        $(_this).removeClass('color_chose');
+        $(_this).html('');
+    } else {
+        $(_this).addClass('color_chose');
+        $(_this).html('<i class="glyphicon glyphicon-ok"></i>');
+
+    }
+    var ids = ',',
+        names = '';
+    $('.color_chose').each(function() {
+        ids += $(this).data('id') + ',';
+        names += $(this).attr('data-name') + ' ';
+
+    });
+    $('#color_ids').val(ids);
+    $('#color_names').val(names);
+}
+
+//change image check state
+function onSelectImage(e) {
+    var _id = $(e).children(":input[id^='product_img_']").val();
+    if ('' == _id) {
+        return;
+    }
+
+    _id = parseInt(_id);
+
+    var _index = edit_select_images.indexOf(_id);
+    if ($(e).hasClass(m_selected_class_name)) {
+        $(e).removeClass(m_selected_class_name);
+
+        if (_index > -1) {
+            edit_select_images.splice(_index, 1);
+        }
+    } else {
+        $(e).addClass(m_selected_class_name);
+        if (_index == -1) {
+            edit_select_images.push(_id);
+        }
+    }
+
+    updateSelectTips();
+}
+
+//update tips text
+function updateSelectTips() {
+    $('#lbl_select_count').text('已选择' + edit_select_images.length + '张');
+}
+
+//关键词
+var naa = false;
+
+function aa() {
+    if (event.keyCode == "32") {
+        if (!naa) return;
+        naa = false;
+        var val = $.trim($('#a').val());
+        if (val == '') return;
+        goon = true;
+        $('.tags').each(function() {
+            if ($(this).html() == val) {
+                alert('您输入的关键词已存在!');
+                goon = false;
+            }
+        });
+        if (goon) tag_js(val);
+        $('#a').val('');
+        $('#da').width(30);
+    } else {
+        naa = true;
+        var w = $('#a').textWidth();
+        $('#da').width(w + 30);
+    }
+}
+
+function closeMyalbum() {
+    $('#myalbum').modal('hide');
+}
+
+function isAllImagesSelected(){
+  return (edit_select_images.length == $(":input[id^='product_img_']").filter(function() {return !!this.value;}).length);
+}
+
+function doAllUploadImagesSelected(){
+  edit_select_images = new Array();
+  $.each($(":input[id^='product_img_']"), function(i, item) {
+      if ($(item).val() !== '') {
+          edit_select_images.push(parseInt($(item).val()));
+          $(item).parent().addClass(m_selected_class_name);
+      }
+  });
+}
+
+function mnew(val) {
+    if (val == 'new') {
+        $('#folderid').attr({
+            "data-toggle": "modal",
+            "data-target": "#myalbum"
+        });
+    } else {
+        $('#folderid').removeAttr("data-toggle", "data-target");
+    }
+}
+
+function mtype(val) {
+    var str = val.split(",");
+    var strs = '';
+    $.getJSON('/user/get_tags?cid=' + str[0], function(json) {
+        if (json.count > 0) {
+            $.each(json.list, function(index, data) {
+                strs += '<div class="float-left chosetag" onClick="chosetag(this)" style="padding:5px; margin:5px; background-color:#f9f9f9;cursor:default;border:#dddddd 1px solid;" data-id="' + data.id + '" data-name="' + data.tagname + '"><span style="font-weight:bold;color:#F60;">+</span>' + data.tagname + '</div>';
+
+            });
+            $('#tags').html(strs);
+            $('#kwsel').show();
+        } else $('#kwsel').hide();
+    });
+
+}
+
+function chosetag(obj) {
+    var tagname = $(obj).data('name');
+    var tagid = $(obj).data('id');
+    var goon = true;
+    if (goon) tag_js(tagname);
+    $('#a').focus();
+}
+
+function tag_js(tagname) {
+    $('#da').before('<div class="tags" data-name="' + tagname + '" onclick="tagdel(this)">' + tagname + '</div>');
+    tag_rejs(tagname);
+}
+
+function tag_rejs(tagname) {
+    var str = $('#ipt_taglist').val();
+    str += tagname + ' ';
+    $('#ipt_taglist').val(str);
+}
+
+function tagdel(obj) {
+    //if(confirm('确定移除此项?')){
+    $(obj).remove();
+    tag_rejs();
+    //}
+}
+
+function newf2() {
+    if ($('#foldername').val() == '') {
+        alert('请输入专辑名!');
+        return;
+    }
+    $.getJSON('/user/new_folder?fname=' + $('#foldername').val(), function(json) {
+        alert('创建成功!');
+        $('#folderid').prepend('<option value="' + json.id + '">' + json.foldername + '</option>');
+        $('#foldername').val('');
+        global.n_select_value('folderid', json.id);
+        $('#folderid').removeAttr("data-toggle", "data-target");
+        $(".close").click();
+    });
+}
+
+</script>

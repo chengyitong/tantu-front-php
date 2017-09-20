@@ -1,0 +1,86 @@
+<include file="public:mheader"/>
+
+<div class="container1200 center padding_b">
+
+  <div class="pcon42 left">
+  <!--
+    <div  class="hpage1">
+    <div class="hpage11"><p>余额</p><p>$0.00</p></div>
+    <div class="hpageimg"><img src="../../../../static/images/line1.png" width="2px" height="68px" /></div>
+    <div class="hpage11"><p>已冻结</p><p>$0.00</p></div>
+    <div class="hpageimg"><img src="../../../../static/images/line1.png" width="2px" height="68px" /></div>
+    <div class="hpage11"><p>可提取</p><p>$0.00</p></div>
+    <div class="hpageimg"> <img src="../../../../static/images/line1.png" width="2px" height="68px" /></div>
+    <div class="hpagebtn"></div>
+    <div class="hpagebtn1"><button type="submit" class="btn btn6 bgc">充值</button></div>
+    <div class="hpagebtn1"><button type="submit" class="btn btn6 bgc">提现</button></div>
+     <div class="clearfix"></div>
+    </div>
+    -->
+    
+    <div class="hpage2">
+    <a href="/user/homepage_pending"><div class="hpage2txt"><div class="hpage2txt2"> <p>待处理作品</p><p>{$data.num1}</p></div></div></a>
+    <a href="/user/homepage_pending?status=0"><div class="hpage2txt "><div class="hpage2txt2"><p>待审核作品</p><p>{$data.num2}</p></div></div></a>
+    <a href="/user/homepage_pending?status=-1"><div class="hpage2txt"><div class="hpage2txt2"><p>未通过作品</p><p>{$data.num3}</p></div></div></a>
+    <a href="/user/homepage_pending?status=1"><div class="hpage2txt"><div class="hpage2txt2"><p>已发布作品</p><p>{$data.num4}</p></div></div></a>
+    <div class="clearfix"></div>
+    </div>
+    <br /><br /><br /><br />
+    <hr />
+    <div>
+    <h4 class="hpagetxt text-left" >最新收藏</h4>
+    <h4 class="hpagetxt text-right" style="color:#9fa0a0"><a href="/user/collection">查看更多</a></h4>
+    <div class="clearfix"></div>
+    </div>
+    
+    <div class="hpage2">
+    <volist name="data.fav" id="vo">
+    <div class="hpagepic" style="width:auto;"><a href="/index/detail?id={$vo.productid}" target="_blank"><img src="{$vo.imgurl}" height="100%" /></a></div>
+    </volist>
+    <div class="clearfix"></div>
+    </div>
+     <br /><br /><br /><br />
+    <hr />
+    <div>
+    <h4 class="hpagetxt text-left" >浏览记录</h4>
+   
+    <div class="clearfix"></div>
+    </div>
+    
+    <div class="hpage2" style="overflow: hidden;">
+    <volist name="data.visit" id="vo">
+    <div class="hpagepic" style="width:auto;"><a href="/index/detail?id={$vo.productid}" target="_blank"><img src="{$vo.imgurl}" height="100%" /></a></div>
+    </volist>
+    <div class="clearfix"></div>
+    </div>
+    
+    <br /><br />
+ 
+    
+    
+    
+
+  </div>
+</div>
+<script>
+ $(function(){
+	if($('#cashtype').val()==303){
+		$('#bank').show();
+	}else{
+		$('#bank').hide();
+	}
+	$('#cashtype').change(function(e){
+		var st = $('#cashtype').val();
+		if(st==303){
+			$('#bank').show();
+		}else{
+			$('#bank').hide();
+		}
+	})
+	/*function radiobank(id){
+		$('.rabank'+id).children('div').css('border','1px solid #FC0;');
+		$('.rabank'+id).find("input[type=radio]").attr("checked", 'checked');
+	}*/
+});
+</script>
+<include file="public:mfooter"/>

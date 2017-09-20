@@ -1,0 +1,22 @@
+<include file="public:header" />
+<link rel="stylesheet" type="text/css" href="/static/css/gdmap.css" />
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=56da30dd6577a38fbc6ee2f1aa35a1a4&plugin=AMap.Autocomplete"></script>
+<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+<div class="amap">
+    <div id="container"></div>
+</div>
+<script type="text/javascript">
+var n_x = '{:I("get.x",113.55185)}', n_y = '{:I("get.x",22.195765)}';
+    var map = new AMap.Map("container", {
+        resizeEnable: true,
+        zoom:16,
+        center: [n_x,n_y]
+    });
+	marker = new AMap.Marker({
+		icon: "http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+		position: [n_x, n_y]
+	});
+	marker.setMap(map);
+</script>
+</body>
+</html>

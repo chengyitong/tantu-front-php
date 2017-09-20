@@ -1,0 +1,54 @@
+<include file="public:mheader"/>
+
+<div class="container1200 center padding_b"> 
+  <div class="pcon42 left">
+    <div class="hpage2" style="border-bottom: solid 1px #cfcfcf">
+	    <a href="/user/homepage_pending"><div class="hpage2txt <php>if($data['w']=='-2') echo 'hpselect';</php>"><div class="hpage2txt2"> <p>待处理作品</p><p>{$data.num1}</p></div></div></a>
+	    <a href="/user/homepage_pending?status=0"><div class="hpage2txt <php>if($data['w']=='0') echo 'hpselect';</php>"><div class="hpage2txt2"><p>待审核作品</p><p>{$data.num2}</p></div></div></a>
+	    <a href="/user/homepage_pending?status=-1"><div class="hpage2txt <php>if($data['w']=='-1') echo 'hpselect';</php>"><div class="hpage2txt2"><p>未通过作品</p><p>{$data.num3}</p></div></div></a>
+	    <a href="/user/homepage_pending?status=1"><div class="hpage2txt <php>if($data['w']=='1') echo 'hpselect';</php>"><div class="hpage2txt2"><p>已发布作品</p><p>{$data.num4}</p></div></div></a>
+	    <div class="clearfix"></div>
+    </div>
+
+	<!-- <div style="margin: 0 auto;"> -->
+		<include file="public:upload_component"/>
+	<!-- </div> -->
+  </div>
+</div>
+<include file="public:mfooter"/>
+
+<script type="text/javascript">
+var upload_save_img_url = "/product/add_product";
+
+$(function() {
+    //defined button click from `upload_component`
+    $('#btnSaveImages').click(function(){
+        if (edit_select_images.length == 0) {
+            alert('未选择任何图片');
+            return;
+        }
+
+        $('#btnSaveImages').button('loading');
+        $.post('/product/productionSave', {
+                'images': JSON.stringify(edit_select_images),
+                'name': $('#name').val(),
+                'classid': $('#classid').val(),
+                'taglist': $('#ipt_taglist').val(),
+                'colorids': $('#color_ids').val(),
+                'colorlist': $('#color_names').val(),
+                'folderid': $('#folderid').val(),
+                'desc': $('#desc').val()
+            },
+            function(res) {
+              $('#btnSaveImages').button('reset');
+              if(0==res.flag){
+                alert(res.msg);
+              }
+              else{             
+                  $(".upload-image.upload-image-selected").remove();
+                  edit_select_images = new Array();
+              }
+            }, 'json');
+    });	
+});
+</script>

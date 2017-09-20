@@ -1,0 +1,288 @@
+<include file="public:header" />
+<script charset="utf-8" src="/static/plugs/kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="/static/plugs/kindeditor/lang/zh_CN.js"></script>
+<script>
+KindEditor.ready(function(K) {
+	var editor = K.create("textarea[name='detail']", {
+		resizeType : 1,
+		//pasteType : 1,
+		syncType : "form",
+		width: "680px",
+		height: "300px",
+		newlineTag : "br",
+		allowPreviewEmoticons : false,
+		uploadJson : "/static/plugs/kindeditor/php/upload_json.php",
+		fileManagerJson : "/static/plugs/kindeditor/php/file_manager_json.php",
+		allowFileManager : true,
+		afterBlur: function(){this.sync();}
+		//items : [
+		//	"fontname", "fontsize", "|", "textcolor", "bgcolor", "bold", "italic", "underline",
+		//	"removeformat", "|", "justifyleft", "justifycenter", "justifyright", "|", "emoticons", "image", "media", "source"]
+	});
+});
+</script>
+<script>
+$(function() {
+});
+</script>
+<style>
+label {
+	text-align: right;
+	display: inline-block
+}
+.seacon1col {
+    margin-top: 6px;
+    width: 30px;
+    height: 20px;
+    border: 1px #ccc solid;
+    margin-right: 2px;
+    float: left;
+    -webkit-border-radius: 1px;
+    border-radius: 1px;
+}
+.width{width:10%;}
+input{max-width:100px;}
+tr{margin:5px 0;}
+.ke-container{margin-left:10%;}
+.table_list_gray {
+	margin: 0 0 5px 0;
+	font-size: 13px;
+}
+	.table_list_gray tr {
+		background-color: #FFF;
+	}
+	.table_list_gray th {
+		border-top:1px #DDD solid;
+		border-left:1px #DDD solid;
+		border-bottom:1px #DDD solid;
+		border-right:1px #DDD solid;
+		background:url(/static/img/tbl_bg.gif) repeat-x;
+		line-height:28px;
+		height:28px;
+	}
+		.table_list_gray .lth {
+			border-right:1px #DDD solid;
+		}
+	.table_list_gray td {
+		padding: 4px;
+		border-bottom:1px solid #DDD;
+	}
+	.table_list_gray td a {
+		color: #00F;
+		text-decoration: underline;
+	}
+	.table_list_gray td a:hover {
+		text-decoration: none;
+	}
+.ke-edit-iframe img{max-width:100%;}
+</style>
+<form action="/product/edit" method="post">
+    
+    <input type="hidden" name="id" id="id" value="{$data.r.id}" />
+   
+    <table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <thead>
+            <tr>
+                <th>图片编辑</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <label class="width" for="id">图片Key:</label>
+                    {$data.r.imgkey}
+                    <label class="width" for="id">格式:</label>
+                    {$data.r.format}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="width" for="id">编号:</label>
+                    {$data.r.id}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="width" for="name">图片名称:</label>
+                    <input name="name" id="name" type="text" style="width:80%;max-width:80%;" value="{$data.r.name}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="width" for="desc">简介:</label>
+                    <input name="desc" id="desc" type="text" style="width:80%;max-width:80%;" value="{$data.r.desc}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="width" for="username">所属用户:</label>
+                    {$data.r.username} - {:cstr($u['nickname'],'匿名')}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="width" for="folderid">所在文件夹:</label>
+                    {$data.r.folderid}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="width" for="ctime">创建时间:</label>
+                    {$data.r.ctime}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="width" for="banquan">属性:</label>
+                    <select name="banquan">
+                    	<option value="1" <php>if($data['r']['banquan']==1) echo ' selected';</php>>版权保护</option>
+                    	<option value="2" <php>if($data['r']['banquan']==2) echo ' selected';</php>>版权释放</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="width" for="rotate">图片方向:</label>
+                    <select name="rotate">
+                    	<option value="0" <php>if($data['r']['rotate']==0) echo ' selected';</php>>橫置</option>
+                    	<option value="1" <php>if($data['r']['rotate']==1) echo ' selected';</php>>竖置</option>
+                    	<option value="2" <php>if($data['r']['rotate']==2) echo ' selected';</php>>正方</option>
+                    </select>
+                    <label class="width" for="size">图片尺寸:</label>
+                    <input name="size" id="size" type="hidden" value="{$data.r.size}" size="8" style="text-align: right;" /><php>$size = $data['r']['size']/1024;if(round($size,2)>1024){echo sprintf('%.2f', $size/1024).'MB';}else{echo round($size,2).'KB';}</php>
+                    
+                    <label class="width" for="resolution">图片分辨率:</label>
+                    <input name="width" id="width" type="text" type="text" value="{$data.r.width}" size="5" style="text-align: center;" />X<input name="height" id="height" type="text" value="{$data.r.height}" size="5" style="text-align: center;" />
+                    
+                    <label class="width" for="brand">品牌:</label>
+                    <input name="brand" id="brand" type="text" value="{$data.r.brand}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="width" for="model">型号:</label>
+                    <input name="model" id="model" type="text" value="{$data.r.model}" />
+                    
+                    <label class="width" for="jiaoju">焦距:</label>
+                    <input name="jiaoju" id="jiaoju" type="text" value="{$data.r.jiaoju}" />
+                    <label class="width" for="guangquan">光圈:</label>
+                    <input name="guangquan" id="guangquan" type="text" value="{$data.r.guangquan}" />
+                    <label class="width" for="kuaimen">快门:</label>
+                    <input name="kuaimen" id="kuaimen" type="text" value="{$data.r.kuaimen}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="width" for="iso">ISO:</label>
+                    <input name="iso" id="iso" type="text" value="{$data.r.iso}" />
+                    <label class="width" for="baoguang">曝光:</label>
+                    <input name="baoguang" id="baoguang" type="text" value="{$data.r.baoguang}" />
+                    <label class="width" for="jingtou">镜头:</label>
+                    <input name="jingtou" id="jingtou" type="text" value="{$data.r.jingtou}" />
+                    <label class="width" for="taketime">拍摄时间:</label>
+                    <input name="taketime" id="taketime" type="text" value="{$data.r.taketime}" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label class="width" for="">是否收费:</label>
+                    <select name="isfree">
+                    	<option value="0"<php>if(!$data['r']['isfree']) echo ' selected';</php>>收费</option>
+                    	<option value="1"<php>if($data['r']['isfree']) echo ' selected';</php>>免费</option>
+                    </select>
+                    <label class="width" for="">是否上架:</label>
+                    <select name="status">
+                    	<option value="0"<php>if($data['r']['status']==0) echo ' selected';</php>>下架</option>
+                    	<option value="1"<php>if($data['r']['status']==1) echo ' selected';</php>>上架</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td id="classids">
+                <label class="width" for="">分类:</label>
+                <volist name="data.class" id="vo_cl">
+                <php>
+                $chk = '';
+                $arr = explode(',',$data['r']['classids']);
+                if(in_array($vo_cl['id'],$arr)) $chk = 'checked';
+                </php>
+                    <input name="class[]" id="class{$vo_cl.id}" type="checkbox" value="{$vo_cl.id}" {$chk} /><label for="class{$vo_cl.id}">{$vo_cl.classname}</label>
+                </volist>
+                </td>
+            </tr>
+            <tr style="display:none;">
+                <td id="tagids">
+                <label class="width" for="">标签:</label>
+                <volist name="data.tags" id="vo_tags">
+                <php>
+                $chk = '';
+                $arr = explode(',',$data['r']['tagids']);
+                if(in_array($vo_tags['id'],$arr)) $chk = 'checked';
+                </php>
+                    <input name="tags[]" id="tags{$vo_tags.id}" type="checkbox" value="{$vo_tags.id}" {$chk} /><label for="tags{$vo_tags.id}">{$vo_tags.tagname}</label>
+                </volist>
+                </td>
+            </tr>
+            <tr>
+                <td id="tagids">
+                <label class="width" for="">标签:</label>(不同的标签请用空格隔开)<br />
+                <label class="width" for=""></label>
+                <textarea name="tagids" id="tagids" cols="80" rows="3"><php>
+                $arr = explode(',',$data['r']['tagids']);
+                for($i=0;$i<(count($arr)-1);$i++){
+                	if($arr[$i]>0){
+                        $r = D('a_tags')->field('tagname')->where('id='.$arr[$i])->find();
+                       if($r) echo $r['tagname'].' ';
+                    }
+                }
+                </php></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td id="colorids">
+                <span><label style="float: left;margin-right:2px;" class="width" for="">颜色:</label></span>
+                <span>
+                <volist name="data.color" id="vo_color">
+                <php>
+                $chk = '';
+                $arr = explode(',',$data['r']['colorids']);
+                if(in_array($vo_color['id'],$arr)) $chk = 'checked';
+                </php>
+                    <input name="color[]" id="color{$vo_color.id}" type="checkbox" value="{$vo_color.id}" style="float:left;margin-top: 10px;" {$chk} />
+                    <label for="color{$vo_color.id}" class="seacon1col" data-val="{$vo_color.id}" style=" background-color:{$vo_color.colorvalue};">
+                    </label>
+                </volist>
+                </span>
+                </td>
+            </tr>
+            <php>if($data['r']['haspass']=='0'):</php>
+            <tr>
+            	<td style="background: #EEE;text-align: center;">
+            		图片审核：
+            	</td>
+            </tr>
+            <tr>
+            	<td>
+            		<label class="width" for="">审核状态：</label>
+            		<select name="haspass">
+            			<option value="1">通过审核</option>
+            			<option value="-1">不通过</option>
+            		</select>
+            	</td>
+            </tr>
+            <tr>
+            	<td>
+            		<label class="width" for="">审核意见：</label>
+            		<input name="passstr" id="passstr" type="text" value="{$data.r.passstr}" style="width: 80%;max-width: 80%;" />
+            	</td>
+            </tr>
+            <php>endif;</php>
+        </tbody>
+    </table>
+    <div align="center" style="margin-top:5px;">
+        <input type="submit" class="sys_button" value=" 保存 " />
+        <input type="button" class="sys_button" onClick="parent.window.close();" value=" 关闭 " />
+    </div>
+</form>
+</body>
+</html>

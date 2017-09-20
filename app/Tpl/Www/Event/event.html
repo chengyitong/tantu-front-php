@@ -1,0 +1,561 @@
+<include file="public:header" />
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.flex-images.css">
+<script type="text/javascript" src="/static/js/jquery.flex-images.min.js"></script>
+<style type="text/css">
+
+/*样式追加*/
+
+body {
+    background-color: #eeeeee;
+}
+
+.event-detail-box {
+    padding: 40px 60px;
+    margin: 20px auto 0 auto;
+    background-color: white;
+    width: 70%;
+    -webkit-box-shadow: 0px 5px 20px 0px rgb(200, 200, 200);
+    -moz-box-shadow: 0px 5px 20px 0px rgb(200, 200, 200);
+    box-shadow: 0px 5px 20px 0px rgb(200, 200, 200);
+}
+
+.event-detail-box h1 {
+    color: #f16172;
+}
+
+
+/*重写 tab start*/
+
+.nav-tabs {
+    border: none;
+}
+
+.nav-tabs>li {
+    margin: 0;
+}
+
+.nav-tabs>li.active>a,
+.nav-tabs>li.active>a:hover,
+.nav-tabs>li.active>a:focus {
+    color: #555;
+    cursor: default;
+    background-color: transparent;
+    border: 1px solid #f16172 !important;
+    color: #f16172;
+}
+
+.nav-tabs>li>a {
+    border-radius: 1px;
+    padding: 6px 12px;
+}
+
+#selectPictureTab li a,
+#selectPictureTab li a:hover,
+#selectPictureTab li a:focus {
+    border: 1px solid #f16172 !important;
+    color: #f16172;
+    background-color: white;
+}
+
+#selectPictureTab li.active a {
+    color: white;
+    background-color: #f16172;
+}
+
+
+/*重写 tab end*/
+
+#selectPictureBody img {
+    height: 160px;
+    margin: 1px 1px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.img-selected {
+    border: 2px solid #f16172;
+    padding: 3px;
+}
+
+
+/*modal 重写 start*/
+
+#selectPictureModal .modal-dialog {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+#selectPictureModal .modal-content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+#selectPictureModal .modal-body {
+    overflow-y: scroll;
+    position: absolute;
+    top: 85px;
+    bottom: 65px;
+    width: 100%;
+}
+
+#selectPictureModal .modal-footer {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+/*modal 重写 end*/
+
+</style>
+<div class="event-main">
+    <div class="event-index-cell" style="height:520px;width:100%;background-image:url({$event.subject_banner_detail});background-position:center; background-size: cover;cursor: auto;">
+        <div style="margin-top: 250px;">
+            <p>
+                <h1 style="background-image: url(/static/images/event_bg_01.png);background-repeat: no-repeat;background-position: center;background-size: cover;display: block;padding: 5px 0; width: 50%;margin: 0 auto;">{$event.subject}</h1></p>
+            <p style="margin-top:20px;background-image: url(/static/images/event_bg_01.png);background-repeat: no-repeat;background-position: center;background-size: cover;display: block;padding: 5px 0;width: 40%;margin: 0 auto;"><span>已投稿：{$event.product_count}</span><span style="margin-left: 20px;">参加人数：{$event.user_count}</span></p>
+            <if condition="$event.dayLeft egt 0">
+                <div class="btncon" style="margin:50px auto 0 auto;" data-toggle="modal" onclick="showContributeModal()">我要投稿</div>
+                <p style="background-color: black;display: block; padding: 3px 5px 3px 5px; margin: 50px auto;width: 130px;color:white;">距结束时间：<span style="color:#f16172">{$event.dayLeft}天</span></p>
+                <else/>
+                <div class="btncon" style="margin:50px auto 0 auto; background-color: grey">已结束</div>
+            </if>
+        </div>
+    </div>
+    <div class="top" style="width: 450px">
+        <ul id="myTab" class="nav nav-tabs">
+            <li><a href="#tab_detail" data-toggle="tab">活动详情</a></li>
+            <li class="active"><a href="#all_product" data-toggle="tab">全部作品</a></li>
+            <li><a href="#hot_product" data-toggle="tab">热门作品</a></li>
+            <li><a href="#my_product" data-toggle="tab">我的投稿</a></li>
+            <if condition='$event.award_result neq null'>
+                <li><a id='link_awardresult' href="#awardresult" data-toggle="tab">获奖公示</a></li>
+            </if>
+        </ul>
+    </div>
+</div>
+<div class="tab-content">
+    <!-- 详情信息展示 -->
+    <div id="tab_detail" class="tab-pane fade">
+        <volist name="desc_list" id="vo">
+            <div class="event-detail-box">
+                <p>
+                    <h1>{$vo.title}</h1></p>
+                <div style="position: relative; display: inline-block;">
+                    {$vo.content|htmlspecialchars_decode}
+                </div>
+            </div>
+        </volist>
+    </div>
+    <!-- 全部作品 -->
+    <div id="all_product" class="tab-pane fade in active">
+        <div class="container">
+            <div style="margin-top: 20px;">
+                <div class="floatright fanye" style="padding-right:0px;"></div>
+            </div>
+        </div>
+        <div style="margin-top: 10px;">
+            <div class="flex-images" style="margin: 0 16px;">图片加载中...</div>
+            <hr class="hrsty" style="margin-top:20px;" />
+            <div class="col-xs-12">
+                <div class="floatright fanye" style="padding-right:0px;"></div>
+            </div>
+        </div>
+    </div>
+    <!-- 热门作品 -->
+    <div id="hot_product" class="tab-pane fade">
+        <div class="container">
+            <div style="margin-top: 20px;">
+                <div class="floatright fanye" style="padding-right:0px;"></div>
+            </div>
+        </div>
+        <div style="margin-top: 10px;">
+            <div class="flex-images" style="margin: 0 16px;">图片加载中...</div>
+            <hr class="hrsty" style="margin-top:20px;" />
+            <div class="col-xs-12">
+                <div class="floatright fanye" style="padding-right:0px;"></div>
+            </div>
+        </div>
+    </div>
+    <!-- 我的投稿 -->
+    <div id="my_product" class="tab-pane fade">
+        <div class="container">
+            <div style="margin-top: 20px;">
+                <div class="floatright fanye" style="padding-right:0px;"></div>
+            </div>
+        </div>
+        <div style="margin-top: 10px;">
+            <div class="flex-images" style="margin: 0 16px;">图片加载中...</div>
+            <hr class="hrsty" style="margin-top:20px;" />
+            <div class="col-xs-12">
+                <div class="floatright fanye" style="padding-right:0px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <if condition='$event.award_result neq null'>
+    <!-- 获奖公示 -->
+    <div id="awardresult" class="tab-pane fade">
+        <div class="event-detail-box">
+            <div style="position: relative; display: inline-block;">
+                {$event.award_result|htmlspecialchars_decode}
+            </div>
+        </div>
+    </div>
+    </if>
+</div>
+<div class="container" style="margin-bottom: 20px;">
+    <div class="col-sm-12 almid signbtnpb">
+    </div>
+</div>
+<!-- Modals start -->
+<!-- 选择原创图片/上传新图片 模态框（Modal） -->
+<div class="modal fade" id="selectPictureModal" tabindex="-1" role="dialog" aria-labelledby="selectPictureModalLabel" aria-hidden="true" data-backdrop="static" style="top:5%;">
+    <div class="modal-dialog" style="width: 1020px; height: 800px">
+        <div class="modal-content">
+            <div class="modal-header" style="height: 85px; padding-top: 25px; padding-bottom: 30px;">
+                <ul id="selectPictureTab" class="nav nav-tabs center" style="width: 550px">
+                    <li class="active"><a href="#uploadNew_pane" data-toggle="tab" style="padding-left: 85px; padding-right: 85px;">上传新作品</a></li>
+                    <li style="margin-left:50px "><a href="#selectOld_pane" data-toggle="tab" style="padding-left: 50px; padding-right: 50px;">从个人原创中选择作品</a></li>
+                </ul>
+            </div>
+            <!-- 上传新作品 -->
+            <div id="uploadNew_pane" class="tab-pane fade in active">
+                <div class="modal-body" style="padding-top: 0;padding-bottom: 0;z-index:1;">
+                    <include file="public:upload_component"/>
+                </div>
+            </div>
+                <!-- 从个人原创中选择作品 -->
+            <div id="selectOld_pane" class="tab-pane fade">
+                <div class="modal-body" id="selectPictureBody" style="z-index:0;"></div>
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消
+                    </button>
+                    <button id="btnSubmitSelect" type="button" class="btn btn-primary" onclick="submit_select_images()">
+                        确定
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal -->
+    </div>
+    <!-- Modals end -->
+    <include file="public:mfooter" />
+    <style>
+    img[src=""] {
+        opacity: 0;
+    }
+    </style>
+    <script>
+    var m_event_type = 1;
+    var m_event_page = 1;
+    var m_current_tab = 0;
+    var selectImages = Array();
+    var event_id;
+    var upload_save_img_url = "/product/add_product?event=" + event_id;
+
+    $(function() {
+
+        event_id = {$event.id};
+        if($('#link_awardresult')){
+            $('#link_awardresult').trigger('click');
+        }
+        //默认显示第二个tab页
+        imglist(1, 1);
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+            if ('#all_product' == $(e.target).attr('href')) {
+                m_event_type = 1;
+                m_event_page = 1;
+                imglist(m_event_type, m_event_page);
+            } else if ('#hot_product' == $(e.target).attr('href')) {
+                m_event_type = 2;
+                m_event_page = 1;
+                imglist(m_event_type, m_event_page);
+            } else if ('#my_product' == $(e.target).attr('href')) {
+                var uid = $('#userid').val();
+                if (uid) {
+                    m_event_type = 3;
+                    m_event_page = 1;
+                    imglist(m_event_type, m_event_page);
+                } else {
+                    $('#myModallogin').modal('show');
+                }
+            } else if ('#selectOld_pane' == $(e.target).attr('href')) {
+                m_current_tab = 1;
+                selectImages = Array();
+                get_my_images();
+            } else if ('#uploadNew_pane' == $(e.target).attr('href')) {
+                m_current_tab = 0;
+            }
+        });
+
+        //defined button click from `upload_component`
+        $('#btnSaveImages').click(function(){
+            if (edit_select_images.length == 0) {
+                alert('未选择任何图片');
+                return;
+            }
+
+            $('#btnSubmitSelect').button('loading');
+            $('#btnSaveImages').button('loading');
+            $.post('/event/save_and_add_to_event?id=' + event_id, {
+                    'images': JSON.stringify(edit_select_images),
+                    'name': $('#name').val(),
+                    'classid': $('#classid').val(),
+                    'taglist': $('#ipt_taglist').val(),
+                    'colorids': $('#color_ids').val(),
+                    'colorlist': $('#color_names').val(),
+                    'folderid': $('#folderid').val(),
+                    'desc': $('#desc').val()
+                },
+                function(res) {
+                  $('#btnSubmitSelect').button('reset');
+                  $('#btnSaveImages').button('reset');
+                  if(0==res.flag){
+                    alert(res.msg);
+                  }
+                  else{
+                    //隐藏选择的图片(或关闭弹窗)
+                    if(isAllImagesSelected()){
+                      $('#selectPictureModal').modal('hide');
+                      location.reload();
+                    }
+                    else{              
+                      $(".upload-image.upload-image-selected").remove();
+                      edit_select_images = new Array();
+                    }
+                  }
+                }, 'json');
+        });
+    });
+
+    function showContributeModal() {
+        var uid = $('#userid').val();
+        if (uid) {
+            $('#selectPictureModal').modal('show');
+        } else {
+            $('#myModallogin').modal('show');
+        }
+    }
+
+    function personal_images_select(e, product_id) {
+        if ($(e).hasClass('img-selected')) {
+            $(e).removeClass("img-selected");
+            var _index = selectImages.indexOf(product_id);
+            if (_index > -1) {
+                selectImages.splice(_index, 1);
+            }
+        } else {
+            $(e).addClass("img-selected");
+            var _index = selectImages.indexOf(product_id);
+            if (_index < 0) {
+                selectImages.push(product_id);
+            }
+        }
+    }
+
+    function submit_select_images() {
+        if(0==m_current_tab){
+            doAllUploadImagesSelected();
+            $('#btnSaveImages').click();
+        }
+        else{
+            var _sender = $('#btnSubmitSelect');
+            _sender.button('loading');
+            if (selectImages.length > 0) {
+                $.post('/event/submit_event_product?id=' + {$event.id}, {
+                        'images': JSON.stringify(selectImages)
+                    },
+                    function(res) {
+                        _sender.button('reset');
+                        if (res.flag > 0) {
+                            $('#selectPictureModal').modal('hide');
+                            location.reload();                        
+                        } else {
+                            alert(res.msg);
+                        }
+                    }, 'json');
+            } else {
+                alert('未选择任何图片');
+                _sender.button('reset');
+            }
+        }        
+    }
+
+    function addlikes(id){
+        var storage = window.localStorage;
+        if(!storage || !(storage.setItem('a', 123) , storage.getItem('a') == 123)){
+            alert('当前浏览器不支持投票功能！');
+        }
+        else{
+            var _likes_list = null;
+            if(null!=storage.getItem('likes_list')){
+                _likes_list = JSON.parse(storage.getItem('likes_list'));
+            }
+
+            var _date = new Date().toLocaleDateString();
+
+            if(null!=_likes_list && undefined!=_likes_list[id] && _date==_likes_list[id]){
+                return;
+            }//existed
+            else{
+                $.getJSON('/index/imglike?id='+id,function(json){
+                    $('#likes'+id).html(json.nums);
+                    if(null==_likes_list){
+                        _likes_list = {};
+                    }                    
+                    _likes_list[id]=_date;
+                    storage.setItem('likes_list',JSON.stringify(_likes_list));
+                });
+            }
+        }
+    }
+    var picid = 0;
+
+    function addfav(id) {
+        var uid = $('#userid').val();
+        if (uid) {
+            $.getJSON('/index/has_fav?id=' + id, function(json) {
+                if (json.status == '0') {
+                    $('#colModal').modal('show');
+                    picid = id;
+                }
+            });
+        } else {
+            $('#myModallogin').modal('show');
+        }
+    }
+
+    function fav() { 
+        <php>if (!$fav): </php>
+        if (isNaN($('input[name="fid"]:checked').val())) {
+            alert('请选择收藏夹');
+            return;
+        } <php> endif; </php>
+        location = '/index/tofav?id=' + picid + '&fcid=' + $('input[name="fid"]:checked').val();
+    }
+
+    function newf() {
+        if ($('#foldername').val() == '') {
+            alert('请输入收藏夹名!');
+            return;
+        }
+        $.getJSON('/user/new_favclass?fname=' + $('#foldername').val(), function(json) {
+            alert('创建成功!');
+            $('#flist').prepend('<div class="afid"><input id="fid' + json.id + '" type="radio" name="fid" value="' + json.id + '" />&nbsp;<label for="fid' + json.id + '">' + json.foldername + '</label></div>');
+            $('#foldername').val('');
+        });
+    }
+
+    function get_my_images() {
+        $.getJSON('/index/get_event_images?event_id=' + {$event.id} + '&event_type=4', function(json) {
+            if (!json.r) {
+                $("#selectPictureBody").html('<div style="margin:0 auto;padding:60px;">没有找到除已参加此活动之外的图片</div>');
+            } else {
+                var temp = "";
+                $.each(json.r, function(index, data) {
+                    temp += "<img src='" + data.imgurl + "' onclick='personal_images_select(this," + data.id + ")'/>";
+                });
+                $('#selectPictureBody').html(temp);
+
+            }
+        });
+    }
+
+    function imglist(type, curpage) {
+        var temp = '';
+        var max_page = 0;
+
+        var container_id = "#all_product";
+        switch(type){
+            case 1:
+                container_id = "#all_product";
+                break;
+            case 2:
+                container_id = "#hot_product";
+                break;
+            case 3:
+                container_id = "#my_product";
+                break;
+        }
+
+        var i = 0;
+        $.getJSON('/event/get_event_images?fy=t&curpage=' + curpage + '&event_id=' + {$event.id} + '&event_type=' + type, function(json) {
+            if (!json.r) {
+                $(container_id+" .flex-images").html('<div style="margin:0 auto;padding:60px;">没有找到图片</div>');
+                $(container_id+' .fanye').html('');
+            } else {
+                if ($(container_id+' .alls')) {
+                    $(container_id+' .alls').html(json.total);
+                }
+                if ($(container_id+' .fanye')) {
+                    var fanye_html = json.fanye.replace(/onkeyup=".+"/, ''); //remove onkeyup
+                    $(container_id+' .fanye').html(fanye_html);
+
+                    var re = /this.value<=(\d+)/ig;
+                    var r = re.exec(json.fanye);
+                    if (null != r) {
+                        max_page = parseInt(r[1]);
+                    }
+                }
+                $.each(json.r, function(index, data) {
+                    var width = data.width;
+                    var height = data.height;
+                    if(null==data.nickname||''==data.nickname){
+                        data.nickname="匿名";
+                    }
+
+                    temp += "<div class='item cell' data-w='" + width + "' data-h='" + height + "'><img class='lazy' src='' data-original='" + data.imgurl + "' style='width:100%;height:100%;cursor:pointer;' onclick=\"window.open('/index/detail?id=" + data.id + "');\"><div class='discuz' style='position:absolute;bottom:0px;padding:5px 10px;width:100%;background:rgba(0,0,0,0.2);'><div  onclick=\"window.open('/camerist/gallery?uid=" + data.uid + "');\" class='float' style='cursor:pointer;'><img src='/index/avatar_url/uid/" + data.uid + "' style='border-radius:12px;width:24px' />" + data.nickname + "</div><div style='float:right;margin-top:4px;'><img src='/static/images/iconheart.png' style='margin-top: -3px;width:13px;height:13px;cursor:pointer;' onClick=\"addlikes(" + data.id + ")\" />&nbsp;<span id='likes" + data.id + "'>" + data.likes + "</span>&nbsp;&nbsp;&nbsp;<img src='/static/images/iconeye.png' style='margin-top: -3px;width:18px;height:13px;' />&nbsp;" + data.visits + "&nbsp;&nbsp;&nbsp;<img src='/static/images/iconstar.png' style='margin-top: -3px;width:13px;height:13px;cursor:pointer;' onClick=\"addfav(" + data.id + ")\" id='fav" + data.id + "' />&nbsp;" + data.fav + " </div><div style='clear:both'></div></div></div>";
+                });
+                $(container_id+' .flex-images').html(temp);
+                $(container_id+' .flex-images').flexImages({
+                    'rowHeight': 290,
+                    'container': '.item',
+                    'truncate': false
+                });
+                $("img.lazy").lazyload({
+                    effect: "fadeIn"
+                });
+                $(window).scroll();
+
+                $(container_id+' .cell').mouseover(function() {
+                    $(this).find('.discuz').show();
+                }).mouseout(function() {
+                    $(this).find('.discuz').hide();
+                });
+
+                $(container_id+' .pageaglb').click(function(e) {
+                    e.preventDefault(e);
+                    var re = /curpage=(\d+)/ig;
+                    var r = re.exec($(this).attr('href'));
+                    if (null != r) {
+                        var _curpage = r[1];
+                        if (_curpage) {
+                            m_event_page = _curpage;
+                            imglist(m_event_type, _curpage);
+                        }
+                    }
+                });
+
+                $(container_id+' .fanye input[type=text]').keyup(function(e) {
+                    if (event.keyCode == 13) {
+                        if (!isNaN(this.value) && this.value > 0 && this.value <= max_page) {
+                            imglist(m_event_type, this.value);
+                        } else {
+                            alert('请正确填写页数!');
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    // for scroll bar appear;
+    $(window).trigger("resize");
+    </script>

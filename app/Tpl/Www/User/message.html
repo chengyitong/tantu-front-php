@@ -1,0 +1,88 @@
+
+<include file="public:mheader"/>
+<div class="container1200 center padding_b"> 
+
+  <div class="pcon42 left">
+    <br />
+    <br />
+    <div style="border-bottom:1px solid #c2dcfe"><img src="/static/images/msg.png" width="79" height="28" /></div>
+    <br />
+    <div  style="height:40px; background-color:#edf0f7" >
+    <div style=" max-width:330px; padding:10px; float:left"><span> 标题 </span><input id="smsg" type="text" width="290px" height="24px" style="padding-right:5px" value="{:I('get.kw')}" /> </div>
+    
+    <button class="btn btn9" onclick="location='/user/message?kw='+$('#smsg').val();" >查询</button><h6 class="float-left" style="margin-right:5px; padding-top:3px"  >
+    <img src="/static/images/wmsg.png" />未读邮件[{$data.noread_count}]</h6>
+    <h6 class="float-left" style="margin-right:5px; padding-top:3px"  ><img src="/static/images/dmsg.png" />已读邮件[{$data.read_count}]</h6>
+    </div>
+    <table width="100%"  border="1" cellpadding="1">
+  <tr>
+    <th width="73"  align="left" scope="col"><h6> 状态</h6></th>
+    <th width="741"  align="left" scope="col"><h6> 标题</h6></th>
+    <th width="150" align="left" scope="col"><h6> 时间</h6></th>
+    <th width="78" align="left" scope="col"><h6> 选择 </h6></th>
+  </tr>
+  <volist name="data.list" id="vo">
+  <tr>
+    <td height="36" align="center" valign="middle" style="border:1px solid #d6e4f0"><img src="/static/images/<php>if($vo['hasread']) echo 'dmsg'; else echo 'wmsg';</php>.png" /></td>
+    <td height="36" align="left" valign="middle" style="border:1px solid #d6e4f0"><a href="/user/message_detail?id={$vo.id}&mid={$vo.msgid}"><h6 style="text-decoration:underline ; padding-left:5px">{$vo.title}</h6></a></td>
+    <td height="36" align="left" valign="middle" style="border:1px solid #d6e4f0"><h6 style="padding-left:5px">{$vo.msgctime}</h6></td>
+    <td height="36" align="center" valign="middle" style="border:1px solid #d6e4f0"><input name="msgid" value="{$vo.id}" type="checkbox" /></td>
+  </tr>
+  </volist>
+</table>
+    <br />
+    <br />
+     <div style="margin-right:15px" class="float-right">
+     <button class="btn btn10" id="del" >删除选中项</button><span><label for="checkAll"> 全选 </label></span>&nbsp;<input type="checkbox" id="checkAll" style=" margin-top:15px" />
+     
+     </div> 
+     <div class="clearfix"></div> 
+    
+    <br />
+    <br />
+  </div>
+</div>
+<script>
+
+	var allcheck = false;
+	var checkshop = false;
+	$(function() {
+
+		var total = 0;
+
+		$("#checkAll").click(function() {
+			if (!allcheck)
+				allcheck = true;
+			else
+				allcheck = false;
+			$('input[name="msgid"]').prop("checked", allcheck);
+		});
+
+		$("input[name='msgid']").click(function() {
+			$("#checkAll").attr("checked", false);
+			allcheck = false;
+		});
+		
+		$("#del").click(function() {
+			
+			 var ids = '';
+                var i = 0;
+                $('input[name="msgid"]:checked').each(function() {
+                    if (i > 0)
+                        ids += ',';
+                    i++;
+                    ids += $(this).val();
+                });
+                if (ids == '') {
+
+                    alert('请选择删除信息!');
+                    return;
+                }
+				if(!confirm('删除后不得恢复，是否继续删除？')) return false;
+				$.getJSON('/user/message_del?callback=?&ids='+ids,function(){
+					location.reload();
+				});
+		});
+	});
+</script>
+<include file="public:mfooter"/>

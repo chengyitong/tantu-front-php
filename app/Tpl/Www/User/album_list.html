@@ -1,0 +1,276 @@
+
+<include file="public:mheader"/>
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.flex-images.css">
+<script type="text/javascript" src="/static/js/jquery.flex-images.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.lazyload.min.js"></script>
+<script>
+function onkey(val){
+	if(window.event.keyCode==13) window.open('/index/search?kw='+escape(global.trim(val)));
+}
+
+</script>
+
+<!--图片展示  -->
+<div class="container container-whitespace container-feature">
+        <div class="text-center" style="margin:40px;position:relative;">
+        	<span style="position:absolute;left:0;">
+            	<button class="btn btn-default" onclick="location='/user/album';" type="button">返回</button>&nbsp;&nbsp;&nbsp;
+                <img src="/static/images/change.png" style="cursor:pointer" onclick="showcheck()" />
+            	<button class="btn btn-info abtn" data-toggle="modal" data-target="#colModal" type="button">转到</button>
+            	<button class="btn btn-danger abtn" onclick="del()" type="button">删除</button>
+                <span class="abtn" id="anum"></span>&nbsp;&nbsp;
+                <span onclick="choseall()" style="cursor:pointer;color:#09C;">全选</span>
+            </span>
+            
+            <span style="font-size:22px;">《{$data.folder.foldername}》 专辑</span>
+        </div>
+  <div class="flex-images" style="margin: 0 16px;">图片加载中...</div>
+        <div class="fanye" style="margin:10px;text-align: center;"></div>
+  <hr class="hrsty"/>
+  
+</div>
+
+<!--Modal-->
+<div class="modal fade" id="colModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="max-height:364px; max-width:582px; width:582px; height:364px; margin-top:185px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title"><h5>移动（已选择<span style="color:#ff57a7">1</span>张）</h5></h4>
+      </div>
+      <div class="modal-body">
+      <div id="flist" style="width:547px; height:200px;  border:1px solid #bbbbbb; position:relative">
+      	<div style="height:150px;overflow:auto;">
+          <volist name="data.folder_list" id="vo">
+          <div class="afid">
+            <input id="fid{$vo.id}" type="radio" name="fid" value="{$vo.id}"<php>if(I('get.id')==$vo['id']) echo ' disabled';</php> />&nbsp;<label for="fid{$vo.id}">{$vo.foldername}<php>if(I('get.id')==$vo['id']) echo ' <span style="color:#999;">[当前专辑]</span>';</php></label>
+          </div>
+          </volist>
+        </div>
+       <div style="position:absolute; height:50px; background-color:#f8f8f8; padding:10px 15px ;bottom:0px ; width:100%"> <input id="foldername" type="text"   placeholder="请输入专辑名" style="line-height:29px; width:80%; border:1px solid #cccccc;border-radius: 3px;padding-left:5px;" /><button style="text-align:center; line-height:29px; background-color:#000; color:#FFF; width:20%; position:absolute; right:10px;border-radius: 5px; " onclick="newf()">创建专辑</button></div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        
+        <button type="button" class="btn btn-primary allbgc" onclick="move()" style="border:0px" >确定</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<footer>
+  <div class="bgc">
+    <div class="row footerh1">
+      <div class="col-sm-3 col-xs-12"><img src="/static/images/logo.png"> </div>
+      <div class="col-sm-4 col-xs-6">
+        <p>关于</p>
+        <div class="about">
+          <p style="line-height: 22px;">探图是一个致力于摄影分享、发现、售卖的专业平台，来自世界各地的摄影师是我们的忠实用户。</p>
+        </div>
+      </div>
+      <div class="col-sm-2">
+        <p class="foottitle">关于探图</p>
+        <div class="about">
+          <a href="/index/content?id=314" target="_blank"><p>关于我们</p></a>
+          <a href="/index/content?id=315" target="_blank"><p>授权协议</p></a>
+          <a href="/index/content?id=316" target="_blank"><p>服务条款</p></a>
+        </div>
+      </div>
+      <div class="col-sm-3 col-xs-12 ">
+        <p class="foottitle">联系我们</p>
+        <div class="about">
+          <p class="foottitle">400-6066-110</p>
+          <p><a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2562199003&site=qq&menu=yes"><img src="/static/images/qq.jpg"></a></p>
+        </div>
+        <!-- <ul class="get-in-touch-social">
+              <li class="social-linkedin global-icon-linkedin"><a href="https://www.linkedin.com/company/10099106" target="_blank">LinkedIn</a></li>
+              <li class="social-twitter global-icon-twitter"><a href="https://twitter.com/whoop_app" target="_blank">Twitter</a></li>
+              <li class="social-facebook global-icon-facebook"><a href="https://www.facebook.com/750568905024967" target="_blank">Twitter</a></li>
+              <li class="social-xing global-icon-xing"><a href="https://www.xing.com/companies/whoop!bid-managementforgoogleshopping" target="_blank">XING</a></li>
+              <li class="social-google-plus global-icon-google-plus"><a class="gplus-footer-link" href="https://plus.google.com/109507560161080721469/posts" target="_blank">GooglePlus</a></li>
+          </ul> --> 
+      </div>
+    </div>
+    <hr>
+    <div class="container">
+      <div class="copyright">
+        <div class="col-sm-6 copyright-left">
+          <p> Copyright © 2010-2016 探图版权所有  粤ICP备16107621号 </p>
+        </div>
+        <div class="col-sm-6 copyright-right">
+          <p> <!--<img src="/static/images/partment.png">--></p>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- /.carousel <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="APPID" data-redirecturi="http://ttwww.bindow.cn/" charset="utf-8"></script>--> 
+<style>
+    
+.control-label{color:#999999;text-align:right;line-height: 34px;}
+.col-sm-8{margin-bottom:10px;padding-left:0;padding:0 2px;}
+.col-sm-4{padding-right:4px;}
+.show{display:block !important;}
+.abtn{display:none;}
+.afid{height:36px ; padding:10px 15px;}
+.afid:hover{background:#f8f8f8;}
+.chose{display:none;}
+</style>
+
+<script>
+$(function(){
+	imglist('');
+    $("img.lazy").lazyload({effect: "fadeIn"});
+});
+	function imglist(url){
+		var temp = '';
+		url += '{$data.sql}';
+		var i = 0;
+		$.getJSON('/index/get_images?'+url,function(json){
+			if(!json.r){
+				$(".flex-images").html('<div style="margin:0 auto;padding:60px;">没有找到图片</div>');
+			}else{
+				if($('.alls')){
+					$('.alls').html(json.r.length);
+				}
+				if($('.fanye')){
+					$('.fanye').html(json.fanye);
+				}
+				$.each(json.r,function(index,data){
+					var width = data.width;
+					var height = data.height;
+					if(height>width){
+						
+						var w = ((width*250)/height);
+					 	var h = 250;
+						
+					}else if(height==width){
+						var w = 250;
+						var h = 250;
+					}else{
+						var w = ((width*250)/height);
+						var h = 250;
+					}
+					if(null==data.nickname||''==data.nickname){
+                        data.nickname="匿名";
+                    }
+					
+					temp+= "<div class='item cell' data-w='"+width+"' data-h='"+height+"'><a href='/index/detail?id="+data.id+"' target='_blank'><img class='lazy' src='"+data.imgurl+"' style='width:100%;height:100%;'></a><div  class='discuz' style='position:absolute;top:5px;right:5px;'><button class='btn btn-info btn-xs' onclick='fm("+data.id+",{$data.folder.id})'>设置封面图</button></div><div id='img"+data.id+"' class='chose' onclick='chose(this)' data-id='"+data.id+"' style='position:absolute;top:5px;left:5px;border:1px solid #666;width:20px;height:20px;background:#fff;border-radius:4px;'></div><div class='discuz' style='position:absolute;bottom:0px;padding:5px 10px;width:100%;background:rgba(0,0,0,0.2);'><div style='float:left'><img src='/index/avatar_url/uid/"+data.uid+"' style='border-radius:12px;width:24px;height:24px;' />"+data.nickname+"</div><div style='float:right;margin-top:4px;'><img src='/static/images/iconheart.png' style='margin-top: -3px;width:13px;height:13px;' />&nbsp;"+data.likes+"&nbsp;&nbsp;<img src='/static/images/iconeye.png' style='margin-top: -3px;width:18px;height:13px;' />&nbsp;"+data.visits+"&nbsp;&nbsp;<img src='/static/images/iconstar.png' style='margin-top: -3px;width:13px;height:13px;' />&nbsp;"+data.fav+"&nbsp;&nbsp;</div><div style='clear:both'></div></div></div>"
+				});
+			  $(".flex-images").html(temp);
+				$('.flex-images').flexImages({'rowHeight':290,'container':'.item','truncate':false });
+				$('.cell').mouseover(function(){
+					$(this).find('.discuz').show();
+				}).mouseout(function(){
+					$(this).find('.discuz').hide();
+				});
+			}
+		});
+	}
+	
+	function newf(){
+		if($('#foldername').val()==''){
+			alert('请输入相册名!');
+			return;
+		}
+		$.getJSON('/user/new_folder?fname='+$('#foldername').val(),function(json){
+			alert('创建成功!');
+			$('#flist').prepend('<div class="afid"><input id="fid'+json.id+'" type="radio" name="fid" value="'+json.id+'" />&nbsp;<label for="fid'+json.id+'">'+json.foldername+'</label></div>');
+		});
+	}
+      // for scroll bar appear;
+      $(window).trigger("resize");
+      $(function(){
+        $('.ula ul li').click(function(){
+          var num = $(this).index();
+          for(var i=0;i<8;i++){
+            $('.ula ul li').eq(i).children('img').attr("src","/static/images/item"+i+".png");
+          }
+          $(this).children('img').attr("src","/static/images/item_c"+num+".png");
+          $(this).siblings().removeClass('ind_active');
+          $(this).addClass('ind_active');
+		  imglist($(this).attr('data-url'));
+        });
+		$('.go-top').click(function(){ 
+		  $('html, body').animate({scrollTop:0}, 'slow'); 
+		  return false; 
+		});
+      })
+		function fm(id,fid){
+			if(confirm('确定设置为专辑封面吗 ?')){
+				$.get('/user/album_topimg?id='+fid+'&pid='+id,function(){
+					alert('设置成功');
+				});
+			}
+		}
+		function showcheck(){
+			$('.chose').show();	
+		}
+		function chose(obj){
+			if($(obj).hasClass('show')){
+				$(obj).html('');	
+				$(obj).removeClass('show');
+				
+			}else{
+				$(obj).html('<i class="glyphicon glyphicon-ok" style="color:#f16172;padding-left:2px;"></i>');	
+				$(obj).addClass('show');
+			}
+			if($('.show').length>0){
+				$('.abtn').show();	
+			}else{
+				$('.abtn').hide();	
+			}
+			$('#anum').html('已选：'+$('.show').length);
+		}
+		function choseall(){
+			$('.chose').html('<i class="glyphicon glyphicon-ok" style="color:#f16172;padding-left:2px;"></i>');	
+			$('.chose').addClass('show');
+			if($('.show').length>0){
+				$('.abtn').show();	
+			}else{
+				$('.abtn').hide();	
+			}
+			$('#anum').html('已选：'+$('.show').length);
+		}
+		function move(){
+			if($('.show').length==0){
+				alert('请先选择图片!');
+				return;
+			}
+			if(isNaN($('input[name="fid"]:checked').val())){
+				alert('请选择收藏夹');return;
+			}
+			var ids='';
+			$('.show').each(function(index,obj){
+				if(index>0) ids+=',';
+				ids+=$(this).data('id');
+			});
+			var url = '/user/img_moveto?fid='+$('input[name="fid"]:checked').val()+'&ids='+ids;
+			$.getJSON(url,function(){
+				alert('移动成功!');
+				location.reload();
+			});
+		}
+		function del(){
+			if($('.show').length==0){
+				alert('请先选择图片!');
+				return;
+			}
+			if(!confirm('是否确认删除?')) return;
+			var ids='';
+			$('.show').each(function(index,obj){
+				if(index>0) ids+=',';
+				ids+=$(this).data('id');
+			});
+			var url = '/user/img_del?ids='+ids;
+			$.getJSON(url,function(){
+				alert('删除成功!');
+				location.reload();
+			});
+		}
+    </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:header" />
+<div class="midline">
+    {$data.r.username}的<php>if(I('get.type')=='follow') echo '关注'; else echo '粉丝';</php>:
+</div>
+<php>endif;</php>
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th width="5%">ID.</th>
+            <th width="10%">头像</th>
+            <th width="10%">用户名</th>
+            <th width="10%">手机</th>
+            <th width="10%">昵称</th>
+            <th width="15%">邮箱</th>
+            <th width="15%">上次登录</th>
+            <th width="15%">创建时间</th>
+    <php>if(I('get.exp')!='xls'):</php>
+    <th>其他操作</th>
+    <php>endif;</php>
+</tr>
+</thead>
+<tbody>
+<volist name="data.list" id="vo">
+<php>
+$bimg = 'btn_gray';
+$bimg_src = '';
+$imgs = D('a_images')->where("type='user_avatar' and targetid=".$vo['id'])->order('id desc')->find();
+if($imgs){
+	$bimg = 'btn_blue';
+	$bimg_src = '/static/uploadfiles/images/'.$imgs['name'];
+}
+</php>
+    <tr align="center">
+        <td>{$vo.id}</td>
+        <td><php>if($bimg_src!=''):</php><img src="{$bimg_src}" width="30" style="margin: 2px;" /><else/>&nbsp;<php>endif;</php></td>
+        <td>{$vo.username}</td>
+        <td>{$vo.mobile}</td>
+        <td>{$vo.nickname}</td>
+        <td>{$vo.email}</td>
+        <td>{$vo.lastlogin}</td>
+        <td>{$vo.ctime}</td>
+    <php>if(I('get.exp')!='xls'):</php>
+    <td>
+    	<input type="button" class="sys_button {$bimg} btn_open" value="头像" href="/index/images?w=160&h=160&type=user_avatar&id={$vo.id}" />
+        <input type="button" class="sys_button <php>if($vo['isverify']==1) echo 'btn_red';</php> btn_open" value="编辑" href="/user/editv?id={$vo.id}" />
+        <input type="button" class="sys_button btn_blue" value="删除" onclick="if (confirm('确定删除?'))
+                    location = '/user/del?id={$vo.id}';" /> 
+    </td>
+    <php>endif;</php>
+    </tr>
+</volist>
+</tbody>
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:table_page" />
+<php>endif;</php>
+</table>
+<php>if(I('get.exp')!='xls'):</php>
+</body>
+</html>
+<php>endif;</php>

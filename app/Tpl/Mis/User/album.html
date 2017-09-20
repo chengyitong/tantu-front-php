@@ -1,0 +1,49 @@
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:header" />
+<div class="midline">
+    {$data.r.username}的相册:
+</div>
+<php>endif;</php>
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th width="5%">ID.</th>
+            <th width="20%">封面图</th>
+            <th width="20%">相册名</th>
+            <th width="20%">图片数量</th>
+            <th width="15%">创建时间</th>
+    <php>if(I('get.exp')!='xls'):</php>
+    <th>其他操作</th>
+    <php>endif;</php>
+</tr>
+</thead>
+<tbody>
+<volist name="data.list" id="vo">
+<php>
+$imgcnt = D('a_product')->field('id')->where('isuse=1 and folderid='.$vo['id'])->count();
+</php>
+    <tr align="center">
+        <td>{$vo.id}</td>
+        <td><php>if($bimg_src!=''):</php><img src="{$bimg_src}" width="30" style="margin: 2px;" /><else/>&nbsp;<php>endif;</php></td>
+        <td>{$vo.foldername}</td>
+        <td>{$imgcnt}</td>
+        <td>{$vo.ctime}</td>
+    <php>if(I('get.exp')!='xls'):</php>
+    <td>
+    	<input type="button" class="sys_button" value="查看图片" onclick="parent.addTab('图片库','/product/index?folderid={$vo.id}','','291');" />
+        <input type="button" class="sys_button <php>if($vo['isverify']==1) echo 'btn_red';</php> btn_open" value="编辑" href="/user/editv?id={$vo.id}" />
+        <input type="button" class="sys_button btn_blue" value="删除" onclick="if (confirm('确定删除?'))
+                    location = '/user/del?id={$vo.id}';" /> 
+    </td>
+    <php>endif;</php>
+    </tr>
+</volist>
+</tbody>
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:table_page" />
+<php>endif;</php>
+</table>
+<php>if(I('get.exp')!='xls'):</php>
+</body>
+</html>
+<php>endif;</php>

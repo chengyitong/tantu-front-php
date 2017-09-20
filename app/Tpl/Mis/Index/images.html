@@ -1,0 +1,26 @@
+<include file="public:header"/>
+
+    <table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:5px;">
+        <thead>
+            <tr>
+                <th>图片</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            	<td style="padding:5px;background:#FFF;">
+                    <input type="button" class="sys_button btn_orange btn_open" href="/index/uploadfilev?w={:I('get.w')}&h={:I('get.h')}&type={:I('get.type')}&id={:I('get.id')}" value="上传新图片" /><br />
+                    <volist name="data.imgs" id="vo_imgs">
+                        <div style="float:left;padding:10px;width:80px;text-align:center;">
+                            <img style="max-height:80px;max-width:80px;" src="/static/uploadfiles/images/{$vo_imgs.name}" /><br />
+                            <a href="#productimg" onclick="if(confirm('确认删除?')) location='/index/uploadfile_del?id={$vo_imgs.id}';">删除</a><br />
+                            <input type="text" id="" value="{$vo_imgs.sortno}" size="3" style="text-align:center;" onblur="sortno({$vo_imgs.id},this.value)" />
+                        </div>
+                    </volist>
+                    <div style="clear:both;"></div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

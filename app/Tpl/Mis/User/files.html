@@ -1,0 +1,75 @@
+<include file="public:header" />
+<div class="midline">
+	<empty name="data.current_dir_path">
+	<input type="button" class="sys_button btn_disabled" value="上一级目录" />
+	<else/>
+	<input type="button" class="sys_button btn_gray" value="上一级目录" onclick="location='?path={$data.moveup_dir_path}';" />
+	</empty>
+	<input type="button" class="sys_button btn_gray btn_open" value="上传文件" href="/sys/files_uploadv?path={$data.current_url}" title="上传文件" callback="location.reload();" />
+	当前路径: {$data.current_url}
+</div>
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <thead>
+  <tr>
+    <th width="5%">No</th>
+    <th width="8%">{:sortby('is_dir','文件夹')}</th>
+    <th>{:sortby('filename','名称')}</th>
+    <th width="8%">{:sortby('filesize','大小')}</th>
+    <th width="20%">{:sortby('datetime','日期')}</th>
+    <th width="15%">操作</th>
+  </tr>
+  </thead>
+  <tbody>
+  <volist name="data.file_list" id="vo">
+  <tr align="center">
+    <td>{$i}</td>
+    <td><eq name="vo.is_dir" value="1">√</eq></td>
+    <td><eq name="vo.is_dir" value="1"><a href="?path={$data.current_dir_path}{$vo.filename}/" style="color:blue;"></eq>{$vo.filename}<eq name="vo.is_dir" value="1"></a><else/><php>if(in_array($vo['filetype'],$canedit)) echo ' [<a class="btn_open" href="javascript:;" data-url="/sys/files_edit?path='.$data['current_path'].$vo['filename'].'&ftype='.$vo['filetype'].'" style="color:blue;" title="'.$vo['filename'].'">编辑</a>]';</php></eq></td>
+    <td>{$vo.filesize}</td>
+    <td>{$vo.datetime}</td>
+    <td>
+	    <input type="button" class="sys_button btn_del" value=" 删除 " href="/sys/files_del" data-id="{$data.current_url}{$vo.filename}" callback="" />
+    </td>
+  </tr>
+  </volist>
+  <tr>
+    <td align="center" colspan="10"><a href="#newcode_row" onclick="showdis_newcode();">新建</a></td>
+  </tr>
+  <form id="newcode_form" name="newcode_form" method="post" action="/sys/files_newf">
+  <input type="hidden" name="path" value="{$data.current_url}" />
+  <tr align="center" id="newcode_tr"<neq name="_GET['done']" value="new"> style="display:none;"</neq>>
+    <td>-</td>
+    <td><select name="ftype"><option value="folder">文件夹</option><option value="file">文件</option></select></td>
+    <td>
+		<input type="text" name="fname" id="fname" value="" />
+    </td>
+    <td>-</td>
+    <td>{:now(1)}</td>
+    <td><input name="" type="button" onclick="gosub()" class="sys_button" value=" 创建 " /></td>
+  </tr>
+  </form>
+  </tbody>
+</table>
+</div>
+<script>
+var subto=false;
+function gosub(){
+	if(!subto){
+		subto=true;
+		$('#newcode_form').submit();
+	}
+}
+function showdis_newcode(){
+	if($('#newcode_tr').css('display')=='none'){
+		$('#newcode_tr').css('display','');
+		if($('#syscodeNo').length>0) $('#syscodeNo').focus(); else{
+			if($('#syscodeName').length>0) $('#syscodeName').focus();
+		}
+		global.input_defwd();
+	}else{
+		$('#newcode_tr').css('display','none');
+	}
+}
+</script>
+</body>
+</html>

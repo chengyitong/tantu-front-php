@@ -1,0 +1,33 @@
+<include file="public:header" />
+<script>
+var doing = false;
+function toupload(){
+	if(doing) return false;
+	doing = true;
+	$('.btn_upload').val('上传中,请稍候...');
+	$('.btn_upload').addClass('btn_disabled');
+	$('#form').submit();
+}
+</script>
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <thead>
+  <tr>
+    <th class="title" colspan="2" style="border-bottom:1px solid gray;">文件</th>
+  </tr>
+  </thead>
+  <form action="/product/uploadfile?minw=720&minh=432" method="post" enctype="multipart/form-data" id="form">
+  <tr>
+    <td>
+    上传文件:<br />
+    <input type="file" name="userfile" size="20" />
+    <input type="hidden" name="id" value="{$data.id}" />
+    (分辨率: 720px X 432px)
+    <br /><br />
+    <input type="button" value="上传" class="sys_button btn_upload" onclick="toupload();" />
+    <br /><br />
+    </td>
+  </tr>
+  </form>
+</table>
+</body>
+</html>

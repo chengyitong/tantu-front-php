@@ -1,0 +1,18 @@
+<include file="public:header"/>
+<style>
+body{background:#f2f2f2;}
+.c{padding:40px;margin-top:60px;min-height:450px;}
+.nc{max-width:1100px;background:#fff;height:100%;padding:50px 20px;}
+</style>
+<div class="container1200 center">
+    <div class="c">
+    	<div class="nc">
+        <div class="text-center"><h3><php>if($data['r']['syscode_name']) echo $data['r']['syscode_name'];else echo '正在开发中的页面';</php></h3></div>
+        <div class="cdetal">{:htmlspecialchars_decode($data['r']['syscode_remark3'])}</div>
+        </div>
+    </div>
+</div>
+
+
+
+<include file="public:mfooter"/>

@@ -1,0 +1,534 @@
+<include file="public:header"/>
+
+<!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+<!--[if lt IE 9]><script src="../../assets//static/js/ie8-responsive-file-warning.js"></script><![endif]-->
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.flex-images.css">
+<script charset="utf-8" src="/static/plugs/kindeditor/kindeditor-min.js"></script>
+<script charset="utf-8" src="/static/plugs/kindeditor/lang/zh_CN.js"></script>
+<script type="text/javascript" src="/static/js/jquery.flex-images.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.lazyload.min.js"></script>
+
+<script>
+
+KindEditor.ready(function(K) {
+	var editor = K.create("textarea[name='commendtxt']", {
+		resizeType : 1,
+		//pasteType : 1,
+		syncType : "form",
+		width: "100%",
+		height: "100px",
+		newlineTag : "br",
+		allowPreviewEmoticons : false,
+		uploadJson : "/static/plugs/kindeditor/php/upload_json.php",
+		fileManagerJson : "/static/plugs/kindeditor/php/file_manager_json.php",
+		allowFileManager : true,
+		afterBlur: function(){this.sync();},
+		items : ["emoticons"]
+	});
+});
+
+/******禁右键*****/
+<php>if($data['r']['banquan']==1){</php>
+function iEsc(){ return false; }
+function iEsc2(){ <php>if($data['r']['banquan']==1):</php>$("#banquanbaohu").fadeIn();setTimeout("$('#banquanbaohu').fadeOut()",1500);<php>endif;</php>return false; }
+function iRec(){ return true; }
+function DisableKeys() {
+if(event.ctrlKey || event.shiftKey || event.altKey)  {
+window.event.returnValue=false;
+iEsc();}
+}
+document.ondragstart=iEsc;
+document.onkeydown=DisableKeys;
+document.oncontextmenu=iEsc2;
+if (typeof document.onselectstart !="undefined"){
+	document.onselectstart=iEsc;
+}else{//qsyz.net
+	document.onmousedown=iEsc;
+	document.onmouseup=iRec;
+}
+<php>}</php>
+/*****end******/
+function onkey(){
+	if(window.event.keyCode==13) window.open('/index/search?kw='+escape($('#searchcon').val()));	
+}
+function fav2(){
+	<php>if(!$fav):</php>
+	if(isNaN($('input[name="fid"]:checked').val())){
+		alert('请选择收藏夹');return;
+	}
+	<php>endif;</php>
+	location='/index/tofav?id={$data.r.id}&fcid='+$('input[name="fid"]:checked').val();	
+}
+
+function fouc(id,obj){
+	var user = $('#session').val();
+		
+	if(user){
+		$.get('/camerist/tofollow?uid='+id,function(json){
+			location.reload();
+		})
+	}else{
+		alert('请先登陆');
+	}
+}
+</script>
+
+<php>
+$fav = D('a_user_fav')->where('isuse=1 and uid='.session('uid').' and productid='.$data['r']['id'])->find();
+</php>
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+      <script src="http://cdn.boot/static/css.com/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="http://cdn.boot/static/css.com/respond./static/js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+<style>
+.yScrollList{width:1198px;background:#ffffff;margin:25px auto 0;}
+.yScrollListTitle{width:100%;height:38px;line-height:38px;border-bottom:1px solid #dcdcdc;}
+.yScrollListTitle h1{cursor:pointer;font-size:16px;background:#fff;color:#666666;height:38px;border-left:1px solid #dcdcdc;border-right:1px solid #dcdcdc;float:left;position:relative;left:-1px;width:110px;text-align:center;}
+.yScrollListTitle h1.ytitleh12{left:-2px;}
+.yScrollListTitle h1.yth1click{height:42px;border-top:2px solid #e9630a;top:-5px;}
+.yScrollListIn{width:100%;height:200px;position:relative;}
+.yScrollListInList{display:none;width:1190px;height:200px;position:absolute;padding:0 30px;left:0;top:0;overflow:hidden;}
+.yScrollListInList .yScrollListbtn{cursor:pointer;position:absolute;width:20px;height:180px;top:12px;}
+.yScrollListInList .yScrollListbtnr{right:0px;background:url(/static/images/per_right.png) no-repeat 0 0;}
+.yScrollListInList .yScrollListbtnl{left:0px;background:url(/static/images/per_left.png) no-repeat 0 0;}
+.yScrollListInList ul{width:2238px;height:224px;position:absolute;top:0;left:30px;overflow:hidden;}
+.yScrollListInList ul li{height:224px;float:left;}
+.yScrollListInList ul li img{height: 180px;display:block;margin-left:10px;margin-top:12px;}
+.yScrollListInList ul li p{text-align:center;font-size:12px;color:#666666;line-height:18px;padding:7px 10px 0;width:140px;height:36px;overflow:hidden;}
+.yScrollListInList ul li p:hover{color:#e9630a;text-decoration:underline;}
+.yScrollListInList ul li span{color:#e9630a;font-size:12px;text-align:center;display:block;line-height:24px;}
+
+#fancybox-overlay{background-color: #000 !important;opacity: .9 !important;}
+#fancybox-content{border:none !important;}
+body {
+  min-width:1200px;
+}
+</style>
+
+<!--detal1-->
+<div class="container1200 center  clearfix">
+  <div class="d1 float" style="margin-top:80px;">
+    <a class="sexybox_img" href="{$data.r.imgurl}">
+    <div class="d1-3">
+       <img id="photo" src="{$data.r.imgurl}" alt="{$data.r.name}" title="{$data.r.name}" style="cursor:pointer;background:url({$data.r.timgurl});background-size:cover;">
+    	<php>if($data['r']['banquan']==1){</php><div id="banquanbaohu" style="display: none;position:absolute;top:20px;right:20px;background:#333;border-radius:4px;color:#fff;padding:5px 10px;">© 版权保护</div><php>}</php>
+    </div>
+    </a>
+    <div class="d1-4 clearfix">
+        <span class="tag-1 float">标签:</span>
+        <span class="tags float">
+      	<volist name="data.r.tag_data" id="vo_tag">
+            <a href="/index/search?kw={:escape($vo_tag['tagname'])}&type=is" target="_blank">{$vo_tag.tagname}</a>
+            </volist>           
+
+        </span>
+        
+    </div>
+  </div>
+  
+  <div class="d2 float-right" style="margin-top:80px;">
+  <div class="d22">
+    <a href="/camerist/gallery?uid={$data.r.uid}">
+    <div class="d2-1">
+    	<img src="/index/avatar_url/uid/{$data.r.uid}" width="40" style="border-radius:20px;" />
+		<h5><div class="float" style="white-space:nowrap;width:110px; overflow:hidden; text-overflow:ellipsis;">{:cstr($data['r']['nickname'],'匿名')}</div> &nbsp;&nbsp;<php>if($data['r']['uid']!=$data['user']['id']){</php><span onClick="fouc({$data.r.uid})" class="radius userfocus" style="cursor:pointer;"><php>if($data['followed']==1) echo '取消关注';else echo '关注';</php></span><php>}</php></h5>
+		<div class="clearfix"></div>
+    </div>
+    </a>
+   </div>
+   <div class="d23"> 
+   	<div class="d2-4">
+     <div class="d2-2">
+     <php>if($data['r']['banquan']==1){</php>
+      <button class="btn d2btn bgc disabled">版权保护</button>
+     	
+     <php>}else{if($data['user']==0){</php>
+      <button class="btn d2btn  bgc" data-toggle="modal" data-target="#mydetail">免费下载</button>
+      <php>}else{</php>
+      <button class="btn d2btn  bgc" onClick="location='/index/img_api?id={$data.r.id}&rand='+Math.random();">免费下载</button>
+
+      <php>}}</php>
+      <!--<div data-toggle="modal" data-target="#mydetail" >123</div>-->
+   		</div>
+    </div>
+    <php>if($data['user']['id']){</php>
+    <div class="d2-2">
+    	<button class="btn d2btn1 btn-default" <php>
+         	if($fav) echo ' onclick="fav2()"'; else echo ' data-toggle="modal" data-target="#colModal"';</php>>★ <php>if($fav) echo '取消';</php>收藏</button>
+    </div>
+    <php>}</php>
+    
+     <php>if($data['r']['banquan']!=1){</php>
+    <div class="d2-3"> 
+      <p class="top">
+        <a href="/index/content?id=444" rel="nofollow" target="_blank">知识共享CC0协议</a>  / <a href="/index/content?id=324" rel="nofollow" target="_blank">常见问题解答</a>
+      </p>
+      <!--<p class="bottom" style="cursor: pointer;">
+        <i></i><span>允许商用</span>
+        <small style="color: #f16172;"><a href="/index/content?id=322" target="_blank">授权范围最广的全用途授权</a></small>
+      </p>-->
+    </div> 
+      <php>}</php>
+   </div>
+   <div class="d23"> 
+    <div class="d2-4">
+   <script>
+    function addlikes(){
+        var id = {$data.r.id};
+        var storage = window.localStorage;
+        if(!storage || !(storage.setItem('a', 123) , storage.getItem('a') == 123)){
+            alert('当前浏览器不支持投票功能！');
+        }
+        else{
+            var _likes_list = null;
+            if(null!=storage.getItem('likes_list')){
+                _likes_list = JSON.parse(storage.getItem('likes_list'));
+            }
+
+            var _date = new Date().toLocaleDateString();
+
+            if(null!=_likes_list && undefined!=_likes_list[id] && _date==_likes_list[id]){
+                return;
+            }//existed
+            else{
+                $.getJSON('/index/imglike?id='+id,function(json){
+                    $('#likes').html(json.nums);
+                    if(null==_likes_list){
+                        _likes_list = {};
+                    }                    
+                    _likes_list[id]=_date;
+                    storage.setItem('likes_list',JSON.stringify(_likes_list));
+                });
+            }
+        }
+    }
+
+   </script>
+      <div class="radius detial_like" onClick="addlikes()">
+      	<img src="/static/images/iconheart2.png" width="20" /><br />喜欢(<span id="likes">{$data.r.likes}</span>)
+      </div>
+         <!--<div class="radius detial_like" style="background: blue;" onClick="location='/index/tofav?id={$data.r.id}';">
+         	<img src="/static/images/iconheart2.png" width="20" /><br /><php>
+         	$fav = D('a_user_fav')->where('isuse=1 and uid='.session('uid').' and productid='.$data['r']['id'])->find();
+         	if($fav) echo '已';</php>收藏
+         </div>-->
+        <div class="d1-2" style="padding-left:0;">
+          <span class="look"><i><img src="/static/images/iconeyes2.png" /></i>&nbsp;{$data.r.visits} 浏览<b></b></span>
+          <span class="collect"><i><img src="/static/images/iconstar2.png" style="margin-top:-2px;"/></i>&nbsp;{$data.fav} 收藏</span>
+          <span class="download"><i><img src="/static/images/icondownload2.png" /></i>&nbsp;{$data.r.downloads} 下载 </span>
+        </div>
+        <div class="d1-2" style="padding-left:0;">
+          <span class="look"><i class="glyphicon glyphicon-time"></i>&nbsp;发布时间: {$data.r.ctime}</span>
+        </div>
+      
+  	<div class="share-wrap clearfix">
+  		<a href="http://www.jiathis.com/send/?webid=weixin&url={:GetCurUrl()}&title=探图" target="_blank"><img src="/static/images/iconwechat.png" /></a>
+      <a href="http://www.jiathis.com/send/?webid=tsina&url={:GetCurUrl()}&title=探图" target="_blank"><img src="/static/images/iconsina.png" /></a>
+      <a href="http://www.jiathis.com/send/?webid=qzone&url={:GetCurUrl()}&title=探图" target="_blank"><img src="/static/images/iconqzone.png" /></a>
+      <a href="http://www.jiathis.com/send/?webid=renren&url={:GetCurUrl()}&title=探图" target="_blank"><img src="/static/images/iconrenren.png" /></a>
+      <a href="http://www.jiathis.com/send/?webid=douban&url={:GetCurUrl()}&title=探图" target="_blank"><img src="/static/images/icondou.png" /></a>
+  	</div>
+      
+    </div>
+   </div>
+   <div class="d23"> 
+    <div class="d2-4">
+      <h5>作品描述</h5>
+      <div>
+      	<p>{$data.r.name}</p>
+      	<p>{$data.r.desc}</p>
+      </div>
+   		
+    </div>
+   </div>
+   <div class="d23"> 
+    <div class="d2-4">
+   
+      <p>编号<span><php>$id = $data['r']['id']+30000000;echo $id;</php></span></p>
+      <p>分类
+      	<volist name="data.r.class_data" id="vo_cla">
+          <span style="color: #f16172;">
+              <a target="_blank" class="a-cate" href="/index/search?classid={$vo_cla.id}">{$vo_cla.classname}</a>
+          </span>
+          </volist>
+          </p>
+      <php>if($data['r']['width']) echo '<p>尺寸<span>'.$data['r']['width'].' × '.$data['r']['height'].'</span></p>';</php>
+      <p>大小<span><php>$size = $data['r']['size']/1024;if(round($size,2)>1024){echo sprintf('%.2f', $size/1024).'MB';}else{echo round($size,2).'KB';}</php></span></p>
+      <p>格式<span>{$data.r.imgext}</span></p>
+    </div>
+   </div>
+   <div class="d24">
+    <div class="d2-5">
+      <h5>EXIF信息</h5>
+      <php>if($data['r']['brand']) echo '<p>品牌<span>'.$data['r']['brand'].'</span></p>';</php>
+      <php>if($data['r']['model']) echo '<p>型号<span>'.$data['r']['model'].'</span></p>';</php>
+      <php>if($data['r']['jiaoju']) echo '<p>焦距<span>'.$data['r']['jiaoju'].'</span></p>';</php>
+      <php>if($data['r']['guangquan']) echo '<p>光圈<span>'.$data['r']['guangquan'].'</span></p>';</php>
+      <php>if($data['r']['kuaimen']) echo '<p>快门<span>'.$data['r']['kuaimen'].'</span></p>';</php>
+      <php>if($data['r']['iso']) echo '<p>iso<span>'.$data['r']['iso'].'</span></p>';</php>
+      <php>if($data['r']['baoguang']) echo '<p>曝光<span>'.$data['r']['baoguang'].'</span></p>';</php>
+      <php>if($data['r']['jingtou']) echo '<p>镜头<span>'.$data['r']['jingtou'].'</span></p>';</php>
+      <php>if($data['r']['isfree']==0) echo '<p>费用<span></span></p>';</php>
+      <php>if($data['r']['taketime']!='0000-00-00 00:00:00' || !$data['r']['taketime']) echo '<p>拍摄时间<span>'.$data['r']['taketime'].'</span></p>';</php>
+    </div>
+   </div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+
+<div class="container1200 center">
+  <h4>类似图片<span style="font-size:.6em;color:#09F;margin-left:10px;"><a href="/index/search?kw=" target="_blank">查看全部>></a></span></h4>
+</div>
+
+<div class="yScrollList">
+	<div class="yScrollListIn">
+		<div class="yScrollListInList yScrollListInList1" >
+			<ul style="margin-left: -40px;">
+            	
+			</ul>
+			<div class="yScrollListbtn yScrollListbtnl"></div>
+			<div class="yScrollListbtn yScrollListbtnr"></div>
+		</div>
+	</div>
+</div>
+
+<div class="container container-whitespace container-feature">
+  <div id="freewall" class="free-wall" style="margin-left:0px; margin-right:0px;"></div>
+  <div class="flex-images"></div>
+</div>
+
+<!-- 评论 -->
+<div class="container1200 center">
+<a href="/index/detail?id={$data.preid.id}"><div style="position:absolute;top:320px;left:0;width:45px;height:80px;text-align:center;background:#CCC;"><img style="margin-top:15px;" src="/static/images/toleft.png" height="50" /></div></a>
+<a href="/index/detail?id={$data.nextid.id}"><div style="position:absolute;top:320px;right:0;width:45px;height:80px;text-align:center;background:#CCC;"><img style="margin-top:15px;" src="/static/images/toright.png" height="50" /></div></a>
+	<div class="float-left" style="
+	    max-width: 900px;
+	    width: 100%;
+	">
+		<a name="commend"></a>
+		<h5>全部留言（{:count($data['commend'])}）</h5>
+		<php>if(!$data['commend']):</php>
+		<div class="text-center" style="padding: 20px;"><h2>快来抢沙发咯~</h2></div>
+		<php>endif;</php>
+		<php>if(!session('uid')):</php>
+			<div class="float-left" style="padding:15px;width:72px"><img src="/static/images/dperson.png" width="42"></div>
+			<div class="float-left" style="
+      padding: 10px;
+			    height: 69px;
+			    border: 1px solid #e3e3e3;
+			    width: 827px;
+			    border-radius: 10px;
+			    "><h5 style="padding: 5px;">登陆后才可以评论，请<span style="color: #1f9bdb;" class="cursor" data-toggle="modal" data-target="#myModallogin">点击这里</span>，进行登陆</h5>
+			</div>
+			<div class="clearfix"></div>
+		<php>else:</php>
+		<form action="/index/detail_commend?pid={$data.r.id}" id="formly" method="post">
+			<textarea name="commendtxt" id="commendtxt" style="visibility:hidden;"></textarea>
+			<div style="padding: 10px;text-align: right;">
+				<input type="button" class="btn btn-info" onClick="if($('#commendtxt').val()!='') $('#formly').submit();" value="发布留言" />
+			</div>
+		</form>
+		<php>endif;</php>
+		<div>
+			<volist name="data.commend" id="vo">
+			<php>$u = D('a_user')->where('id='.$vo['uid'])->find();</php>
+				<div style="/* width:1200px; */position:relative;">
+					<div class="float-left" style="padding:15px; width:86px;height:86px"><img width="52" src="/index/avatar_url/uid/{$vo.uid}"></div>
+					<div class="float-left">
+						<h4>{:cstr($u['nickname'],$u2['username'])}</h4>
+						<h5>{:htmlspecialchars_decode($vo['commendtxt'])}</h5>
+					</div>
+					<div style="position: absolute;right:10px;"><h5>{$vo.ctime}</h5></div>
+					<div style="position: absolute;right:10px;bottom:10px;"><h5 style="color:#ff7c8b;cursor: pointer;" onClick="<php>if(!session('uid')):</php>alert('请先登录!');<else/>$('#divre{$vo.id}').toggle();<php>endif;</php>">回复</h5></div>
+					<div class="clearfix"></div>
+				</div>
+				<div>
+					<php>$re = D('a_product_commend')->where('isuse=1 and parentid='.$vo['id'].' and productid='.$data['r']['id'])->order('id desc')->select();</php>
+					<volist name="re" id="vo2">
+					<php>$u2 = D('a_user')->where('id='.$vo2['uid'])->find();</php>
+					<div style="padding-left: 80px;margin-bottom: 10px;">
+						<img width="42" src="/index/avatar_url/uid/{$vo2.uid}">
+						{:cstr($u2['nickname'],$u2['username'])}&nbsp;回复：
+						{:htmlspecialchars_decode($vo2['commendtxt'])}
+					</div>
+					</volist>
+				</div>
+				<form action="/index/detail_commend_re?id={$vo.id}&pid={$data.r.id}" id="formre{$vo.id}" method="post">
+				<div id="divre{$vo.id}" style="display: none;padding-left: 80px;">
+					<textarea name="commendtxt" id="commendtxt{$vo.id}" style="visibility:hidden;"></textarea>
+					<div style="padding: 10px;text-align: right;">
+						<input type="button" class="btn btn-info" onClick="if($('#commendtxt{$vo.id}').val()!='') $('#formre{$vo.id}').submit();" value="确认回复" />
+					</div>
+				</div>
+				</form>
+			</volist>
+		</div>
+	</div>
+</div>
+
+<!-- 最近访问 -->
+<div class="float-left" style="padding: 10px;max-width: 300px;/* border:  3px solid #f8f8f8; */width: 100%;min-height: 100px;"><h2>最近访问</h2>
+  <volist name="data.visit" id="vo">
+  <php>$u = D('a_user')->where('id='.$vo['uid'])->find();</php>
+	  <div class="float-left text-center" style="margin:5px;width:50px;height:80px; overflow: -moz-hidden-unscrollable;white-space: nowrap;">
+	  <a href="/camerist/gallery?uid={$vo.uid}" target="_blank">
+	  <div style="width:100%; height:50px;">
+	  	<img src="/index/avatar_url/uid/{$vo.uid}" width="50" />
+	  </div>
+	  <h6 style="color:#83b9dc;margin: 2px;width:50px;white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="{:cstr($u['nickname'],'匿名')}">{:cstr($u['nickname'],$u['username'])}</h6>
+	  </a>
+	  <p style="font-size: xx-small;"><php>
+	  $looktime = datediff('n',$vo['ctime'],now());
+	  if($looktime<60) echo $looktime.'分钟前';
+	  else{
+	  	$looktime = floor($looktime/60);
+	  	if($looktime<24) echo $looktime.'小时前';
+	  	else{
+	  		$looktime = floor($looktime/24);
+  			if($looktime<99) echo $looktime.'日前';
+  			else{
+  				echo '来访过';
+  			}
+	  	}
+	  }
+	  </php></p>
+	  </div>
+  </volist>
+</div>
+  
+<div class="clearfix"></div></div>
+<div class="modal fade" id="mydetail" tabindex="-1" role="dialog" aria-labelledby="mydetail" aria-hidden="true">
+  <div class="modal-dialog" style="max-height:227px; max-width:430px; width:430px; height:227px; margin-top:185px; opacity:0.9; background:#FFF">
+    <div class="modal-content" style=" width:100%; height:100%">
+      <div class="modal-header" style="border:0px">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>
+      <div id="threg">
+          <div class="modal-body">
+            <div >
+              <div class="center mod2151" > <img src="/static/images/logocol.png" width="150px" > </div>
+              <div class="text-center" style="margin-top:15px">
+                <h4>海量正版高清大图注册免费下载</h4>
+              </div>
+              <div class="clearfix ">
+                  <div>
+                    <div style="width:150px; margin:10px auto">
+                		<div  class="bgc form-control" style="text-align:center;cursor:pointer; border-radius:4px" data-toggle="modal" data-target="#myModal">免费注册</div>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer" style="border:0px" >
+            <h6 class="float-right mod4col" data-toggle="modal" data-target="#myModallogin" style="cursor:pointer;">登录</h6>
+            <h6 class="float-right">已有账号？</h6>
+            
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+$(function(){
+	imglist('');
+	$(".sexybox_img").fancybox( {
+		"transitionIn"		: "fade",
+		"transitionOut"		: "fade",
+		"titlePosition" 	: "over",
+		"type":"image"
+	})
+});
+
+	function imglist(url){
+		var temp = '';
+		url += '{$data.sql}';
+		$.getJSON('/index/get_images?'+url,function(json){
+			if(!json.r){
+				$(".yScrollListInList").css('display','none');
+				$(".yScrollList").css('height','auto');
+				$(".yScrollListIn").css('height','auto');
+				
+			}else{
+				if($('#alls')){
+					$('#alls').html(json.r.length);
+				}
+				if($('.fanye')){
+					$('.fanye').html(json.fanye);
+				}
+				$(".yScrollListInList").css('display','block');
+				$.each(json.r,function(index,data){
+					var width = data.width;
+					var height = data.height;
+					if(height>width){
+						
+						var w = ((width*250)/height);
+						var h = 250;
+						
+					}else if(height==width){
+						var w = 250;
+						var h = 250;
+					}else{
+						var w = ((width*250)/height);
+						var h = 250;
+					}
+					temp+= "<li><a href='/index/detail?id="+data.id+"' target='_blank'><img class='lazy' src='"+data.imgurl+"' ></a></li>"
+				});
+			  	$(".yScrollListInList1 ul").html(temp);
+			  
+				$(".yScrollListTitle h1").click(function  () {
+					var index=$(this).index(".yScrollListTitle h1");
+					$(this).addClass("yth1click").siblings().removeClass("yth1click");
+					$($(".yScrollListInList")[index]).show().siblings().hide();
+				})
+				//$(".yScrollListInList1 ul").css("width","auto");
+				$(".yScrollListInList1 ul").css({width:$(".yScrollListInList1 ul li").length*(160+84)+"px"});
+				var numwidth=(160+84)*5;
+				$(".yScrollListInList .yScrollListbtnl").click(function(){
+					var obj=$(this).parent(".yScrollListInList").find("ul");
+					if (!(obj.is(":animated"))) {
+						var lefts=parseInt(obj.css("left").slice(0,-2));
+						if(lefts<30){
+							obj.animate({left:lefts+numwidth},1000);
+						}
+					}
+				})
+				$(".yScrollListInList .yScrollListbtnr").click(function(){
+					var obj=$(this).parent(".yScrollListInList").find("ul");
+					var objcds=-(30+(Math.ceil(obj.find("li").length/5)-2)*numwidth);
+					if (!(obj.is(":animated"))) {
+						var lefts=parseInt(obj.css("left").slice(0,-2));
+						if(lefts>objcds){
+							obj.animate({left:lefts-numwidth},1000);
+						}
+					}
+				});
+			}
+		});
+	}
+      // for scroll bar appear;
+      $(window).trigger("resize");
+      $(function(){
+		$('.carousel-caption').fadeIn(1000);
+		$('.go-top').click(function(){ 
+		  $('html, body').animate({scrollTop:0}, 'slow'); 
+		  return false; 
+		});
+      })
+</script>
+	<!-- Add mousewheel plugin (this is optional) -->
+	<script type="text/javascript" src="../lib/jquery.mousewheel.pack.js?v=3.1.3"></script>
+	<!-- Add fancyBox main JS and CSS files -->
+	<script type="text/javascript" src="/static/js/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+	<link rel="stylesheet" type="text/css" href="/static/js/fancybox/source/jquery.fancybox.css?v=2.1.5" media="screen" />
+    <style>
+    .fancybox-skin{padding:0 !important;}
+	.fancybox-inner{width:100% !important;height:100% !important}
+    </style>
+<include file="public:mfooter"/>
+

@@ -1,0 +1,123 @@
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:header" />
+<script>
+function sortno(id){
+	loading.show();
+	$.get('/product/color_sortno?id='+id+'&sortno='+$('#sortno'+id).val(),function() {
+		loading.hide();
+	});
+}
+function upt(obj,id,str){
+	loading.show();
+	$.get('/product/color_upt?id='+id+'&'+str+'='+escape($('#'+obj+id).val()),function() {
+		if(obj=='cvalue'){
+			$('#pcolor'+id).css('background',$('#'+obj+id).val());
+		}
+		$('#'+obj+id).hide();
+		$('#w'+obj+id).html($('#'+obj+id).val()).show();
+		loading.hide();
+	});
+}
+function openupt(obj,id){
+	$('#w'+obj+id).hide();
+	$('#'+obj+id).show().focus();
+}
+</script>
+<table class="table_list table_search" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <form action="?" method="get">
+        <thead>
+            <tr>
+                <th colspan="4">
+        <div class="tdp">
+            <div></div>搜索条件
+        </div>
+        </th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td width="25%">
+                    <label>名称</label>
+                    <input type="text" name="name" value="{$where.name}" />
+                </td>
+                <td width="25%">
+					<label>简介关键字</label>
+                    <input type="text" name="desc" value="{$where.desc}" />
+                </td>
+                <td colspan="2">
+                	
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr align="center">
+                <td colspan="4"><input type="submit" class="sys_button btn_blue" value=" 搜索 " /></td>
+            </tr>
+        </tfoot>
+    </form>
+</table>
+<div class="midline" align="right">
+    <input type="button" style="display:none;" class="sys_button btn_gray" id="btntocvs" value="导出表格" onclick="location = '{:seturlget('exp')}&exp=xls';" />
+    <input type="button" class="sys_button btn_orange" id="btntocvs" value="颜色代码表" onclick="window.open('http://www.atool.org/colorpicker.php')" />
+    <input type="button" class="sys_button btn_gray" id="btntocvs" value="刷新页面" onclick="location.reload();" />
+</div>
+<php>endif;</php>
+<table class="table_list table_list_hover" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th width="5%">ID.</th>
+            <th width="15%">颜色预览</th>
+            <th width="15%">名称</th>
+            <th width="15%">颜色代码</th>
+            <th width="15%">上传时间</th>
+            <th width="15%">排序</th>
+    <php>if(I('get.exp')!='xls'):</php>
+    <th>其他操作</th>
+    <php>endif;</php>
+</tr>
+</thead>
+<tbody>
+    <tr align="center">
+    <form action="/product/color_add" method="post">
+        <td>{$vo.id}</td>
+        <td>-</td>
+        <td><input type="text" name="colorname" value="" /></td>
+        <td><input type="text" name="colorvalue" value="" /></td>
+        <td>{:now()}</td>
+        <td><input type="text" name="sortno" value="0" style="text-align: center;width: 60px;" /></td>
+	    <td>
+	        <input type="submit" class="sys_button btn_blue" name="" value="添加" />
+	    </td>
+    </form>
+    </tr>
+<volist name="data.list" id="vo">
+    <tr align="center">
+        <td>{$vo.id}</td>
+        <td><div id="pcolor{$vo.id}" style="width: 30px;height: 10px;background: {$vo.colorvalue};border: 1px solid #CCC;"></div></td>
+        <td style="cursor: pointer;" onclick="openupt('cname',{$vo.id})">
+	        <span id="wcname{$vo.id}">{$vo.colorname}</span>
+	        <input type="text" id="cname{$vo.id}" value="{$vo.colorname}" style="display: none;text-align: center;width: 60px;" onblur="upt('cname',{$vo.id},'colorname')" />
+        </td>
+        <td style="cursor: pointer;" onclick="openupt('cvalue',{$vo.id})">
+	        <span id="wcvalue{$vo.id}">{$vo.colorvalue}</span>
+	        <input type="text" id="cvalue{$vo.id}" value="{$vo.colorvalue}" style="display: none;text-align: center;width: 60px;" onblur="upt('cvalue',{$vo.id},'colorvalue')" />
+        </td>
+        <td>{$vo.ctime}</td>
+        <td><input type="text" id="sortno{$vo.id}" value="{$vo.sortno}" style="text-align: center;width: 60px;" onchange="sortno({$vo.id})" /></td>
+    <php>if(I('get.exp')!='xls'):</php>
+    <td>
+        <input type="button" class="sys_button btn_blue" value=" 删除 " onclick="if (confirm('确定删除?'))
+                    location = '/product/color_del?id={$vo.id}';" /> 
+    </td>
+    <php>endif;</php>
+    </tr>
+</volist>
+</tbody>
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:table_page" />
+<php>endif;</php>
+</table>
+<php>if(I('get.exp')!='xls'):</php>
+</body>
+</html>
+<php>endif;</php>

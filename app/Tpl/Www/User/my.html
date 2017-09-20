@@ -1,0 +1,431 @@
+<include file="public:mheader"/>
+<!-- Add fancyBox -->
+<style>
+/*  loading  */
+#background {display: block;width: 100%;height: 100%;opacity: 0.6;filter: alpha(opacity=60);background: #000;position: absolute;top: 0;left: 0;z-index: 2000;}
+#progressBar {border:solid 2px #2E5B89;background-color:white;background-repeat:no-repeat;background-position:10px 12px;display:block;position:absolute;padding:4px 20px 5px 33px;text-align:left;line-height:27px;font-weight:bold;position: absolute;z-index: 2001;}
+#loadingclose {position:absolute;top:5px;right:5px;background:url(../img/cancel.jpg) no-repeat;width:14px;height:14px;cursor:pointer;}
+</style>
+<link rel="stylesheet" href="/static/plugs/fancybox/v2.1.5.css?v=2.1.5" type="text/css" media="screen" />
+<script type="text/javascript" src="/static/plugs/fancybox/v2.1.5.js?v=2.1.5"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$(".fancybox").fancybox({
+			"type":"iframe",
+			"scrolling": "auto",
+			"width":"800px",
+			"height":"600px",
+			"autoDimensions": false
+		});
+	});
+</script>
+	<script src='/static/js/location.js'></script>
+	<script src='/static/js/select.js'></script>
+	<script src='/static/js/global.js'></script>
+<link type="text/css" rel="stylesheet" href="/static/css/css.css">
+    <link href="/static/css/select.css" rel="stylesheet">
+
+<div class="container1200 center bg5" style="height:860px">
+  <form action="/user/refix_user" method="post" id="form1" >
+  <div class="bg51 float">
+    <div class="detailcon">
+      <div class="detail1 float"><font color="red">*</font>用戶名：</div>
+      <div class="detail2 float">
+        <input type="text" class="form-control deinputtext" name="username" value="{$data.user.username}" <php>if($data['user']['username']!='') echo 'disabled="disabled"';</php>  />
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="detailcon">
+      <div class="detail1 float"><font color="red">*</font>昵称：</div>
+      <div class="detail2 float">
+        <input type="text" class="form-control deinputtext" name="nickname" value="{$data.user.nickname}"  />
+      </div>
+      <div class="detail3 float">
+        
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="detailcon">
+      <div class="detail1 float"><font color="red">*</font>真实姓名：</div>
+      <div class="detail2 float">
+        <input type="text" class="form-control deinputtext " disabled="disabled" value="{$data.user.realname}" >
+      </div>
+      <div class="detail3 float">
+        <h6><input type="checkbox" name="realname_show" value="1"<php>if(!$data['user']['realname_show']) echo ' checked';</php> /><span style="padding-bottom:3px;">保密</span></h6>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="detailcon">
+      <div class="detail1 float"><font color="red">*</font>EMail：</div>
+      <div class="detail2 float">
+        <!--<input type="text" class="form-control deinputtext" name="email" value="{$data.user.email}" disabled="disabled" >-->
+      	<div class="float" style="width:179px;padding-top:10px;white-space: nowrap;text-overflow: ellipsis;overflow:hidden;" title="{$data.user.email}"><php>if(!$data['user']['email_v']) echo '<span style="color:red;">[待绑定] </span>';</php>{$data.user.email}</div> <br />
+        <span data-toggle="modal" data-target="#bindingmailModal" style="color:#f16172;cursor:pointer;font-size:11px;" >邮箱绑定（绑定后可用作登录）</span>
+      </div>
+      <div class="detail3 float">
+        <h6><input type="checkbox" name="email_show" value="1"<php>if(!$data['user']['email_show']) echo ' checked';</php> /><span style="padding-bottom:3px;">保密</span></h6>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="detailcon">
+      <div class="detail1 float"><font color="red">*</font>QQ：</div>
+      <div class="detail2 float" style="padding:10px 0;width:179px;">
+        <input type="text" class="form-control deinputtext" name="qq" value="{$data.user.qq}" style="display:none;" />
+        <php>if($data['user']['3rdpartyid']!='288'):</php><span onclick="location='/static/qq.php?go=qqbind';" style="color:#f16172;cursor:pointer;font-size:11px;" >QQ绑定（绑定后可用作登录）</span>
+        <else/><span onclick="if(confirm('确定取消绑定？')) location='/user/qqunbind';" style="color:#f16172;cursor:pointer;font-size:11px;" >取消绑定（绑定后可用作登录）</span>
+        <php>endif;</php>
+      </div>
+      <div class="detail3 float" style="display:none;">
+        <h6><input type="checkbox" name="qq_show" value="1"<php>if(!$data['user']['qq_show']) echo ' checked';</php> /><span style="padding-bottom:3px;">保密</span></h6>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="detailcon">
+      <div class="detail1 float"><font color="red">*</font>手机：</div>
+      <div class="detail2 float">
+      <div class="float" style="width:179px;padding-top:10px;overflow:hidden;" title="{$data.user.mobile}">{$data.user.mobile}</div><br />
+        <span data-toggle="modal" data-target="#bindingModal" style="color:#f16172;cursor:pointer;font-size:11px;" >手机绑定（绑定后可用作登录）</span>
+        
+      </div>
+      <div class="detail3 float">
+      <h6><input type="checkbox" name="mobile_show" value="1"<php>if(!$data['user']['mobile_show']) echo ' checked';</php> /><span style="padding-bottom:3px;">保密</span></h6>
+      </div>
+    </div>
+    <div class="detailcon">
+      <div class="detail1 float">电话：</div>
+      <div class="detail2 float">
+        <input type="text" class="form-control deinputtext" name="tel" value="{$data.user.tel}" >
+      </div>
+      <div class="detail3 float">
+        <h6>请按照"区号+固定电话"格式填写</h6>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="detailcon">
+      <div class="detail1 float">空间签名：</div>
+      <div class="detail2 float"><input type="text" class="form-control deinputtext" name="desc" value="{$data.user.desc}" ></div>
+    </div>
+    <div class="detailcon">
+      <div class="detail1 float">身份：</div>
+      <div class="float">
+      <php>
+      $sf = D('syscode')->where('syscode_parentid=318 and syscode_isuse=1')->order('syscode_sortno')->select();
+      </php>
+      <volist name="sf" id="vo">
+      <php>
+      $sf_chk = '';
+      $sf_arr = explode(',',$data['user']['shenfen']);
+      if(in_array($vo['syscode_id'],$sf_arr)) $sf_chk = 'checked';
+      </php>
+        <input type="checkbox" name="sf[]" value="{$vo.syscode_id}" style="margin: 10px;" {$sf_chk} >
+        {$vo.syscode_name}
+      </volist>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="detailcon">
+      <div class="detail1 float">性别：</div>
+      <div class="float">
+        <input type="radio" style="margin: 10px;" name="gander" value="1" <php>if($data['user']['gander']==1) echo 'checked="checked"';</php> >
+        男
+        <input type="radio" style="margin: 10px;" name="gander" value="2" <php>if($data['user']['gander']==2) echo 'checked="checked"';</php>>
+        女</div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="detailcon">
+      <div class="detail1 float">出生：</div>
+      <div class="detail2 float">
+        <input type="date" class="form-control deinputtext" name="birth" value="{$data.user.birth}" >
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    
+    <div class="detailcon">
+      <div class="detail1 float">所在地：</div>
+      <div class="dedropdownlist float" style="margin-top:4px;">
+          <select id="loc_province" style="width:100px;">
+          </select>
+          <select id="loc_city" style="width:100px;">
+          </select>
+          <select id="loc_town" style="width:120px;">
+          </select>
+      </div>
+      <div style="margin-left: 85px;">
+        <textarea class="form-control " rows="3" id="addr" placeholder="填写您所在街道房号"></textarea>
+        <input type="hidden" name="address" id="address" value="{$data.user.address}" /><br />
+      </div>
+      <div class="clearfix"></div>
+      <div class="detail1 float">自我介绍：</div>
+      <div class="float" style="margin-top:4px;width:445px;margin-left:4px;">
+        <textarea class="form-control " rows="5" id="introduce" name="introduce" placeholder="">{$data.user.introduce}</textarea>
+      </div>
+      <div class="clearfix"></div>
+  </form>
+      <div style="margin-left: 85px;margin-top:20px;">
+        <button class="btn bgc" type="button" style="width:220px;" onclick="subm()">保存</button> 
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+  <iframe name="ifrm1" src="about:blank" style="position:absolute;top:-100px;left:-100px;width:0px;height:0px;" frameborder="0"></iframe>
+  <form action="/user/avatar_up" target="ifrm1" method="post" id="form_1" enctype="multipart/form-data">
+  <input type="file" name="avatar" id="avatar1" style="position:absolute;width:0px;height:0px;left:-100px;top:-100px;" onChange="upimg1(this)" />
+  <div class="bg52 float">
+  <div class="dtimg" onClick="//$('#avatar1').click();" style="border:none;"><php>if($data['user']['avatar']==''){if($data['user']['avatarimg']==''){</php><img id="avt" src="/static/images/uploadtx.jpg" width="160" /><php>}else{</php><img src="{$data.user.avatarimg}" width="160" /><php>}}else{</php><img id="avt" src="/static/uploadfiles/images/{$data.user.avatar}" width="160" /><php>}</php>
+  <img src="/static/images/uploads.jpg" onclick="selpic()" /><input type="file" id="userfile" name="userfile" size="20" style="width: 0;height: 0;" onchange="toupload();" /></div>
+  </div>
+  <div class="clearfix"></div>
+</div>
+</form>
+
+
+<!-- Modal -->
+<div class="modal fade" id="bindingModal" tabindex="-1" role="dialog" aria-labelledby="bindingModal" aria-hidden="true">
+  <div class="modal-dialog" style="width:482px;margin-top:185px;">
+    <div class="modal-content" style=" width:100%; height:100%">
+      <div class="modal-header" style="border:0px">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>
+      <div id="threg">
+          <div class="modal-body">
+            <div class="mod2" style="height:auto;width:450px;">
+              <div class="center mod2151" > <img src="/static/images/logocol.png" width="150px" > </div>
+              
+              <div class="mod21" style="height: auto;">
+                <form action="/user/refix_mobile" method="post" id="formobile">
+                <div class="pcon5 center">
+                <table height="36px" class="p-table">
+                    <tr >
+                        <td style="width:90px;text-align: right;vertical-align: middle;">已绑定号码：<br></td>
+                        <td style="width:233px;text-align: left;">{$data.user.mobile}</td>
+                    </tr>
+                    <tr><td><br></td></tr>
+                    <tr>
+                    <td style="width:90px;text-align: right;vertical-align: middle;">手机号：<br></td>
+                    <td style="width:233px"> <input type="text" name="mobile" id="remobile2" class="form-control" value="" onkeyup="this.value=this.value.replace(/\D/g,'')"></td>
+                    </tr>
+                    <tr><td><br></td></tr>
+                    <tr >
+                    <td style="width:90px;text-align: right;vertical-align: middle;">验证码：<br></td>
+                    <td style="width:233px"> <div class="input-group">
+                      <input type="text" name="code" id="recode" class="form-control">
+                      <span class="input-group-btn">
+                        <input class="btn btn-default" type="button" id="resendsms" onclick="resend()" value="获取验证码" />
+                      </span>
+                    </div><!-- /input-group -->
+                    </tr>
+                </table>
+                <div class="almid pa--20">
+                    <button class="btn btn2 bgc" type="button" onclick="submobile()">绑 定</button> 
+                  </div>
+                </div>
+                </form>
+              </div>
+              
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- mailModal -->
+<div class="modal fade" id="bindingmailModal" tabindex="-1" role="dialog" aria-labelledby="bindingModal" aria-hidden="true">
+  <div class="modal-dialog" style="width:482px;margin-top:185px;">
+    <div class="modal-content" style=" width:100%; height:100%">
+      <div class="modal-header" style="border:0px">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>
+      <div id="threg">
+          <div class="modal-body">
+            <div class="mod2" style="height:auto;width:450px;">
+              <div class="center mod2151" > <img src="/static/images/logocol.png" width="150px" > </div>
+              
+              <div class="mod21" style="height: auto;">
+                <form action="/user/refix_mail" method="post" id="formail">
+                <div class="pcon5 center">
+                <table height="36px" class="p-table">
+                    <tr >
+                        <td style="width:90px;text-align: right;vertical-align: middle;">已绑定邮箱：<br></td>
+                        <td style="width:233px;text-align: left;">{$data.user.email}</td>
+                    </tr>
+                    <tr><td><br></td></tr>
+                    <tr>
+                    <td style="width:90px;text-align: right;vertical-align: middle;">绑定新邮箱：<br></td>
+                    <td style="width:233px"> <input type="text" name="mail" id="remail" class="form-control" value="" ></td>
+                    </tr>
+                </table>
+                <div class="almid pa--20">
+                    <button class="btn btn2 bgc" type="button" onclick="submail()">提交绑定</button> 
+                  </div>
+                </div>
+                </form>
+              </div>
+              
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+	function submobile(){
+		
+		var code = $('#recode').val();
+		var tel = $('#remobile2').val();	
+		if(tel.length!=11 || isNaN(tel)){
+			alert('请输入正确的手机号码');
+			return false;
+		}
+		if(!code){
+			alert('请输入验证码');
+			return false;
+		}
+		$('#formobile').submit();
+	}
+	function submail(){
+		
+		var code = $('#recode').val();
+		var mail = $('#remail').val();	
+		
+		if(mail.indexOf('@')<0 || mail.indexOf('.')<0){
+			alert('请输入正确的邮箱');
+			return false;
+		}
+		
+		$('#formail').submit();
+	}
+	
+	function resend(){
+		var tel = $('#remobile2').val();
+		if(tel.length!=11 || isNaN(tel)){
+			alert('请输入正确的手机号码');
+			return;
+		}
+		$.getJSON('/user/sms_vcode?mobile='+global.trim(tel),function(data){
+			
+			if(data.rstatus==0){
+				alert(data.info);
+			}else{
+			var i = 60; 
+					  $("#resendsms").attr("disabled","disabled");
+
+			  var _time = setInterval(function(){
+				  i = i-1;  
+				  $("#resendsms").val("（"+i+"）秒").css("color","#333");
+				  if(i == 0)
+				  {
+					  $("#resendsms").removeAttr("disabled");
+				  	  $("#resendsms").val("获取验证码").css("color","#333");
+					  clearInterval(_time);
+				  }    
+			  },1000);
+			}
+		});
+	}
+
+var doing = false;
+function toupload(){
+	if(doing || $('#userfile').val()=='') return false;
+	doing = true;
+	loading.show(0,'图片上传中,请稍候...');
+	//$('.btn_upload').val('上传中,请稍候...');
+	//$('.btn_upload').addClass('btn_disabled');
+	//$('#form span').html('图片上传中，请稍后...');
+	//$('#form img').hide();
+	$('#form_1').submit();
+}
+function selpic(){
+	if(doing) return false;
+	$('#userfile').val('').click();
+}
+function api_avatar_err(info){
+	alert(info);
+	doing = false;
+	loading.hide();
+}
+function api_avatar_ok(name){
+	loading.hide();
+	doing = false;
+	$.fancybox({
+			"href":'/user/avatar_cut?fname='+name,
+			"type":"iframe",
+			"scrolling": "auto",
+			"width":"800px",
+			"height":"600px",
+			"autoDimensions": false
+		});
+}
+function api_fancybox_close(){
+	$.fancybox.close();
+}
+function upimg1(obj){
+	if ($(obj).val() != '') {
+		loading.show();
+		$('#form_1').submit();
+	}
+}
+function api_upload1(filename){
+	$('#avt').attr('src','/static/uploadfiles/images/'+filename);
+	loading.hide();
+}
+	$(function(){
+		var address = $('#address').val();
+		if(address!=''){
+			var strs= new Array(); 
+			strs=address.split("|;|");
+			if(strs[0]!=''){
+				$('#select2-chosen-1').html(strs[0]);
+			}
+			if(strs[1]!=''){
+				$('#select2-chosen-2').html(strs[1]);
+			}
+			if(strs[2]!=''){
+				$('#select2-chosen-3').html(strs[2]);
+			}
+			if(strs[3]!=''){
+				$('#addr').val(strs[3]);
+			}
+			
+		}
+	});
+	function subm(){
+		var province = $('#loc_province').val();
+		var city = $('#loc_city').val();
+		var town = $('#loc_town').val();
+		var addr = $('#addr').val();
+		
+		var add1 = $('#loc_province').select2('data').text;
+		
+		var add2 = $('#loc_city').select2('data').text;
+		
+		var add3 = $('#loc_town').select2('data').text;
+		
+		var address = $('#address').val();
+		if(address!=''){
+			var strs = address.split("|;|");
+			if(strs[0]!=''){
+				//$('#select2-chosen-1').html(strs[0]);
+				if(add1=='省份') add1 = strs[0];
+			}
+			if(strs[1]!=''){
+				//$('#select2-chosen-2').html(strs[1]);
+				if(add2=='地级市') add2 = strs[1];
+			}
+			if(strs[2]!=''){
+				//$('#select2-chosen-3').html(strs[2]);
+				if(add3=='市、县、区') add3 = strs[2];
+			}
+			
+		}
+		
+		var address = add1 + '|;|' + add2 + '|;|' + add3 + '|;|' + $('#addr').val();
+		$('#address').val(address);
+		$('#form1').submit();
+	}
+	
+	
+</script>
+<include file="public:mfooter"/> 

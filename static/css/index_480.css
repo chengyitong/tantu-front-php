@@ -1,0 +1,8 @@
+
+/*  輪播  */
+.touchslider-imgs {position:relative;margin:0 auto;padding:0;border-bottom: #CCC 1px solid;}
+.touchslider-imgs .touchslider-viewport {overflow:hidden;position:relative;}
+.touchslider-imgs .touchslider-nav {position:absolute;left:0;bottom:5px;text-align:center;}
+/*  点  */
+.touchslider-imgs .touchslider-nav-item {width: 12px;height: 12px;background: #EEE;margin: 0 4px;display: inline-block;-webkit-border-radius: 8px;border-radius: 8px;border:none;box-shadow: 0 0 0 2px #FFF;}
+.touchslider-imgs .touchslider-nav-item-current {background-color: #F60;}

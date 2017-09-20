@@ -1,0 +1,130 @@
+<include file="public:header" />
+<style>
+.main{padding:0 20px;}
+td{padding:5px !important;}
+</style>
+
+<div class="main">
+    <h3 align="center">用户资料</h3>
+        <table border="0" width="100%" cellpadding="0" class="table_list">
+            <tr>
+                <td width="15%" align="right">GUID：</td>
+                <td>{$data.r.fguid}</td>
+            </tr>
+            <form action="/user/upt?id={:I('get.id')}" method="post" id="form1">
+            <tr>
+                <td align="right">用户名：</td>
+                <td>{$data.r.mobile}</td>
+            </tr>
+            <tr>
+                <td align="right">重置密码：</td>
+                <td><input type="text" name="pwd" value="" /></td>
+            </tr>
+            <tr>
+                <td align="right">昵称：</td>
+                <td><input type="text" value="{$data.r.nickname}" name="nickname" /></td>
+            </tr>
+            <tr>
+                <td align="right">邮箱：</td>
+                <td><input type="text" value="{$data.r.email}" name="email" /></td>
+            </tr>
+            <tr>
+                <td align="right">QQ：</td>
+                <td><input type="text" value="{$data.r.qq}" name="qq" /></td>
+            </tr>
+            <tr>
+                <td align="right">MSN：</td>
+                <td><input type="text" value="{$data.r.msn}" name="msn" /></td>
+            </tr>
+            <tr>
+                <td align="right">联系方式：</td>
+                <td><input type="text" value="{$data.r.tel}" name="tel" /></td>
+            </tr>
+            <tr>
+                <td align="right">出生日期：</td>
+                <td><input type="text" value="{$data.r.birth}" name="birth" /></td>
+            </tr>
+            <tr>
+                <td align="right">性别：</td>
+                <td>
+                <select name="gander">
+                    <option value="">请选择</option>
+                        <option value="1" <php>if($data['r']['gander']=='1') echo 'selected';</php>>男</option>
+                        <option value="2" <php>if($data['r']['gander']=='2') echo 'selected';</php>>女</option>
+                  </select>
+                  </td>
+            </tr>
+            <tr>
+                <td align="right">认证：</td>
+                <td>
+                <php>
+                switch($data['r']['isverify']){
+                	case -1: echo '驳回';break;
+                	case 0: echo '未申请';break;
+                	case 1: echo '待审批';break;
+                	case 2: echo '通过';break;
+                }
+                </php>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">认证类型：</td>
+                <td>
+                个人认证
+                </td>
+            </tr>
+            <tr>
+                <td align="right">真实姓名：</td>
+                <td>{$data.r.realname}</td>
+            </tr>
+            <tr>
+                <td align="right">身份证：</td>
+                <td>{$data.r.idcard}</td>
+            </tr>
+            <tr>
+                <td align="right">身份证有效期：</td>
+                <td>{$data.r.idcardedate}</td>
+            </tr>
+            <php>if($data['r']['isverify']==1):</php>
+            <tr>
+                <td align="right">审核结果：</td>
+                <td>
+                <select name="isverify">
+                        <option value="2">通过</option>
+                        <option value="-1">驳回</option>
+                  </select>
+                  评语：
+                  <input type="text" value="{$data.r.verifyresult}" name="verifyresult" />
+                  </td>
+            </tr>
+            <php>endif;</php>
+            <tr>
+                <td align="right"></td>
+                <td>
+                	<php>if($data['r']['idcardimga']!='') echo '<img src="/static/uploadfiles/authend/'.$data['r']['idcardimga'].'" style="width:180px;border:1px solid #CCC;"/>';</php>&nbsp;&nbsp;
+                	<php>if($data['r']['idcardimga']!='') echo '<img src="/static/uploadfiles/authend/'.$data['r']['idcardimgb'].'" style="width:180px;border:1px solid #CCC;"/>';</php>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">地址：</td>
+                <td>{:str_replace('|;|',' ',$data['r']['address'])}<!--input type="text" value="{$data.r.address}" name="address" style="width:90%;" /--></td>
+            </tr>
+            <tr>
+                <td align="right">最后登录时间：</td>
+                <td>{$data.r.lastlogin}</td>
+            </tr>
+            
+            <tr>
+                <td align="right">注册时间：</td>
+                <td>{$data.r.ctime}</td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input class="btn btn-primary" type="button" onclick="$('#form1').submit();" value=" 更新 " />
+                </td>
+            </tr>
+            </form>
+        </table>
+</div>
+</body>
+</html>

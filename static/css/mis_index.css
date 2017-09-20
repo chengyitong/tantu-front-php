@@ -1,0 +1,22 @@
+﻿body { overflow: hidden; }
+#frames_top { height: 72px; background:url(../img/aa.jpg) repeat-x; position: relative;}
+.frames_top_title { padding-top: 18px; text-indent: 1em; letter-spacing: 1px; font-size: 28px; color: #FFF; font-weight: bold; }
+.frames_top_links { position: absolute; top: 5px; right: 5px; font-size: 13px; color: #fff; font-family: Verdana; }
+#frames_bottom { height: 25px; background-color:#2E5B89; }
+#frames_bottom .tab { height:26px; line-height:26px; background:url(../img/office2000_menuitem_ico.gif) 10px 5px no-repeat; padding:0 50px 0 20px; color: #FFF; float:left; }
+ul {margin: 0;padding: 0;}
+li {background: url(../img/houye.gif) no-repeat 16px 7px;list-style: none;border-bottom: #FFF 1px solid;padding: 5px;background-color: rgb(226, 239, 255);}
+li a {margin-left: 36px;font-size: 14px;font-weight: bold;color: #3366cc;text-decoration: none;}
+li a:hover {text-decoration: underline;}
+.easyui-accordion ul{list-style-type:none;margin:0px; padding-left:0px; background:#D2E7FD;}
+.easyui-accordion ul li{ padding:0px;height:30px;}
+.easyui-accordion ul li a{line-height:30px;}
+.easyui-accordion ul li div{margin:0px 0px;padding-left:10px;padding-top:0px; font-size:14px;}
+.easyui-accordion ul li div.hover{border:1px dashed #99BBE8; background:#E0ECFF;cursor:pointer;}
+.easyui-accordion ul li div.hover a{text-decoration:underline;}
+.easyui-accordion ul li div.selected{border:1px solid #99BBE8; background:#E0ECFF;cursor:default;}
+.easyui-accordion ul li div.selected a{color:#416AA3; font-weight:bold;}
+.panel-with-icon,.nav,.accordion-body ul li div{position:relative;}
+.icon{display:block !important;width:0;position:absolute;left:138px;top:-8px;font-size:10px;color:red;}
+.menutip{font-size:10px;color:red;margin-left:3px;position:absolute;top:-3px;}
+.menutip2{font-size:10px;color:red;margin-left:3px;position:absolute;top:1px;}

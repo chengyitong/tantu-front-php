@@ -1,0 +1,24 @@
+<include file="public:header" />
+{:loadplug_fancybox();}
+<style>
+table{width:100%;border-collapse: separate;empty-cells:show;}
+ul{padding:0;margin:0; list-style:none;width:0px;}
+li{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:0px;}
+li:hover{background:#FFC;}
+.cd_days{line-height:1.5em !important;}
+</style>
+<script>
+$(function(){
+	$('ul').each(function(){
+		var w = $(this).parent('td').width();
+		$(this).width(w);
+	});
+	$('li').each(function(){
+		var w = $(this).parent('ul').width();
+		$(this).width(w);
+	});
+});
+</script>
+{:calendar(array('title'=>'我的日程','td_height'=>90,'after_today_gray'=>0,'can_pre'=>1,'can_next'=>1,'data'=>$date['r'],'func'=>'my/calendar'))}
+</body>
+</html>

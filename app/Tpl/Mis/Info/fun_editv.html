@@ -1,0 +1,243 @@
+<include file="public:header" />
+{:loadplug_editor('syscoderemark3');}
+<script>
+$(function() {
+	$('.amap').css('top',$('.table_list').height()+10);
+});
+</script>
+<style>
+label {
+	width: 120px;
+	text-align: right;
+	display: inline-block
+}
+tr{margin:5px 0;}
+.amap{display:none;height:500px;width:850px;position:absolute;top:640px;}
+</style>
+<link rel="stylesheet" type="text/css" href="/static/css/gdmap.css" />
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.3&key=56da30dd6577a38fbc6ee2f1aa35a1a4&plugin=AMap.Autocomplete"></script>
+<script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+<form action="/index/do_edit?table=a_fun_list" method="post">
+<input name="id" type="hidden" value="{$data.r.id}" />
+  <thead>
+  <tr>
+    <th>信息修改</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>
+		<label>分类: </label>
+        <select name="classid">
+            <option selected="selected" >请选择</option>
+            <volist name="data.class" id="vo">
+            <option value="{$vo.syscode_id}"<php>if($vo['syscode_id']==$data['r']['classid']) echo ' selected';</php>>{$vo.syscode_name}</option>
+            </volist>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>名称: </label>
+        <input name="name_cn" id="name_cn" type="text" value="{$data.r.name_cn}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>英文名称: </label>
+		<input name="name_en" id="name_en" type="text" value="{$data.r.name_en}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>地址: </label>
+        <input type="text" name="address_cn" value="{$data.r.address_cn}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>英文地址: </label>
+        <input name="address_en" type="text" value="{$data.r.address_en}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>简介: </label>
+        <textarea name="text_cn" rows="6" cols="80">{$data.r.text_cn}</textarea >
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>英文简介: </label>
+        <textarea name="text_en" rows="8" cols="80">{$data.r.text_en}</textarea >
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>备注: </label>
+        <input type="text" name="remark_cn" value="{$data.r.remark_cn}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>英文备注: </label>
+        <input type="text" name="remark_en" value="{$data.r.remark_en}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>电话: </label>
+        <input type="text" name="tel" value="{$data.r.tel}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>喜欢人数: </label>
+        <input type="text" name="like" value="{$data.r.like}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>类型: </label>
+        <select name="type">
+            <option value="content"<php>if($data['r']['type']=='content') echo ' selected';</php>>详细页</option>
+            <option value="web"<php>if($data['r']['type']=='web') echo ' selected';</php>>外部浏览器</option>
+            <option value="webview"<php>if($data['r']['type']=='webview') echo ' selected';</php>>内部浏览器</option>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>超链接: </label>
+        <input type="text" name="url" value="{$data.r.url}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>英文超链接: </label>
+        <input type="text" name="url_en" value="{$data.r.url_en}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>内文按钮中文名称: </label>
+        <input type="text" name="btn_cn" value="{$data.r.btn_cn}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>内文按钮英文名称: </label>
+        <input type="text" name="btn_en" value="{$data.r.btn_en}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>按钮类型: </label>
+        <select name="btn_type">
+        	<option value="">请选择</option>
+            <option value="web"<php>if($data['r']['btn_type']=='web') echo ' selected';</php>>外部浏览器</option>
+            <option value="webview"<php>if($data['r']['btn_type']=='webview') echo ' selected';</php>>内部浏览器</option>
+        </select>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>超链接: </label>
+        <input type="text" name="btn_url" value="{$data.r.btn_url}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>位置坐标: </label>
+        <span id="addrxy">{$data.r.location_x},{$data.r.location_y}</span>
+        <input type="hidden" name="location_x" id="addrx" value="{$data.r.location_x}" />
+        <input type="hidden" name="location_y" id="addry" value="{$data.r.location_y}" />
+        <input type="button" value="设置" onclick="$('.amap').toggle();" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label >创建时间: </label>
+        {$data.r.ctime}
+    </td>
+  </tr>
+  
+  </tbody>
+  <tr>
+  	<td align="center" bgcolor="#EEEEEE"><input type="submit" class="sys_button" value=" 修改 " /> <input type="button" class="sys_button" onClick="parent.window.close();" value=" 关闭 " /></td>
+  </tr>
+</form>
+</table>
+<div class="amap">
+    <div id="container"></div>
+    <div id="myPageTop">
+        <table>
+            <tr>
+                <td>
+                    <label>按关键字搜索：</label>
+                </td>
+                <td class="column2">
+                    <label>左击获取经纬度：</label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" placeholder="请输入关键字进行搜索" id="tipinput">
+                </td>
+                <td class="column2">
+                    <input type="text" readonly="true" id="lnglat">
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+var n_x = '{$data.r.location_x}', n_y = '{$data.r.location_y}';
+if(n_x=='') n_x = 113.55185;
+if(n_y=='') n_y = 22.195765;
+    var map = new AMap.Map("container", {
+        resizeEnable: true,
+        zoom:14,
+        center: [n_x,n_y]
+    });
+    //为地图注册click事件获取鼠标点击出的经纬度坐标
+    var clickEventListener = map.on('click', function(e) {
+        document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat()
+    });
+	marker = new AMap.Marker({
+		icon: "http://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+		position: [n_x, n_y]
+	});
+	marker.setMap(map);
+	 //为地图注册click事件获取鼠标点击出的经纬度坐标
+    var clickEventListener = map.on('click', function(e) {
+        document.getElementById("lnglat").value = e.lnglat.getLng() + ',' + e.lnglat.getLat();
+		$('#addrxy').html(e.lnglat.getLng() + ',' + e.lnglat.getLat());
+		$('#addrx').val(e.lnglat.getLng());
+		$('#addry').val(e.lnglat.getLat());
+		// 实例化点标记
+		 marker.setPosition([e.lnglat.getLng(), e.lnglat.getLat()]); //更新点标记位置	
+		
+    });
+    var auto = new AMap.Autocomplete({
+        input: "tipinput"
+    });
+    AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
+    function select(e) {
+        if (e.poi && e.poi.location) {
+			var loc = e.poi.location;
+            map.setZoom(16);
+            map.setCenter(e.poi.location);
+			
+			$('#addrxy').html(loc.lng + ',' + loc.lat);
+			$('#addrx').val(loc.lng);
+			$('#addry').val(loc.lat);
+			document.getElementById("lnglat").value = loc.lng + ',' + loc.lat;
+			marker.setPosition([loc.lng, loc.lat]); //更新点标记位置	
+        }
+    }
+	
+</script>
+</body>
+</html>

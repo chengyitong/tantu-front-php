@@ -1,0 +1,130 @@
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:header" />
+
+<table class="table_list table_search" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <form action="?" method="get">
+        <thead>
+            <tr>
+                <th colspan="4">
+        <div class="tdp">
+            <div></div>搜索条件
+        </div>
+        </th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td width="25%">
+                    <label>类别id</label>
+                    <input type="text" name="classid" value="{$where.classid}" />
+                </td>
+                <td width="25%">
+					<label>类型</label>
+                    <input type="text" name="type" value="{$where.type}" />
+                </td>
+                <td colspan="2">
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr align="center">
+                <td colspan="4"><input type="submit" class="sys_button btn_blue" value=" 搜索 " /></td>
+            </tr>
+        </tfoot>
+        
+    </form>
+</table>
+<div class="midline">
+    <input type="button" class="sys_button btn_gray" id="btntocvs" value="导出表格" onclick="location = '{:seturlget('exp')}&exp=xls';" />
+</div>
+<php>endif;</php>
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th width="5%">ID.</th>
+            <th width="5%">备注</th>
+            <th width="5%">类别</th>
+            <th width="10%">开启类型</th>
+            <th width="15%">目标参数</th>
+            <th width="10%">开始时间</th>
+            <th width="10">结束时间</th>
+            <th width="10%">创建时间</th>
+    <php>if(I('get.exp')!='xls'):</php>
+    <th>其他操作</th>
+    <php>endif;</php>
+</tr>
+</thead>
+<tbody>
+<volist name="data.list" id="vo">
+    <tr align="center">
+        <td>{$vo.id}</td>
+        <td>{$vo.remark}</td>
+        <td>{$vo.classname}</td>
+        <td><php>
+        if($vo['type']=='') echo '无动作';
+        elseif($vo['type']=='content') echo '详细页面';
+        elseif($vo['type']=='webview') echo '内部网页';
+        elseif($vo['type']=='web') echo '外部网页';
+        </php></td>
+        <td>{$vo.url}</td>
+        <td>{$vo.stime}</td>
+        <td>{$vo.etime}</td>
+        <td>{$vo.ctime}</td>
+    <php>if(I('get.exp')!='xls'):</php>
+    <td>
+        <input type="button" class="sys_button btn_blue btn_open" value=" 图片 " href="/index/images?w=720&h=350&type=info_banner&id={$vo.id}" />
+        <input type="button" class="sys_button btn_blue btn_open" value=" 编辑 " href="/info/ad_editv?id={$vo.id}" />
+        <input type="button" class="sys_button btn_blue" value=" 删除 " onclick="if (confirm('确定删除?'))
+                    location = '/info/ad_del?id={$vo.id}';" /> 
+    </td>
+    <php>endif;</php>
+    </tr>
+</volist>
+
+    <tr align="center">
+
+        <form action="/info/adv_add" method="post">
+    
+            <td>新增</td>
+    
+            <td><input type="text" name="remark" value="" /></td>
+            <td>
+            <select name="classid">
+                <option value="">请选择</option>
+                <volist name="data.class" id="vo">
+                <option value="{$vo.syscode_id}">{$vo.syscode_name}</option>
+                </volist>
+            </select>
+            </td>
+    
+            <td>
+            <select name="type">
+                <option selected="selected" >无动作</option>
+                <option value="content" >详细页面</option>
+                <option value="webview" >内部网页</option>
+                <option value="web" >外部网页</option>
+            </select>
+            </td>
+            <td><input type="text" name="url" value="" /></td>
+            <td><input type="date" name="stime" value="" /></td>
+            <td><input type="date" name="etime" value="" /></td>
+            <td></td>
+    
+            <td>
+    
+                <input type="submit" class="sys_button btn_orange" value=" 提交 " />
+    
+            </td>
+    
+        </form>
+    
+    </tr>
+</tbody>
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:table_page" />
+<php>endif;</php>
+</table>
+<php>if(I('get.exp')!='xls'):</php>
+</body>
+</html>
+<php>endif;</php>

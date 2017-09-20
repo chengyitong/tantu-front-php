@@ -1,0 +1,129 @@
+<include file="public:header"/>
+<style>
+#sendsms{color:#333 !important;}
+</style>
+
+<div class="container1200 center">
+    <div class="pcon5 center" style="padding:80px 0;">
+    <h3 style="text-align:center">找回密码</h3>
+    <br />
+    <table height="36px" class="p-table">
+        <tr>
+            <td style="width:80px;text-align: right;vertical-align: middle;">手机/邮箱：<br></td>
+            <td style="width:233px"> <input type="text" name="mobile" id="refixtel" class="form-control"></td>
+        </tr>
+        <tr><td><br></td></tr>
+        <tr >
+            <td style="width:80px;text-align: right;vertical-align: middle;">验证码：<br></td>
+            <td style="width:233px"> <div class="input-group">
+              <input type="text" name="code" id="code" class="form-control">
+              <span class="input-group-btn">
+        		<input class="btn btn-default" type="button" id="sendsms" onclick="refixsend()" value="获取验证码" />
+              </span>
+            </div><!-- /input-group -->
+            </td>
+        </tr>
+        <tr><td><br></td></tr>
+        <tr >
+            <td style="width:80px;text-align: right;vertical-align: middle;">新密码：<br></td>
+            <td style="width:233px"> <input type="password" id="pwd1" class="form-control"></td>
+        </tr>
+        <tr><td><br></td></tr>
+        <tr >
+            <td style="width:80px;text-align: right;vertical-align: middle;">确认密码：<br></td>
+            <td style="width:233px"> <input type="password" id="pwd2" class="form-control"></td>
+        </tr>
+    </table>
+        <div class="almid pa--20">
+        <button class="btn btn2 bgc" onclick="subm()">确认</button> 
+      </div>
+    </div>
+</div>
+<div class="container1200 "></div>
+<script>
+
+	function refixsend(){
+		var tel = $('#refixtel').val();
+						  $("#sendsms").attr("disabled","disabled");
+		if(tel.length==11 && !isNaN(tel)){
+			$.getJSON('/index/sms_fvcode?mobile='+global.trim(tel),function(data){
+				
+				if(data.rstatus==0){
+					alert(data.info);
+					$("#sendsms").removeAttr("disabled");
+				}else{
+				var i = 60; 
+	
+				  var _time = setInterval(function(){
+					  i = i-1;  
+					  $("#sendsms").val("（"+i+"）秒").css("color","#333");
+					  if(i == 0)
+					  {
+						  $("#sendsms").removeAttr("disabled");
+						  $("#sendsms").val("获取验证码").css("color","#fff");
+						  clearInterval(_time);
+					  }    
+				  },1000);
+				}
+			});
+		}else if(tel.indexOf('@')>0 && tel.indexOf('.')>0){
+			$.getJSON('/index/mail_vcode?mail='+global.trim(tel),function(data){
+				if(data.rstatus==0){
+					alert(data.info);
+					$("#sendsms").removeAttr("disabled");
+				}else{
+				var i = 60; 
+	
+				  var _time = setInterval(function(){
+					  i = i-1;  
+					  $("#sendsms").val("（"+i+"）秒").css("color","#333");
+					  if(i == 0)
+					  {
+						  $("#sendsms").removeAttr("disabled");
+						  $("#sendsms").val("获取验证码").css("color","#fff");
+						  clearInterval(_time);
+					  }    
+				  },1000);
+				}
+			});
+		}else{
+			alert('请输入正确的手机或邮箱');
+			$("#sendsms").removeAttr("disabled");
+			return false;
+			
+		}
+	}
+	
+	function subm(){
+		
+		var code = $('#code').val();
+		var tel = $('#refixtel').val();	
+		var pwd1 = $('#pwd1').val();	
+		var pwd2 = $('#pwd2').val();	
+		if(!tel){
+			alert('请输入正确的手机号码');
+			return false;
+		}
+		if(!code){
+			alert('请输入验证码');
+			return false;
+		}
+		if(pwd1==''){
+			alert('密码不能为空');
+			return false;
+		}
+		if(pwd1!=pwd2){
+			alert('两次密码输入不一致');
+			return false;
+		}
+		$.get('/index/refix_pwd?code='+global.trim(code)+'&pwd='+global.trim(pwd1),function(data){
+			 var arr = data.split(':');
+		  if(arr[0]==1) {
+				alert('修改成功');
+				location.reload();
+			}
+		  else alert(arr[1]);
+		});
+	}
+</script>
+<include file="public:mfooter"/> 

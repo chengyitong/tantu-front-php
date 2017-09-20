@@ -1,0 +1,36 @@
+<neq name="page.len" value="">
+  <tfoot>
+  <tr class="table_page">
+  	<td colspan="30">
+  	<div class="tdp">
+	  	<div>共有 {$page.len} 条数据, {$page.tol} 页 <neq name="page.hide" value="1">[{$page.per}/页]</neq></div>
+	  	<neq name="page.hide" value="1">
+	  	<eq name="page.cur" value="1">
+			<input type="button" class="sys_button btn_disabled" value="上一页" />
+		<else/>
+			<input type="button" class="sys_button btn_gray" value="上一页" onclick="location='{$page.url}&curpage={$page.pre}';" />
+	  	</eq>
+	  	<select onchange="location='{$page.url}&curpage='+this.value;">
+	  		<for start="1" end="$page.tol" comparison="elt">
+	  		<option value="{$i}"<eq name="page.cur" value="$i"> selected="seleted"</eq>>{$i}</option>
+	  		</for>
+	  	</select>
+	  	<eq name="page.cur" value="$page.tol">
+			<input type="button" class="sys_button btn_disabled" value="下一页" />
+		<else/>
+			<input type="button" class="sys_button btn_gray" value="下一页" onclick="location='{$page.url}&curpage={$page.nex}';" />
+	  	</eq>
+	  	</neq>
+  	</div>
+  	</td>
+  </tr>
+  </tfoot>
+<else/>
+  <tfoot>
+  <tr>
+  	<td colspan="10">
+  		没有数据
+  	</td>
+  </tr>
+  </tfoot>
+</neq>

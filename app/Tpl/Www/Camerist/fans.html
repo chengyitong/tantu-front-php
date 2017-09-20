@@ -1,0 +1,24 @@
+<include file="public:cheader" />
+<div class="wrapper">
+    <div class="fans">
+        <div class="fans-list clearfix">
+            <div class="fans-margin">
+                <volist name="data.fans" id="vofans">
+                    <div class="list float">
+                        <a target="_blank" href="/camerist/gallery?uid={$vofans.id}">
+                            <div class="float"><img src="/static/<php>if($vofans['avatar']) echo 'uploadfiles/images/'.$vofans['avatar'];else echo 'images/tx.png';</php>" width="70" style="border-radius:35px;" /></div>
+                            <div class="float" style="margin:5px;">
+                                <div style="font-size:16px;width:110px;white-space:nowrap;text-overflow:ellipsis;">{:cstr($vofans['nickname'],'匿名')}</div>
+                                <div style="margin:10px 0;color:#888;">{$vofans.fans_count}&nbsp;粉丝</div>
+                                <div>{$vofans.img_count}&nbsp;作品</div>
+                            </div>
+                        </a>
+                        <php>if($vofans['id']!=$data['user']['id']){</php><span onClick="fouc({$vofans.id})" style="float: right;" class="<php>if($vofans['followed']==1) echo 'fansbtn_2'; else echo 'fansbtn';</php>"><php>if($vofans['followed']==1) echo '取消关注';else echo '关注';</php></span>
+                        <php>}</php>
+                    </div>
+                </volist>
+            </div>
+        </div>
+    </div>
+</div>
+<include file="public:mfooter" />

@@ -1,0 +1,1 @@
+<?php	return array ( 0 => 'id', 1 => 'colorname', 2 => 'colorvalue', 3 => 'ctime', 4 => 'sortno', 5 => 'isuse', '_autoinc' => true, '_pk' => 'id', '_type' => array ( 'id' => 'int(11)', 'colorname' => 'varchar(255)', 'colorvalue' => 'varchar(255)', 'ctime' => 'datetime', 'sortno' => 'int(11)', 'isuse' => 'tinyint(1)', ), );?>

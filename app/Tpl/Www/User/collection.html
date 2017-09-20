@@ -1,0 +1,115 @@
+ <include file="public:mheader"/>
+ <script>
+ $(function(){
+	$('.list32').mouseover(function(){
+		$(this).find('.discuz').show();	
+	}).mouseout(function(){
+		$(this).find('.discuz').hide();
+	});
+	$('.colpencil').click(function(){
+		var id=$(this).data('id');	
+		var fname = $(this).data('fname');
+		var show = $(this).data('show');
+		$('#foldername').val(fname);
+		global.n_select_value('show',show);
+		$('#fid').val(id);
+		
+	})
+ });
+ 
+function delfolder(fid){
+	if(!confirm('确定删除该收藏夹（此操作将会清空此收藏夹的所有照片）!')) return;
+	$.getJSON('/user/favclass_del?id='+fid+'&callback=?',function(json){
+		alert(json.info);
+		if(json.status==1){
+			$('.ff'+fid).remove();
+		}
+	});
+}
+function makesure(){
+		var name=$('#foldername').val();
+		var show=$('#show').val();
+		var fid=$('#fid').val();
+	$.getJSON('/user/favclass_upt?id='+fid+'&name='+name+'&show='+show+'&callback=?',function(json){
+		alert(json.info);
+		location.reload();
+	});
+}
+ </script>
+<div class="wrapper1" style="min-height:300px;">
+  <div class="fans">
+    <div class="fans-list clearfix" style="margin-top:20px;">
+      <div class="fans-margin">
+      	<php>if(!$data['list']) echo '暂没收藏图片';</php>
+      	<volist name="data.list" id="vo">
+        <div class="list3 float ff{$vo.id}">
+          <div class="list3 float">
+            <div class="list32 float">
+              <div onclick="location='/user/collection_list?id={$vo.id}';" style="cursor:pointer;width:100%; height:272px;background:url({$vo.topimg});background-position: center;background-size:cover;border-bottom:1px solid #eeeff2;" ></div>
+              <div style="font-size:20px; text-align:center; margin-top:20px">{$vo.foldername}  <img src="/static/images/<php>if($vo['show']) echo 'unlock.png'; else echo 'locked.png';</php>" height="20" /></div>
+              <div style=" text-align:center; margin:10px; color:#b9c1c7">{$vo.img_count}张图片</div>
+              <div class="discuz" style="position:absolute; right:10px; top:10px" onclick="delfolder({$vo.id})"><img src="/static/images/colclose.png" /></div>
+              <div class="discuz" style="position:absolute;bottom: 80px;padding: 5px 10px; height:37px;width: 100%;background: rgba(0, 0, 0, 0.2) none repeat scroll 0% 0%; ">
+                 <div style="float:right;margin-top:4px;" data-toggle="modal" data-fname="{$vo.foldername}" data-show="{$vo.show}" data-id="{$vo.id}" data-target="#myalbum" class="colpencil">
+                 	<img src="/static/images/colpencil.png"  />
+                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      	</volist>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Modal-->
+<div class="modal fade" id="myalbum" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog mod1">
+    <div class="modal-content modwh100">
+      <div class="modal-header modborder0" style="background-color:#eceff1">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title text-center" >修改收藏夹名</h4>
+      </div>
+      <div class="modal-body">
+        <div class="mod2">
+          <div class="clearfix almod22a">
+            <div style="margin:0 auto;width:300px;">
+                <label for="mobile" class="control-label"><font color="red">*</font>收藏夹名:</label> 
+                <div>
+                  <input class="form-control" id="foldername"  type="text"  >
+                  <input class="form-control" id="fid"  type="hidden"  >
+                </div>
+                <div class="clearfix"></div>
+            </div>
+              <div style="margin:0 auto;width:300px;">
+                  <label for="mobile" class="control-label"><font color="red">*</font>公开:</label> 
+                  <div>
+                    <select class="form-control" id="show">
+                    	<option value="0">否</option>
+                    	<option value="1">是</option>
+                    </select>
+                  </div>
+                  <div class="clearfix"></div>
+              </div>
+            <div class="">
+                
+                <div class="clearfix"></div>
+                
+            </div>
+            <div class="" style="margin: 40px 100px;">
+            <div>
+                	<div class="alsumitbgc form-control" style="text-align:center;cursor:pointer;width:122px;margin:0 auto;" onclick="makesure()"> 确 定 </div>
+                <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+</div>
+
+<include file="public:mfooter"/> 

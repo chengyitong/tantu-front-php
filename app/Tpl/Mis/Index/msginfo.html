@@ -1,0 +1,42 @@
+<include file="public:header" />
+<script>
+function gopage(name,url,id){
+	parent.addTab(name,url,'',id);
+}
+</script>
+<style>
+a{color:blue;}
+</style>
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <thead>
+  <tr>
+    <th width="8%">ID</th>
+    <th width="10%">类型</th>
+    <th>内容</th>
+    <th width="10%">已读</th>
+    <th width="20%">日期</th>
+    <th width="20%">操作</th>
+  </tr>
+  </thead>
+  <tbody>
+  <volist name="data.r" id="vo">
+  <tr>
+    <td align="center">{$vo.id}</td>
+    <td align="center">{$vo.type}</td>
+    <td>{$vo.content}</td>
+    <td align="center"><eq name="vo.hasread" value="0">×<else/>√</eq></td>
+    <td align="center">{$vo.createtime}</td>
+    <td align="center">
+    <eq name="vo.hasread" value="0">
+    <input type="button" class="sys_button btn_orange" value="已读" onclick="if(confirm('确认已读?')) location='/index/msgread?id={$vo.id}';" />
+    </eq>
+    <input type="button" class="sys_button btn_del" value="删除" href="/index/msgdel" data-id="{$vo.id}" callback="" />
+    </td>
+  </tr>
+  </volist>
+  </tbody>
+  <include file="public:table_page" />
+</table>
+</div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<include file="public:cheader" />
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.flex-images.css">
+<script type="text/javascript" src="/static/js/jquery.flex-images.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery.lazyload.min.js"></script>
+<script>
+function onkey(val) {
+    if (window.event.keyCode == 13) window.open('/index/search?kw=' + escape(global.trim(val)));
+}
+</script>
+<!--图片展示  -->
+<div class="container container-whitespace container-feature">
+    <div class="text-center" style="margin:40px"><span class="float"><button class="btn btn-default" onclick="history.go(-1)" type="button">返回</button></span><span style="font-size:22px;">《{$data.folder.foldername}》 专辑</span></div>
+    <div class="flex-images" style="margin: 0 16px;">图片加载中...</div>
+    <div class="fanye" style="margin:10px;text-align: center;"></div>
+    <hr class="hrsty" />
+</div>
+<include file="public:loadimg" />
+<include file="public:footer" />
+<!--Modal-->
+<div class="modal fade" id="galModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-height:364px; max-width:675px; width:675px; height:364px; margin-top:185px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title"><span style="color:#f16172">从本专辑选择一张作品作为封面</span></h4>
+            </div>
+            <div class="modal-body">
+                <div style="height:auto ; margin:10pa auto">
+                    <div class="float" style="margin:5px; width:150px ; height:100px; border:1px solid #999;position:relative ; background-image:url(../../../../static/images/glabg.png); background-size:100%;"><img src="../../../../static/images/gla1.png" style="position:absolute; right:10px; bottom:5px;" /></div>
+                    <div class="float" style="margin:5px; width:150px ; height:100px; border:1px solid #999; position:relative;background-image:url(../../../../static/images/glabg.png); background-size:100%;"><img src="../../../../static/images/gla0.png" style="position:absolute; right:10px; bottom:5px;" /></div>
+                    <div class="float" style="margin:5px; width:150px ; height:100px; border:1px solid #999;position:relative;background-image:url(../../../../static/images/glabg.png); background-size:100%;"><img src="../../../../static/images/gla0.png" style="position:absolute; right:10px; bottom:5px;" /></div>
+                    <div class="float" style="margin:5px; width:150px ; height:100px; border:1px solid #999;position:relative;background-image:url(../../../../static/images/glabg.png); background-size:100%;"><img src="../../../../static/images/gla0.png" style="position:absolute; right:10px; bottom:5px;" /></div>
+                    <div class="float" style="margin:5px; width:150px ; height:100px; border:1px solid #999;position:relative;background-image:url(../../../../static/images/glabg.png); background-size:100%;"><img src="../../../../static/images/gla0.png" style="position:absolute; right:10px; bottom:5px;" /></div>
+                    <div class="float" style="margin:5px; width:150px ; height:100px; border:1px solid #999;position:relative;background-image:url(../../../../static/images/glabg.png); background-size:100%;"><img src="../../../../static/images/gla0.png" style="position:absolute; right:10px; bottom:5px;" /></div>
+                    <div class="float" style="margin:5px; width:150px ; height:100px; border:1px solid #999;position:relative;background-image:url(../../../../static/images/glabg.png); background-size:100%;"><img src="../../../../static/images/gla0.png" style="position:absolute; right:10px; bottom:5px;" /></div>
+                    <div class="float" style="margin:5px; width:150px ; height:100px; border:1px solid #999;position:relative;background-image:url(../../../../static/images/glabg.png); background-size:100%;"><img src="../../../../static/images/gla0.png" style="position:absolute; right:10px; bottom:5px;" /></div>
+                    <div class="float" style="margin:5px; width:150px ; height:100px; border:1px solid #999;position:relative;background-image:url(../../../../static/images/glabg.png); background-size:100%;"><img src="../../../../static/images/gla0.png" style="position:absolute; right:10px; bottom:5px;" /></div>
+                    <div class="float" style="margin:5px; width:150px ; height:100px; border:1px solid #999;position:relative;background-image:url(../../../../static/images/glabg.png); background-size:100%;"><img src="../../../../static/images/gla0.png" style="position:absolute; right:10px; bottom:5px;" /></div>
+                    <div class="float" style="margin:5px; width:150px ; height:100px; border:1px solid #999;position:relative;background-image:url(../../../../static/images/glabg.png); background-size:100%;"><img src="../../../../static/images/gla0.png" style="position:absolute; right:10px; bottom:5px;" /></div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default">取消</button>
+                <button type="button" class="btn btn-primary allbgc" style="border:0px">确定</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

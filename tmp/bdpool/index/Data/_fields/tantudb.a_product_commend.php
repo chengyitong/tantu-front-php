@@ -1,0 +1,1 @@
+<?php	return array ( 0 => 'id', 1 => 'parentid', 2 => 'productid', 3 => 'uid', 4 => 'commendtxt', 5 => 'isuse', 6 => 'ctime', '_autoinc' => true, '_pk' => 'id', '_type' => array ( 'id' => 'int(11)', 'parentid' => 'int(11)', 'productid' => 'int(11)', 'uid' => 'int(11)', 'commendtxt' => 'text', 'isuse' => 'tinyint(1)', 'ctime' => 'datetime', ), );?>

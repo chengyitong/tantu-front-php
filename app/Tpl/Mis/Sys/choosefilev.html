@@ -1,0 +1,49 @@
+<include file="public:header" />
+<script>
+var doing = false;
+function toupload(){
+	if(doing) return false;
+	if($('input[name=sel]:checked').val()==null){
+		alert('请先选择图片!');return;
+	}
+	doing = true;
+	$('.btn_upload').val('提交中,请稍候...');
+	$('.btn_upload').addClass('btn_disabled');
+	$('#form1').submit();
+}
+</script>
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <thead>
+  <tr>
+    <th class="title" colspan="2" style="border-bottom:1px solid gray;">文件</th>
+  </tr>
+  </thead>
+  <form action="/sys/choosefile" method="post" id="form1">
+  <tr>
+    <td style="background:#FFF;">
+    <php>if(!$data['r']):</php>
+    尚未上传图片
+    <php>else:</php>
+    选择文件:<br />
+    <input type="hidden" name="fieldid" value="{$data.fieldid}" />
+    <input type="hidden" name="id" value="{$data.id}" />
+    <input type="hidden" name="field" value="{$data.field}" />
+    <input type="hidden" name="table" value="{$data.table}" />
+    <volist name="data.r" id="vo">
+    <div style="height:70px;width:50px;border:#373737 1px solid;float:left;text-align:center;margin:10px 10px 0 0;padding:5px;" onclick="$('#sel{$vo.id}').prop('checked',true);">
+    	<img src="/static/uploadfiles/sys/{$vo.imgname}" style="max-height:50px;max-width:50px;" /><br />
+        <input type="radio" name="sel" id="sel{$vo.id}" value="{$vo.id}" />选择
+    </div>
+    </volist>
+    <div style="clear:both;"></div>
+    <br /><br />
+    <input type="button" value="提交" class="sys_button btn_upload" onclick="toupload();" />
+    <input type="button" value="返回" class="sys_button" onclick="history.back();" />
+    <php>endif;</php>
+    <br /><br />
+    </td>
+  </tr>
+  </form>
+</table>
+</body>
+</html>

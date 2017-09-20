@@ -1,0 +1,67 @@
+<include file="public:header" />
+{:loadplug_editor('syscoderemark3');}
+<script>
+$(function() {
+});
+</script>
+<style>
+label {
+	width: 60px;
+	text-align: right;
+	display: inline-block
+}
+tr{margin:5px 0;}
+</style>
+<form action="/hotel/upthotel" method="post">
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <thead>
+  <tr>
+    <th>信息修改</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>
+        <label>ID: </label>
+		<input name="id" id="id" type="text" value="{$data.r.id}" readonly="readonly" style="background-color:#EEE;" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>酒店名称: </label>
+        <input name="hotelname_cn" id="hotelname_cn" type="text" value="{$data.r.hotelname_cn}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>酒店官网: </label>
+		<input name="hotelurl" id="hotelurl" type="text" value="{$data.r.hotelurl}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label>酒店电话: </label>
+        <input type="text" name="hoteltel" value="{$data.r.hoteltel}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>酒店位置: </label>
+        <input name="hoteladdr" id="hoteladdr" type="text" value="{$data.r.hoteladdr}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label >创建时间: </label>
+        <input name="ctime" id="ctime" type="text" value="{$data.r.ctime}" readonly="readonly" style="background-color:#EEE;" />
+    </td>
+  </tr>
+  
+  </tbody>
+  <tr>
+  	<td align="center" bgcolor="#EEEEEE"><input type="submit" class="sys_button" value=" 修改 " /> <input type="button" class="sys_button" onClick="parent.window.close();" value=" 关闭 " /></td>
+  </tr>
+</table>
+</form>
+</body>
+</html>

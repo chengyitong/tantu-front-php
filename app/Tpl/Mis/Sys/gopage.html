@@ -1,0 +1,56 @@
+<include file="public:header" />
+<script>
+	$(function(){
+		var b={$id};
+		  $.get("/sys/getzcd?id="+b, function(data){
+				var ww=data.split(",");
+				for(var i=0;i<ww.length-1;i++)
+				{
+					var a1="xz"+ww[i];
+					$("#"+a1).attr('disabled',true);
+				}
+		   });
+	});
+</script>
+<form action="/sys/gopage_upt" method="post">
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+	<thead>
+	<tr class="title">
+		<th class="title">转到</th>
+	</tr>
+	</thead>
+	<tbody>
+	<volist name="code" id="vo">
+	<eq name="vo.syscode_level" value="1">
+	<tr>
+		<td <eq name="vo.syscode_id" value="$id">style="color:blue;"</eq>>
+			<eq name="vo.syscode_id" value="$id"><input type="hidden" id="{$id}"  name="level" value="{$vo.syscode_level}" /></eq>
+			<input type="radio" id="xz{$vo.syscode_id}" name="radio" value="{$vo.syscode_parentid},{$vo.syscode_sortno},{$vo.syscode_level}" <eq name="vo.syscode_id" value="$id">disabled="disabled"</eq> />
+			{$vo.syscode_name}
+		</td>
+	</tr>
+			{:dogopage($vo['syscode_id'],$code,$id)}
+	</eq>
+	</volist>
+	<tr>
+		<td>
+			<select name="qh">
+				<option value="1">之前</option>
+				<option value="2">之后</option>
+			</select>
+		</td>
+	</tr>
+	</tbody>
+	<tfoot>
+	<tr>
+		<td align="center" bgcolor="#EEEEEE">
+			<input type="hidden" name="id" value="{$id}" />
+			<input type="submit" class="sys_button" value=" 修改 " />
+			<input type="button" class="sys_button" onClick="parent.window.close();" value=" 关闭 " />
+		</td>
+	</tr>
+	</tfoot>
+</table>
+</form>
+</body>
+</html>

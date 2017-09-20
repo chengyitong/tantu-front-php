@@ -1,0 +1,50 @@
+<include file="public:header" />
+<script>
+var doing = false;
+function toupload(){
+	if(doing) return false;
+	doing = true;
+	$('.btn_upload').val('上传中,请稍候...');
+	$('.btn_upload').addClass('btn_disabled');
+	$('#form').submit();
+}
+</script>
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <thead>
+  <tr>
+    <th class="title" colspan="2" style="border-bottom:1px solid gray;">文件</th>
+  </tr>
+  </thead>
+  <form action="/sys/uploadfile" method="post" enctype="multipart/form-data" id="form">
+  <tr>
+    <td style="background:#FFF;">
+    上传文件:<br />
+    <input type="file" name="userfile" size="20" />
+    <input type="hidden" name="fieldid" value="{$data.fieldid}" />
+    <input type="hidden" name="id" value="{$data.id}" />
+    <input type="hidden" name="field" value="{$data.field}" />
+    <input type="hidden" name="table" value="{$data.table}" />
+    <input type="hidden" name="src" value="{$data.src}" />
+    <br /><br />
+    <input type="button" value="上传" class="sys_button btn_upload" onclick="toupload();" />
+    <br /><br />
+    或 <input type="button" class="sys_button" onclick="location='/sys/choosefilev?table=syscode&fieldid=syscode_id&id={:I('get.id')}&field=syscode_imgid';" value="从图片库选择" />
+    <br /><br />
+    </td>
+  </tr>
+  </form>
+</table>
+<php>if($data['r'][I('get.field')]):</php>
+<form action="/sys/uploadfile_del" method="post" id="form1">
+<input type="hidden" name="id" value="{$data.id}" />
+<input type="hidden" name="fieldid" value="{$data.fieldid}" />
+<input type="hidden" name="name" value="<php>echo $data['r'][I('get.field')];</php>" />
+<input type="hidden" name="field" value="{$data.field}" />
+<input type="hidden" name="table" value="{$data.table}" />
+<input type="hidden" name="src" value="{$data.src}" />
+<img src="{$data.src}<php>echo $data['img']['imgname'];</php>" style="padding:5px 0;max-width:100%;" /><br />
+<input type="button" class="sys_button" value="移除" onclick="if(confirm('确定移除图片?')) $('#form1').submit();" />
+</form>
+<php>endif;</php>
+</body>
+</html>

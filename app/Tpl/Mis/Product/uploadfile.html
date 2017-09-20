@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head> 
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+<link rel="stylesheet" type="text/css" href="/static/css/global.css" /> 
+<link rel="stylesheet" type="text/css" href="/static/plugs/imgareaselect/imgareaselect.css" /> 
+<script type="text/javascript" src="/static/plugs/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="/static/js/global.js"></script>
+<script type="text/javascript" src="/static/plugs/imgareaselect/imgareaselect.js"></script> 
+<script type="text/javascript"> 
+var cut_w = 720, cut_h = 432;
+function preview(img, selection) {
+	$('#x').val(selection.x1);
+	$('#y').val(selection.y1);
+	$('#w').val(selection.width);
+	$('#h').val(selection.height);
+	
+	var scaleX = cut_w / (selection.width || 1);
+	var scaleY = cut_h / (selection.height || 1);
+	$('#ferret > img').css({
+		width: Math.round(scaleX * $('#selectbanner').width()) + 'px',
+		height: Math.round(scaleY * $('#selectbanner').height()) + 'px',
+		marginLeft: '-' + Math.round(scaleX * selection.x1) + 'px',
+		marginTop: '-' + Math.round(scaleY * selection.y1) + 'px'
+	});
+}
+var save = false;
+//这里通过jQuery语法在原来图片后插入预览的小图片 
+$(function (){
+	$('#w').val(cut_w);
+	$('#h').val(cut_h);
+	$('#ferret').css({'width':cut_w,'height':cut_h,'border':'#CCC 1px solid'});
+	$('#selectbanner').imgAreaSelect({
+		selectionColor: 'blue', x1:0, y1:0, x2:cut_w,y2:cut_h,//初始位置
+		maxWidth:$('#selectbanner').width(),
+		aspectRatio: cut_w+':'+cut_h,//缩放比例
+		selectionOpacity: 0 ,
+		onSelectEnd: preview //裁剪后执行的函数，在上面
+	});
+	//确认裁剪
+	$("#sliceButton").click(function() {
+		if(save) return false;
+		save = true;
+		var x,y,w,h;
+		$.post("/product/uploadfile_save",
+				{
+					x:$('#x').val(),
+					y:$('#y').val(),
+					w:$('#w').val(),
+					h:$('#h').val(),
+					id:'{$data.id}',
+					pic:'{$data.imgurl}'
+				},
+				function(data){
+					alert('保存成功!');
+					global.ExitPWin('refrash');
+					return;
+					//把裁剪后图片加载到#sure
+					if(data){
+						$('#sure').attr('src',data+'?rad='+Math.random());
+					}
+				}
+			);
+	});
+});
+</script> 
+<title>图片裁剪、预览</title> 
+</head> 
+<body> 
+<div id="s"> 
+<input type="button" onclick="location='/product/backtoupload?url={$data.imgurl}';" value=" 返回重新上传 ">
+<input type="hidden" id="x" value="0" />
+<input type="hidden" id="y" value="0" />
+<input type="hidden" id="w" value="0" />
+<input type="hidden" id="h" value="0" />
+</div>
+<div class="left">
+	<div class="tit">效果图预览</div>
+	<div id="ferret"><img src="{$data.imgurl}" /></div>
+    <div class="vpost">
+    <input type="submit" id="sliceButton" name="sliceButton" value=" 保存 ">
+    </div> 
+</div>
+<div class="right">
+	<div class="tit">原图预览</div>
+    <!--显示图片--> 
+    <img id="selectbanner" name="selectbanner" src="{$data.imgurl}" /> 
+</div>
+<!--确认裁剪--> 
+<div style="clear:both;"></div> 
+<!--显示裁剪后的图片--> 
+</body> 
+</html>

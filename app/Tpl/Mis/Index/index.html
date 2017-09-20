@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="/static/css/global.css" />
+<link rel="stylesheet" type="text/css" href="/static/css/mis_index.css" />
+<script type="text/javascript" src="/static/plugs/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="/static/js/global.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/plugs/jqueryui/themes/easyui.css" />
+<script type="text/javascript" src="/static/plugs/jqueryui/jquery.easyui.min.1.2.2.js"></script>
+<script type="text/javascript" src="/static/plugs/jqueryui/outlook2.js"></script>
+{:loadplug_jgrowl()}
+<title>欢迎使用 BDMIS</title>
+<script type="text/javascript">
+var _menus = {$menu}//结束菜单
+//  发送在线状态并获取时间
+var tryconn = false;
+var reconn = false;
+function rtime(){
+	$.getJSON('/login/servertime?rad='+Math.random(),function(data){
+		if(data['status']==1) $("#shtime").html(data.now);
+		else{
+			alert(data.errinfo);
+			location='/login/out?url=/login';
+		}
+		tryconn = false;
+		loading.hide();
+		setTimeout("rtime();",10000);
+	})
+	.error(function(x,e){
+		if(tryconn){
+			reconn = false;
+			loading.show(0,'与服务器断开连接, <a href="javascript:;" style="color:blue;" onclick="tryconn=false;rtime();">重试</a>',3);
+		}else{
+			loading.show(0,'正在重新连接服务器...');
+			setTimeout("rtime();",5000);
+			if(!reconn) setTimeout("tryconn=true;",20000);
+			reconn = true;
+		}
+	});
+}
+//  显示一次提示框
+var sabout=true;
+function showonce(){
+	if(sabout){
+		$('#showmsg').jGrowl('<a href="javascript:;" onclick="$(this).trigger(\'jGrowl.close\');gomsg();">您有新消息!</a>', {
+			sticky: true,
+			beforeOpen: function(e,m,o) {
+				sabout=false;
+			},
+			close: function(e,m,o) {
+				sabout=true;
+			}
+		});
+	}
+}
+//  显示提示框
+function smsg(txt){
+	$('#showmsg').jGrowl(txt);
+}
+//  打开消息页面
+function gomsg(){
+	parent.addTab('消息','/index/msginfo','','msg');
+}
+//  获取新消息数量
+var msgs = 0;
+function msgn(){
+	$.getJSON('/index/msg?rad='+Math.random(),function(d){
+		$('#msgspan').html(d.number);
+		if(Number(d.number)>msgs) showonce();
+		msgs=d.number;
+	})
+	.error(function(x,e){
+		return false;
+	});
+	setTimeout('msgn();',10000);
+}
+//  菜单消息提醒
+function menu_tip(){
+	//  
+}
+$(function(){
+	//  发送在线状态并获取时间
+	rtime();
+	//获取消息
+	msgn();
+	//  菜单消息提醒
+	//menu_tip();
+});
+</script>
+<style>
+</style>
+</head>
+<body class="easyui-layout" style="overflow-y: hidden"  scroll="no">
+<noscript>
+<div style=" position:absolute; z-index:100000; height:2046px;top:0px;left:0px; width:100%; background:white; text-align:center;">
+    <img src="images/noscript.gif" alt='抱歉，请开启脚本支持！' />
+</div>
+</noscript>
+	<!-- 顶部-->
+    <div region="north" split="false" border="false" id="frames_top" style=" overflow-y: hidden; ">
+        <div class="frames_top_title">
+			{$storename}管理信息系统
+			<span style="font-size: 12px;">{$version}</span>
+		</div>
+		<div class="frames_top_links" align="right">
+			欢迎您 >>> {:session('bdmis_name')}
+			|
+			<a target="_blank" href="{:main_domain()}">前端网站</a>
+			|
+			<a href="/login/out?url=/login">安全退出</a><!--
+			|
+			<a href="javascript:void(0);" onclick="if(confirm('确定退出系统?')) location='/login/out';">安全退出</a>-->
+            <div id="shtime" align="right" style="margin-top:8px;font-size:15px;font-family:Verdana;"></div>
+		</div>
+    </div>
+	<!-- 右侧菜单栏-->
+	<div region="east" hide="true" split="false" minSize="800" maxSize="100%" title="系统目录" style="width:200px; font-size:14px; overflow: hidden;" id="west">
+			<div id="nav" class="easyui-accordion" fit="true" border="false"></div>
+	</div>
+    <div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden">
+        <div id="tabs" class="easyui-tabs"  fit="true" border="false" >
+			<div title="欢迎使用" style="overflow:hidden;" >
+				<iframe name="123" src="/index/main" frameborder="0" width="100%" height="100%" scrolling="auto"></iframe> 
+			</div>
+		</div>
+    </div>
+	<!-- 底部信息-->
+    <div region="south" split="false" id="frames_bottom" style="height: 26px; border:0; background-color:#2E5B89;">
+        <div class="tab">授权: {$storename}</div>
+        <div class="tab">有效期: {$usetodate}</div>
+        <div class="tab"><a href="javascript:void(0);" onclick="gomsg();">消息[<span id="msgspan">0</span>]条</a></div>
+        <div class="tab">系统角色: {$rulename}</div>
+        <div class="tab"><span onclick="smsg('边度网络科技版权所有<br /><br />BDMIS {$version}');">BDMIS &copy; Since 2004</span></div>
+        <div class="clearboth"></div>
+    </div>
+	<!-- 消息提醒-->
+    <div id="showmsg" class="bottom-right"></div>
+	<!-- 右键菜单-->
+	<div id="mm" class="easyui-menu" style="width:150px;">
+		<div id="mm-tabupdate">刷新</div>
+		<div class="menu-sep"></div>
+		<div id="mm-tabclose">关闭</div>
+		<div id="mm-tabcloseall">全部关闭</div>
+		<div id="mm-tabcloseother">除此之外全部关闭</div>
+		<div class="menu-sep"></div>
+		<div id="mm-tabcloseright">当前页右侧全部关闭</div>
+		<div id="mm-tabcloseleft">当前页左侧全部关闭</div>
+		<div class="menu-sep"></div>
+		<div id="mm-exit">退出</div>
+	</div>
+</body>
+</html>

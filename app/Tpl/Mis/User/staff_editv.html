@@ -1,0 +1,85 @@
+<include file="public:header" />
+{:loadplug_editor('syscoderemark3');}
+<script>
+$(function() {
+});
+</script>
+<style>
+label {
+	width: 80px;
+	text-align: right;
+	display: inline-block
+}
+tr{margin:5px 0;}
+</style>
+<form action="/user/uptstaff?id={$data.r.id}" method="post">
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <thead>
+  <tr>
+    <th>信息修改</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>
+        <label>ID: </label>
+		<input name="id" id="id" type="text" value="{$data.r.id}" readonly="readonly" style="background-color:#EEE;" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>員工編號: </label>
+        <input name="hotelname_cn" id="staffno" type="text" value="{$data.r.staffno}" style="background-color:#EEE;" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>用戶名: </label>
+		<input name="username" id="username" type="text" value="{$data.r.username}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>員工名稱: </label>
+        <input name="name" id="name" type="text" value="{$data.r.name}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>電話: </label>
+        <input name="tel" id="tel" type="text" value="{$data.r.tel}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>郵箱: </label>
+        <input name="email" id="email" type="text" value="{$data.r.email}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>積分: </label>
+        <input name="jifen" id="jifen" type="text" value="{$data.r.jifen}" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+		<label>最後登錄時間: </label>
+        <input name="lastlogin" id="lastlogin" type="text" value="{$data.r.lastlogin}" readonly="readonly" style="background-color:#EEE;" />
+    </td>
+  </tr>
+  <tr>
+    <td>
+        <label >創建時間: </label>
+        <input name="ctime" id="ctime" type="text" value="{$data.r.ctime}" readonly="readonly" style="background-color:#EEE;" />
+    </td>
+  </tr>
+  
+  </tbody>
+  <tr>
+  	<td align="center" bgcolor="#EEEEEE"><input type="submit" class="sys_button" value=" 修改 " /> <input type="button" class="sys_button" onClick="parent.window.close();" value=" 关闭 " /></td>
+  </tr>
+</table>
+</form>
+</body>
+</html>

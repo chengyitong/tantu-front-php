@@ -1,0 +1,165 @@
+<include file="public:header" />
+<style>
+	li{list-style:none; margin-left:20px; height:25px; width:460px;}
+</style>
+<script>
+var System = function(){
+	this.rule0 = function(id,id2,txt){
+		var pid = ','+id2;
+		var kuang = $('#lev'+id).attr('value');
+		if(document.getElementById('menu'+id).checked){
+			//  解锁二级菜单
+			var menu = document.getElementsByName('menu'+id);
+			for(var i=0;i<menu.length;i++){
+				document.getElementsByName('menu'+id)[i].disabled=false;
+				if(!document.getElementsByName('menu'+id)[i].checked)
+					document.getElementsByName('menu'+id)[i].click();
+			}
+			//  解锁用户
+			$('#lev'+id).attr('value',kuang+pid);
+			var user_item = document.getElementsByName('user'+id).length;
+			for(var i=0;i<user_item;i++){
+				document.getElementsByName('user'+id)[i].disabled=false;
+				if(!document.getElementsByName('user'+id)[i].checked)
+					document.getElementsByName('user'+id)[i].click();
+			}
+		}else{
+			// 锁定二级菜单
+			var menu = document.getElementsByName('menu'+id);
+			for(var i=0;i<menu.length;i++){
+				if(document.getElementsByName('menu'+id)[i].checked)
+					document.getElementsByName('menu'+id)[i].click();
+				document.getElementsByName('menu'+id)[i].disabled=true;
+			}
+			//  锁定用户
+			kuang = kuang.replace(pid,'');
+			$('#lev'+id).attr('value',kuang);
+			$('#user_txt'+id).attr('value',txt);
+			var user_item = document.getElementsByName('user'+id).length;
+			for(var i=0;i<user_item;i++){
+				if(document.getElementsByName('user'+id)[i].checked)
+					document.getElementsByName('user'+id)[i].click();
+				document.getElementsByName('user'+id)[i].checked=false;
+				document.getElementsByName('user'+id)[i].disabled=true;
+			}
+		}
+	}
+	this.rule1 = function(id,id2,txt){
+		var pid = ','+id2;
+		var kuang = $('#lev'+id).attr('value');
+		if(document.getElementById('menu'+id).checked){
+			//  解锁用户
+			$('#lev'+id).attr('value',kuang+pid);
+			var user_item = document.getElementsByName('user'+id).length;
+			for(var i=0;i<user_item;i++){
+				document.getElementsByName('user'+id)[i].disabled=false;
+			}
+		}else{
+			//  锁定用户
+			kuang = kuang.replace(pid,'');
+			$('#lev'+id).attr('value',kuang);
+			$('#user_txt'+id).attr('value',txt);
+			var user_item = document.getElementsByName('user'+id).length;
+			for(var i=0;i<user_item;i++){
+				document.getElementsByName('user'+id)[i].checked=false;
+				document.getElementsByName('user'+id)[i].disabled=true;
+			}
+		}
+	}
+	this.rule2 = function(mid,uid){
+		var kuang = $('#user_txt'+mid).attr('value');
+		var userid = ','+uid;
+		if(document.getElementById('user'+uid+'_'+mid).checked){
+			$('#user_txt'+mid).attr('value',kuang+userid);
+		}else{
+			kuang = kuang.replace(userid,'');
+			$('#user_txt'+mid).attr('value',kuang);
+		}
+	}
+}
+var system = new System();
+</script>
+<form action="/sys/permission_upt?url={:GetCurUrl()}" method="post">
+<div align="center"><h2>{$type.syscode_name}权限管理</h2></div>
+<div style="width:50%;text-align:left;margin-left:25%;">
+<volist name="menu" id="vo">
+	<eq name="vo.syscode_level" value="2">
+		<php>
+		//  默认 判断是否已选
+		$echo_chk01 = '';
+		$menu_checked = explode(',',$vo['syscode_remark1']);
+		for($i=0;$i<count($menu_checked);$i++){
+			if($menu_checked[$i]==$type['syscode_id']) $echo_chk01 = ' checked="checked"';
+			continue;
+		}
+		//  结束默认
+		</php>
+	<input type="hidden" name="menuid[]" value="{$vo.syscode_id}" />
+    <input type="checkbox" id="menu{$vo.syscode_id}" name="menu" value="" onclick="system.rule0({$vo.syscode_id},{$type.syscode_id},'{$vo.syscode_remark2}');"{$echo_chk01} />
+	<input type="hidden" id="lev{$vo.syscode_id}" name="level[]" value="{$vo.syscode_remark1}" style="width:30px;" />
+    <span style="font-size:16px"><b>{$vo.syscode_name}</b></span>
+    <volist name="res" id="resvo">
+    	<php>
+		//  循环获取用户信息
+			//  默认 判断是否已选
+			$echo_chk02 = '';
+			if($echo_chk01 == '') $echo_chk02 = ' disabled="disabled"';
+			$menu_checked = explode(',',$vo['syscode_remark2']);
+			for($i=0;$i<count($menu_checked);$i++){
+				if($menu_checked[$i]==$resvo['syscode_id']) $echo_chk02 = ' checked="checked"';
+				continue;
+			}
+			//  结束默认
+    	</php>
+		<input type="checkbox" name="user{$vo.syscode_id}" id="user{$resvo.syscode_id}_{$vo.syscode_id}"{$echo_chk02} onclick="system.rule2({$vo.syscode_id},{$resvo.syscode_id});" />{$resvo.syscode_name}
+    </volist>
+		<input type="hidden" name="user_txt[]" id="user_txt{$vo.syscode_id}" value="{$vo.syscode_remark2}" style="width:30px;" />
+	{//  循环二级菜单}
+		<volist name="menu" id="vo2">
+			<eq name="vo2.syscode_parentid" value="$vo.syscode_id">
+			<php>
+			//  默认 判断是否已选
+			$echo_chk1 = '';
+			if($echo_chk01 == '') $echo_chk1 = ' disabled="disabled"';
+			$menu_checked = explode(',',$vo2['syscode_remark1']);
+			for($i=0;$i<count($menu_checked);$i++){
+				if($menu_checked[$i]==$type['syscode_id']) $echo_chk1 = ' checked="checked"';
+				continue;
+			}
+			//  结束默认
+			</php>
+	<input type="hidden" name="menuid[]" value="{$vo2.syscode_id}" />
+	<li><input type="checkbox" id="menu{$vo2.syscode_id}" name="menu{$vo.syscode_id}" value="" onclick="system.rule1({$vo2.syscode_id},{$type.syscode_id},'{$vo2.syscode_remark2}');"{$echo_chk1} />{$vo2.syscode_name}
+		<input type="hidden" id="lev{$vo2.syscode_id}" name="level[]" value="{$vo2.syscode_remark1}" style="width:30px;" />
+	<span style="float:right;">
+	{//  循环获取用户信息}
+		<volist name="res" id="resvo2">
+			<php>
+			//  默认 判断是否已选
+			$echo_chk2 = '';
+			if($echo_chk1 == '' || $echo_chk01 == '') $echo_chk2 = ' disabled="disabled"';
+			$menu_checked = explode(',',$vo2['syscode_remark2']);
+			for($i=0;$i<count($menu_checked);$i++){
+				if($menu_checked[$i]==$resvo2['syscode_id']) $echo_chk2 = ' checked="checked"';
+				continue;
+			}
+			//  结束默认
+			</php>
+		<input type="checkbox" name="user{$vo2.syscode_id}" id="user{$resvo2.syscode_id}_{$vo2.syscode_id}"{$echo_chk2} onclick="system.rule2({$vo2.syscode_id},{$resvo2.syscode_id});" />{$resvo2.syscode_name}
+		</volist>
+		<input type="hidden" name="user_txt[]" id="user_txt{$vo2.syscode_id}" value="{$vo2.syscode_remark2}" style="width:30px;" />
+	</span>
+	</li>
+			</eq>
+		</volist>
+	<hr>
+	</eq>
+</volist>
+<center>
+<input type="submit" class="sys_button" value="保存" />
+<input type="button" class="sys_button" onclick="location='/sys/permission';" value="返回" />
+</center>
+</div>
+</form>
+</body>
+</html>

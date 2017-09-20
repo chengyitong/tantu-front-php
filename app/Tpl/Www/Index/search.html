@@ -1,0 +1,106 @@
+<include file="public:header" />
+<div class="container">
+        <div style="margin-top: 50px;">
+            <div class="col-lg-4 col-md-4" style="padding-left:20px;">
+                <div class="input-group seacon1input">
+                    <input type="text" onkeydown="onkey(this.value)" class="form-control searchTxt" id="searchcon" value="{:unescape(I('get.kw'))}" placeholder="搜索" style="z-index: 0;">
+                    <span class="input-group-btn">
+            <button class="btn searchBtn" style="padding:2px 20px;background:#f16172;" type="button" onclick="location='?kw='+escape(global.trim($('#searchcon').val()));"><i class="glyphicon" style="background:url(/static/images/iconsearch.png) no-repeat;top: 3px;"></i></button>
+            </span> </div>
+            </div>
+            <div class="col-lg-8 col-md-12">
+                <div class="seanewsearch" style="float: right;">
+                    <div class="categorys">
+                        <span style="color: #999;">分类:</span>
+                        <volist name="data.class" id="vo_cl">
+                            <php>if($i
+                                <7){</php>
+                                    <a href="{:seturlgets('classid,'.$vo_cl['id'].';curpage')}" id="class{$vo_cl.id}" <php>if($_GET['classid']==$vo_cl['id']) echo 'class="selected"';</php>>{$vo_cl.classname}</a>
+                                    <php>}</php>
+                        </volist>
+                        <php>$num =count($data['class']);if($num>=7){</php>
+                        <div class="category-all">
+                            <span class="dropdown-toggle" data-toggle="dropdown">更多<i class="caret"></i></span>
+                            <ul class="dropdown-menu dropdown-menu-right category-more" role="menu" style="width: 250px;">
+                                <volist name="data.class" id="vo_cls">
+                                    <php>if($i>=7){</php>
+                                    <li><a href="{:seturlgets('classid,'.$vo_cls['id'].';curpage')}" id="class{$vo_cls.id}" <php>if($_GET['class']==$vo_cl['id']) echo 'class="selected"';</php>>{$vo_cls.classname}</a></li>
+                                    <php>}</php>
+                                </volist>
+                            </ul>
+                        </div>
+                        <php>}</php>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+</div>
+<div class="search-filter">
+    <div class="container">
+        <div class="col-lg-12 col-md-12">
+            <div class="dropdown float pa--05">
+                <select class="form-control" name="rotate" onchange="location='{:seturlgets('rotateid;curpage')}&rotateid='+this.value;">
+                    <option value="" <php>if($_GET['rotateid']=='') echo ' selected';</php>>全部</option>
+                    <option value="0" <php>if($_GET['rotateid']=='0') echo ' selected';</php>>横向</option>
+                    <option value="1" <php>if($_GET['rotateid']=='1') echo ' selected';</php>>纵向</option>
+                    <option value="2" <php>if($_GET['rotateid']=='2') echo ' selected';</php>>正方</option>
+                </select>
+            </div>
+            <div class="dropdown float pa--05 ">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown"> 图片大小 <span class="caret"></span> </button>
+                <div class="dropdown-menu search-size" role="menu">
+                    <form class="new-filter-size">
+                        <input type="text" class="pagewi float" id="rw" name="width" value="{$data.rw}" placeholder="宽度">
+                        <span class="float">x</span>
+                        <input type="text" class="pagewi float" id="rh" name="height" value="{$data.rh}" placeholder="高度">
+                        <span class="float">px</span>
+                        <input type="button" class="btn btn-sm btn-danger" value="确定" onclick="location='{:seturlgets('wh;curpage')}&wh='+$('#rw').val()+','+$('#rh').val();">
+                    </form>
+                </div>
+            </div>
+            <div class="float" style="line-height:34px;padding: 0 10px;">颜色</div>
+            <div class="seacon1col" onclick="location='{:seturlgets('colorid;curpage')}';" style="cursor: pointer;background:url(/static/images/allcolor.png); ">
+                <php>if($_GET['colorid']=='') echo '<i class="glyphicon glyphicon-ok"></i>';</php>
+            </div>
+            <volist name="data.color" id="vo_c">
+                <div class="seacon1col" data-val="{$vo_c.id}" onclick="location='{:seturlgets('colorid,'.$vo_c['id'].';curpage')}';" style="cursor: pointer;background-color:{$vo_c.colorvalue};">
+                    <php>if($_GET['colorid']==$vo_c['id']) echo '<i class="glyphicon glyphicon-ok"></i>';</php>
+                </div>
+            </volist>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="col-xs-12">
+        <php>if($_GET['kw']){</php>
+        <div class="search-result">
+            关键词：
+            <font>{:unescape(I('get.kw'))}</font>, 共 <span class="alls">0</span> 个结果
+        </div>
+        <php>}</php>
+        <div class="floatright fanye"></div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<!--图片展示  -->
+<div class="container container-whitespace container-feature" style="padding: 0 10px">
+    <div class="flex-images"><p style="margin:0 auto;padding:60px;">图片加载中...</p></div>
+    <div class="col-xs-12">
+        <php>if($_GET['kw']){</php>
+        <div class="search-result">
+            关键词：
+            <font>{:unescape(I('get.kw'))}</font>, 共 <span class="alls">0</span> 个结果
+        </div>
+        <php>}</php>
+        <div class="floatright fanye" style="margin-top: 30px;"></div>
+    </div>
+</div>
+<!-- <div class="container">
+    <div class="col-sm-12 almid signbtnpb">
+    </div>
+</div> -->
+<include file="public:loadimg" />
+<include file="public:mfooter" />

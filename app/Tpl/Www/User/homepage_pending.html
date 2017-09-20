@@ -1,0 +1,156 @@
+<include file="public:mheader"/>
+
+<div class="container1200 center padding_b"> 
+
+  <div class="pcon42 left">
+ 
+    <div class="hpage2">
+    <a href="/user/homepage_pending"><div class="hpage2txt <php>if($data['w']=='-2') echo 'hpselect';</php>"><div class="hpage2txt2"> <p>待处理作品</p><p>{$data.num1}</p></div></div></a>
+    <a href="/user/homepage_pending?status=0"><div class="hpage2txt <php>if($data['w']=='0') echo 'hpselect';</php>"><div class="hpage2txt2"><p>待审核作品</p><p>{$data.num2}</p></div></div></a>
+    <a href="/user/homepage_pending?status=-1"><div class="hpage2txt <php>if($data['w']=='-1') echo 'hpselect';</php>"><div class="hpage2txt2"><p>未通过作品</p><p>{$data.num3}</p></div></div></a>
+    <a href="/user/homepage_pending?status=1"><div class="hpage2txt <php>if($data['w']=='1') echo 'hpselect';</php>"><div class="hpage2txt2"><p>已发布作品</p><p>{$data.num4}</p></div></div></a>
+    <div class="clearfix"></div>
+    </div>
+    <div class="ptips" style=" color:#f16172"><img src="/static/images/tipsicon1.png" style="margin:10px; float:left" width="15" height="15"> <h6>友情提示：探图者们请注意，上传作品后请及时提交审核，1个月之后将作删除处理，不做保留 <span style="float:right;margin-right:10px;" onclick="cha()"><img src="/static/images/cha.png" /></span></h6></div>
+    <br />
+    <php>if(count($data['imgs'])>0){</php>  
+        <div class="fanye" style="margin:10px;text-align:right;">{$data.fanye}</div>
+        
+        <php>if($_GET['status']!='0'){</php>
+         <div class="float-right" style="margin-top:10px;">
+         <button type="button" onclick="del()" class="btn btn7 ">批量删除</button>
+        <button type="button" onclick="muti_modify()" class="btn hpbtn bgc" style="display: inline; height: 41px;">批量修改信息</button>
+         <input class="chkall" type="checkbox" style=" margin-top:15px" /><label for="chkall">全选</label>
+     
+     	</div> 
+    	<php>}</php>
+     <div class="clearfix"></div> 
+    <php>}</php>
+    <br />
+	<volist name="data.imgs" id="voimgs">
+    <div class="hp2page1">
+        <div class="hp2page11" style="display:flex;text-align:center;position:relative;">
+        	<img src="{$voimgs.imgurl}" style="max-width:100%;max-height:100%;vertical-align: middle;margin: auto;" />
+        	<php>if($_GET['status']=='0'){</php>
+            <div style="width:100%;height:40px;position:absolute;top:75px;left: 0;background:#F03;color:#fff;background:rgba(255,40,40,0.6);text-align:center;font-size:26px;line-height:40px;">作品审核中</div>
+        	<php>}</php>
+        </div>
+        <div class="hp2page12">
+        <h5>{$voimgs.name}</h5></li>
+        <h5>[编号] <php>$id=$voimgs['id']+30000000;echo $id;</php></h5>
+        <h5>[分类] {$voimgs.classlist}</h5>
+        <h5>[关键词]{$voimgs.taglist}</h5>
+        <h5>[参数] <php>$size = $voimgs['size']/1024;if(round($size,2)>1024){echo sprintf('%.2f', $size/1024).'MB&nbsp;|&nbsp;';}else{echo round($size,2).'KB&nbsp;|&nbsp;';}if($voimgs['imgext']) echo $voimgs['imgext'].'&nbsp;|&nbsp;';if($voimgs['width']) echo $voimgs['width'].' × '.$voimgs['height'].'&nbsp;|&nbsp;';</php></h5>
+        <h5>[发布时间] {$voimgs.ctime}</h5>
+		<php>if($voimgs['haspass']=='-1'){</php>
+        <br />
+        <h5 style="color:#C00;font-weight:bold;">[审核意见]  {$voimgs.passstr}</h5>
+        <php>}</php>
+        </div>
+        <php>if($_GET['status']!='0'){</php>
+        <div class="hp2page13">
+        <button type="button" onclick="location='/user/production?id={$voimgs.id}&page={:I('get.curpage','1')}&haspass={$voimgs.haspass}';" class="btn hpbtn bgc">修改编辑</button>
+        </div>
+        <div class="hp2page13" style="top: 170px;right: 78px;">
+        	<span onclick="deld({$voimgs.id})" style="cursor:pointer;">删除</span>
+        </div>
+        <div class="hp2pagechackbox" ><input type="checkbox" name="imgid" class="chkimg" value="{$voimgs.id}" /></div>
+        <php>}</php>
+        </div>
+    </volist>
+    
+    <div class="clearfix"></div>  
+    <php>if(count($data['imgs'])>0){</php>  
+        <div class="fanye" style="margin:10px;text-align:right;">{$data.fanye}</div>
+        <php>if($_GET['status']!='0'){</php>
+         <div class="float-right" style="margin-top:10px;">
+         <button type="button" onclick="del()" class="btn btn7 ">批量删除</button>
+        <button type="button" onclick="muti_modify()" class="btn hpbtn bgc" style="display: inline; height: 41px;">批量修改信息</button>
+         <input class="chkall" type="checkbox" style=" margin-top:15px" /><label>全选</label>         
+         </div> 
+    	<php>}</php>
+     <div class="clearfix"></div> 
+    <php>}</php>
+    <br />
+  </div>
+</div>
+<script>
+ $(function(){
+	if($('#cashtype').val()==303){
+		$('#bank').show();
+	}else{
+		$('#bank').hide();
+	}
+	$('#cashtype').change(function(e){
+		var st = $('#cashtype').val();
+		if(st==303){
+			$('#bank').show();
+		}else{
+			$('#bank').hide();
+		}
+	})
+	/*function radiobank(id){
+		$('.rabank'+id).children('div').css('border','1px solid #FC0;');
+		$('.rabank'+id).find("input[type=radio]").attr("checked", 'checked');
+	}*/
+	$('.chkall').click(function(){
+    	if($(this).is(':checked')){   
+        	$('input[name="imgid"]').prop("checked", true);	
+		}else{
+        	$('input[name="imgid"]').prop("checked", false);
+		}
+	});
+	$('.chkimg').click(function(){
+		$('.chkall').prop("checked", false);
+	});
+	
+});
+
+        function muti_modify(){
+            if($('.chkimg:checked').length==0){
+                alert('请先选择图片!');
+                return;
+            }
+
+            var ids='0';
+            $('.chkimg').each(function(index,obj){
+                if($(this).is(':checked')) {
+                    ids+=','+$(this).val();
+                }
+            });
+
+            location='/user/production_muti?id='+ids+'&page={:I('get.curpage','1')}&haspass={$voimgs.haspass}';
+        }
+
+		function del(){
+			if($('.chkimg:checked').length==0){
+				alert('请先选择图片!');
+				return;
+			}
+			if(!confirm('是否确认删除?')) return;
+			var ids='0';
+			$('.chkimg').each(function(index,obj){
+				if($(this).is(':checked')) {
+					ids+=','+$(this).val();
+				}
+			});
+			var url = '/user/img_del?ids='+ids;
+			$.getJSON(url,function(){
+				alert('删除成功!');
+				location.reload();
+			});
+		}
+		function deld(id){
+			if(!confirm('是否确认删除?')) return;
+			var ids=id;
+			var url = '/user/img_del?ids='+ids;
+			$.getJSON(url,function(){
+				alert('删除成功!');
+				location.reload();
+			});
+		}
+		function cha(){
+			$('.ptips').hide();	
+		}
+</script>
+<include file="public:mfooter"/>

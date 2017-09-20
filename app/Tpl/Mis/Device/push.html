@@ -1,0 +1,45 @@
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:header" />
+<div class="midline">
+    <input type="button" class="sys_button btn_orange btn_open" href="/device/push_add" value="新建推送" />
+</div>
+<php>endif;</php>
+<table class="table_list" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th width="5%">ID.</th>
+            <th width="10%">推送名称</th>
+            <th width="15%">推送目标</th>
+            <th width="35%">推送内容</th>
+            <th width="15%">推送时间</th>
+    <php>if(I('get.exp')!='xls'):</php>
+    <th>其他操作</th>
+    <php>endif;</php>
+</tr>
+</thead>
+<tbody>
+<volist name="data.list" id="vo">
+    <tr align="center">
+        <td>{$vo.id}</td>
+        <td>{$vo.name}</td>
+        <td>{$vo.target}</td>
+        <td>{$vo.content}</td>
+        <td>{$vo.ctime}</td>
+    <php>if(I('get.exp')!='xls'):</php>
+    <td>
+        <input type="button" class="sys_button btn_blue btn_open" value=" 编辑 " href="/hotel/room_editv?id={$vo.id}" />
+        <input type="button" class="sys_button btn_blue" value=" 删除 " onclick="if (confirm('确定删除?'))
+                    location = '/product/del?id={$vo.id}';" /> 
+    </td>
+    <php>endif;</php>
+    </tr>
+</volist>
+</tbody>
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:table_page" />
+<php>endif;</php>
+</table>
+<php>if(I('get.exp')!='xls'):</php>
+</body>
+</html>
+<php>endif;</php>

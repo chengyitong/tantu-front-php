@@ -1,0 +1,131 @@
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:header" />
+<script>
+function upt(obj,id,str){
+	loading.show();
+	$.get('/product/tags_upt?id='+id+'&'+str+'='+escape($('#'+obj+id).val()),function() {
+		$('#'+obj+id).hide();
+		$('#w'+obj+id).html($('#'+obj+id).val()).show();
+		loading.hide();
+	});
+}
+function openupt(obj,id){
+	$('#w'+obj+id).hide();
+	$('#'+obj+id).show().focus();
+}
+function api_fsave_ok(str){
+	alert(str);
+	loading.hide();
+}
+</script>
+<table class="table_list table_search" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <form action="?" method="get">
+        <thead>
+            <tr>
+                <th colspan="4">
+        <div class="tdp">
+            <div></div>搜索条件
+        </div>
+        </th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td width="25%">
+                    <label>标签名称</label>
+                    <input type="text" name="name" value="{$where.name}" />
+                </td>
+                <td width="25%">
+					<label>状态</label>
+                    <select name="isuse">
+                    	<option value="">全部</option>
+                    	<option value="1"<php>if($where['isuse']=='1') echo ' selected';</php>>正常</option>
+                    	<option value="0"<php>if($where['isuse']=='0') echo ' selected';</php>>禁用</option>
+                    </select>
+                </td>
+                <td colspan="2">
+                	
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr align="center">
+                <td colspan="4"><input type="submit" class="sys_button btn_blue" value=" 搜索 " /></td>
+            </tr>
+        </tfoot>
+    </form>
+</table>
+<div class="midline" align="right">
+    <input type="button" style="display:none;" class="sys_button btn_gray" id="btntocvs" value="导出表格" onclick="location = '{:seturlget('exp')}&exp=xls';" />
+    <input type="button" class="sys_button btn_gray" id="btntocvs" value="刷新页面" onclick="location.reload();" />
+</div>
+<php>endif;</php>
+<table class="table_list table_list_hover" width="100%" border="0" cellspacing="0" cellpadding="0">
+    <thead>
+        <tr>
+            <th width="5%">ID.</th>
+            <th width="20%">标签名称</th>
+            <th width="30%">分类</th>
+            <th width="20%">添加时间</th>
+            <th width="15%">状态</th>
+    <php>if(I('get.exp')!='xls'):</php>
+    <th>其他操作</th>
+    <php>endif;</php>
+</tr>
+</thead>
+<tbody>
+    <tr align="center">
+    <form action="/product/tags_add" method="post">
+        <td>{$vo.id}</td>
+        <td><input type="text" style="width: 60%;" name="tagname" value="" /></td>
+        <td>-</td>
+        <td>{:now()}</td>
+        <td>允许</td>
+	    <td>
+	        <input type="submit" class="sys_button btn_blue" name="" value="添加" />
+	    </td>
+    </form>
+    </tr>
+<iframe src="" style="position: absolute;left: -100px;top: -100px;width: 0;height: 0;" name="fsave" id="fsave"></iframe>
+<volist name="data.list" id="vo">
+    <tr align="center">
+<form action="/product/tags_upt?do=js&id={$vo.id}" method="post" target="fsave" onsubmit="loading.show();">
+        <td>{$vo.id}</td>
+        <td style="cursor: pointer;" onclick="openupt('cname',{$vo.id})">
+	        <span id="wcname{$vo.id}">{$vo.tagname}</span>
+	        <input type="text" id="cname{$vo.id}" value="{$vo.tagname}" style="display: none;text-align: center;width: 60%;" onblur="upt('cname',{$vo.id},'tagname')" />
+        </td>
+        <td align="left">
+        <volist name="data.class" id="vo_cl">
+        <php>
+        $chk = '';
+        $arr = explode(',',$vo['classids']);
+        if(in_array($vo_cl['id'],$arr)) $chk = 'checked';
+        </php>
+            <input name="class[]" id="class{$vo_cl.id}_{$vo.id}" type="checkbox" value="{$vo_cl.id}" {$chk} /><label for="class{$vo_cl.id}_{$vo.id}">{$vo_cl.classname}</label>
+        </volist>
+        </td>
+        <td>{$vo.ctime}</td>
+        <td><php>if($vo['isuse']) echo '允许'; else echo '禁止';</php></td>
+	    <php>if(I('get.exp')!='xls'):</php>
+	    <td>
+	    	<input type="submit" class="sys_button btn_orange" value="保存" />&nbsp;
+	    	<php>if($vo['isuse']):</php>
+	        <input type="button" class="sys_button btn_gray" value="禁止" onclick="if (confirm('确定禁止使用此标签?')) location = '/product/tags_do?to=0&id={$vo.id}';" /> 
+	        <php>else:</php>
+	        <input type="button" class="sys_button btn_orange" value="允许" onclick="if (confirm('确定允许使用此标签?')) location = '/product/tags_do?to=1&id={$vo.id}';" /> 
+	        <php>endif;</php>
+	    </td>
+	    <php>endif;</php>
+</form>
+    </tr>
+</volist>
+</tbody>
+<php>if(I('get.exp')!='xls'):</php>
+<include file="public:table_page" />
+<php>endif;</php>
+</table>
+<php>if(I('get.exp')!='xls'):</php>
+</body>
+</html>
+<php>endif;</php>
